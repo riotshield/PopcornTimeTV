@@ -19,6 +19,10 @@
 		925F8D921CA74364007100EB /* WatchlistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8D911CA74364007100EB /* WatchlistManager.swift */; };
 		925F8DB21CA773A4007100EB /* MovieWatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DB11CA773A4007100EB /* MovieWatchlistRecipe.swift */; };
 		925F8DB41CA77477007100EB /* MovieWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DB31CA77477007100EB /* MovieWatchlist.swift */; };
+		925F8DBA1CA79C36007100EB /* WelcomeRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */; };
+		925F8DBC1CA79C91007100EB /* WelcomeRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */; };
+		925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */; };
+		925F8DC01CA7ACB3007100EB /* ShowProductRecipe copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */; };
 		92892D221C9E489000BCD1A1 /* SearchRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92892D201C9E489000BCD1A1 /* SearchRecipe.swift */; };
 		92892D231C9E489000BCD1A1 /* MovieSearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */; };
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
@@ -28,7 +32,7 @@
 		92925B461C9E199B0086D362 /* DescriptionRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92925B441C9E199B0086D362 /* DescriptionRecipe.xml */; };
 		929B44631C9B73FE00805EC4 /* CatalogRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929B445F1C9B73FE00805EC4 /* CatalogRecipe.swift */; };
 		929B44641C9B73FE00805EC4 /* CatalogRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 929B44601C9B73FE00805EC4 /* CatalogRecipe.xml */; };
-		929B44651C9B73FE00805EC4 /* ProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929B44611C9B73FE00805EC4 /* ProductRecipe.swift */; };
+		929B44651C9B73FE00805EC4 /* MovieProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929B44611C9B73FE00805EC4 /* MovieProductRecipe.swift */; };
 		929B44661C9B73FE00805EC4 /* ProductRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 929B44621C9B73FE00805EC4 /* ProductRecipe.xml */; };
 		92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */; };
 /* End PBXBuildFile section */
@@ -47,6 +51,10 @@
 		925F8D911CA74364007100EB /* WatchlistManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistManager.swift; sourceTree = "<group>"; };
 		925F8DB11CA773A4007100EB /* MovieWatchlistRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieWatchlistRecipe.swift; sourceTree = "<group>"; };
 		925F8DB31CA77477007100EB /* MovieWatchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieWatchlist.swift; sourceTree = "<group>"; };
+		925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WelcomeRecipe.xml; sourceTree = "<group>"; };
+		925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeRecipe.swift; sourceTree = "<group>"; };
+		925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarRecipe.swift; sourceTree = "<group>"; };
+		925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShowProductRecipe copy.swift"; sourceTree = "<group>"; };
 		92892D201C9E489000BCD1A1 /* SearchRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecipe.swift; sourceTree = "<group>"; };
 		92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MovieSearchRecipe.xml; sourceTree = "<group>"; };
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -56,7 +64,7 @@
 		92925B441C9E199B0086D362 /* DescriptionRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = DescriptionRecipe.xml; sourceTree = "<group>"; };
 		929B445F1C9B73FE00805EC4 /* CatalogRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatalogRecipe.swift; sourceTree = "<group>"; };
 		929B44601C9B73FE00805EC4 /* CatalogRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CatalogRecipe.xml; sourceTree = "<group>"; };
-		929B44611C9B73FE00805EC4 /* ProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductRecipe.swift; sourceTree = "<group>"; };
+		929B44611C9B73FE00805EC4 /* MovieProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieProductRecipe.swift; sourceTree = "<group>"; };
 		929B44621C9B73FE00805EC4 /* ProductRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ProductRecipe.xml; sourceTree = "<group>"; };
 		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -177,12 +185,16 @@
 		929B445E1C9B73FE00805EC4 /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
+				925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */,
 				925F8DB11CA773A4007100EB /* MovieWatchlistRecipe.swift */,
+				925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */,
+				925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */,
 				929B445F1C9B73FE00805EC4 /* CatalogRecipe.swift */,
 				929B44601C9B73FE00805EC4 /* CatalogRecipe.xml */,
 				92925B431C9E199B0086D362 /* DescriptionRecipe.swift */,
 				92925B441C9E199B0086D362 /* DescriptionRecipe.xml */,
-				929B44611C9B73FE00805EC4 /* ProductRecipe.swift */,
+				929B44611C9B73FE00805EC4 /* MovieProductRecipe.swift */,
+				925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */,
 				929B44621C9B73FE00805EC4 /* ProductRecipe.xml */,
 				92892D201C9E489000BCD1A1 /* SearchRecipe.swift */,
 				92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */,
@@ -267,6 +279,7 @@
 				92925B461C9E199B0086D362 /* DescriptionRecipe.xml in Resources */,
 				280910381C99E6CA00C8EC1C /* Loading.xml in Resources */,
 				92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */,
+				925F8DBA1CA79C36007100EB /* WelcomeRecipe.xml in Resources */,
 				929B44661C9B73FE00805EC4 /* ProductRecipe.xml in Resources */,
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,
 				929B44641C9B73FE00805EC4 /* CatalogRecipe.xml in Resources */,
@@ -376,16 +389,19 @@
 				280910321C99DFDA00C8EC1C /* Popular.swift in Sources */,
 				92892D221C9E489000BCD1A1 /* SearchRecipe.swift in Sources */,
 				925F8DB41CA77477007100EB /* MovieWatchlist.swift in Sources */,
+				925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */,
 				925F8DB21CA773A4007100EB /* MovieWatchlistRecipe.swift in Sources */,
+				925F8DC01CA7ACB3007100EB /* ShowProductRecipe copy.swift in Sources */,
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
 				929B44631C9B73FE00805EC4 /* CatalogRecipe.swift in Sources */,
 				92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */,
-				929B44651C9B73FE00805EC4 /* ProductRecipe.swift in Sources */,
+				929B44651C9B73FE00805EC4 /* MovieProductRecipe.swift in Sources */,
 				92925B451C9E199B0086D362 /* DescriptionRecipe.swift in Sources */,
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
 				92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */,
 				280910341C99E0E000C8EC1C /* Search.swift in Sources */,
+				925F8DBC1CA79C91007100EB /* WelcomeRecipe.swift in Sources */,
 				925F8D921CA74364007100EB /* WatchlistManager.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */,
@@ -494,10 +510,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/PopcornTime/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
@@ -512,10 +525,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/PopcornTime/Frameworks",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;

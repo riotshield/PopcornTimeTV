@@ -1,5 +1,5 @@
 //
-//  ProductRecipe.swift
+//  MovieProductRecipe.swift
 //  PopcornTime
 //
 //  Created by Joe Bloggs on 13/03/2016.
@@ -9,7 +9,7 @@
 import TVMLKitchen
 import PopcornKit
 
-public struct ProductRecipe: RecipeType {
+public struct MovieProductRecipe: RecipeType {
 
     let movie: Movie
     let suggestions: [Movie]

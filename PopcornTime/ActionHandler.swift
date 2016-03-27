@@ -22,13 +22,40 @@ struct ActionHandler {
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString(":")
         switch pieces.first! { // swiftlint:disable:this force_cast
+        case "showMovies": break
+//            let tabbar = KitchenTabBar()
+//            tabBar.items = [
+//                Popular(),
+//                Latest(),
+//                MovieWatchlist(),
+//                Search()
+//            ]
+//            Kitchen.serve(recipe: tabBar)
+            
+        case "showTVShows":
+//            var popular = Popular()
+//            popular.fetchType = .Shows
+//            let tabbar = KitchenTabBar()
+//            tabBar.items = [
+//                popular
+//            ]
+//            Kitchen.serve(recipe: tabBar)
+            
+            var popular = Popular()
+            popular.fetchType = .Shows
+            KitchenTabBar.sharedBar.items = [
+                popular
+            ]
+            
         case "showMovie": showMovie(pieces)
+        case "showShow": showShow(pieces)
+            
         case "playMovie": playMovie(pieces)
         case "playPreview": playPreview(pieces)
         case "addWatchlist": addWatchlist(pieces)
         case "closeAlert": Kitchen.dismissModal()
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
-
+            
         default: break
         }
 
@@ -51,7 +78,7 @@ struct ActionHandler {
                 NetworkManager.sharedManager().suggestionsForMovie(movieId: Int(pieces.last!)!, completion: { movies, error in
                     if let movies = movies {
                         WatchlistManager.sharedManager().itemExistsInWatchList(itemId: movie.id, forType: .Movie, completion: { exists in
-                            let product = ProductRecipe(movie: movie, suggestions: movies, existsInWatchList: exists)
+                            let product = MovieProductRecipe(movie: movie, suggestions: movies, existsInWatchList: exists)
                             Kitchen.serve(recipe: product)
                         })
                     } else if let _ = error {
@@ -60,6 +87,29 @@ struct ActionHandler {
                 })
             } else if let _ = error {
 
+            }
+        }
+    }
+    
+    static func showShow(pieces: [String]) {
+        let showId = pieces[1]
+        let tvdbId = pieces[2]
+        let manager = NetworkManager.sharedManager()
+        manager.fetchShowDetails(showId) { show, error in
+            var seasons = [Season]()
+            manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
+                print(response)
+            }
+            
+            var seasonsDictionary = [Int : [Episode]]()
+            for episode in show!.episodes {
+                if let episodes = seasonsDictionary[episode.season] {
+                    var episodes = episodes
+                    episodes.append(episode)
+                    seasonsDictionary[episode.season] = episodes
+                } else {
+                    seasonsDictionary[episode.season] = [episode]
+                }
             }
         }
     }

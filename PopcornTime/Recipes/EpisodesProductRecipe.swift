@@ -104,6 +104,15 @@ public struct EpisodesProductRecipe: RecipeType {
         return ""
     }
     
+    var themeSong: String {
+        var s = "<background>\n"
+        s += "<audio>\n"
+        s += "<asset id=\"tv_theme\" src=\"http://tvthemes.plexapp.com/\(show.tvdbId).mp3\"/>"
+        s += "</audio>\n"
+        s += "</background>\n"
+        return s
+    }
+    
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("ProductRecipe", withExtension: "xml") {
@@ -154,6 +163,8 @@ public struct EpisodesProductRecipe: RecipeType {
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
             } catch {
                 print("Could not open Catalog template")
             }

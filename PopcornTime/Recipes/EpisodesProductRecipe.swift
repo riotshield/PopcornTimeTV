@@ -72,7 +72,7 @@ public struct EpisodesProductRecipe: RecipeType {
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
             var string = "<lockup actionID=\"playEpisode:\(show.id):\($0.episode.season):\(show.title.slugged):\(show.tvdbId)\">" + "\n"
-            string += "<img src=\"\($0.mediumScreenshot)\" width=\"300\" height=\"256\" />" + "\n"
+            string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
             string += "<title>Season \($0.episodeTitle)</title>" + "\n"
             string += "</lockup>" + "\n"
             return string

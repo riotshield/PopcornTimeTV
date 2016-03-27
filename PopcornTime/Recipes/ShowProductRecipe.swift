@@ -89,9 +89,9 @@ public struct ShowProductRecipe: RecipeType {
 
     var genresString: String {
         if showInfo.genres.count == 3 {
-            return "<text>\(showInfo.genres[0])</text>" + "/" + "<text>\(showInfo.genres[1])</text>" + "/" + "<text>\(showInfo.genres[2])</text>"
+            return "<text>\(showInfo.genres[0])" + "/" + "\(showInfo.genres[1])" + "/" + "\(showInfo.genres[2])</text>"
         } else if showInfo.genres.count == 2 {
-            return "<text>\(showInfo.genres[0])</text>" + "/" + "<text>\(showInfo.genres[1])</text>"
+            return "<text>\(showInfo.genres[0])" + "/" + "\(showInfo.genres[1])</text>"
         } else {
             return "<text>\(showInfo.genres.first!)</text>"
         }
@@ -145,6 +145,22 @@ public struct ShowProductRecipe: RecipeType {
         return ""
     }
     
+    var previewButton: String {
+        var preview = "<buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+        preview += "<badge src=\"resource://button-preview\" />\n"
+        preview += "<title>Trailer</title>\n"
+        preview += "</buttonLockup>\n"
+        return preview
+    }
+    
+    var watchlistButton: String {
+        var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+        string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
+        string += "<title>Watchlist</title>\n"
+        string += "</buttonLockup>"
+        return string
+    }
+    
     var themeSong: String {
         var s = "<background>\n"
         s += "<audio>\n"
@@ -182,7 +198,8 @@ public struct ShowProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: show.fanartImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
-
+                xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "<text>\(showInfo.airDay)'s \(showInfo.airTime)</text>")
+                
                 var string = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
                 string += "                    <badge src=\"resource://button-preview\" />\n"
                 string += "                    <title>Trailer</title>\n"
@@ -196,6 +213,7 @@ public struct ShowProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: watchlistButton)
                 if existsInWatchList {
                     xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "remove")
                 } else {

@@ -80,6 +80,14 @@ public struct MovieProductRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
+    
+    var watchlistButton: String {
+        var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+        string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
+        string += "<title>Watchlist</title>\n"
+        string += "</buttonLockup>"
+        return string
+    }
 
     public var template: String {
         var xml = ""
@@ -106,7 +114,8 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: movie.backgroundImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: String(movie.year))
                 xml = xml.stringByReplacingOccurrencesOfString("{{RATING}}", withString: movie.mpaRating.lowercaseString)
-
+                xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
+                
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: movie.torrents.first!.hash)
 
@@ -115,6 +124,7 @@ public struct MovieProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: watchlistButton)
                 if existsInWatchList {
                     xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "remove")
                 } else {

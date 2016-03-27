@@ -141,6 +141,7 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: show.fanartImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
+                xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "<text>\(showInfo.airDay)'s \(showInfo.airTime)</text>")
 
                 var preview = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
                 preview += "                    <badge src=\"resource://button-preview\" />\n"
@@ -155,14 +156,13 @@ public struct EpisodesProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
-                var string = "                <buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
-                string += "                    <badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
-                string += "                    <title>Watchlist</title>\n"
-                string += "                </buttonLockup>\n"
-                xml = xml.stringByReplacingOccurrencesOfString(string, withString: "")
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH)_LIST_BUTTON}}", withString: "")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
             } catch {

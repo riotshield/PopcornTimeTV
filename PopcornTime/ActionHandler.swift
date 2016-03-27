@@ -115,15 +115,17 @@ struct ActionHandler {
                             var season = Season()
                             season.seasonNumber = key
                             season.episodes = value
-                            let seasonInfo = response[key]
-                            if let images = seasonInfo["images"] as? [String : AnyObject] {
-                                if let posters = images["poster"] as? [String : String] {
-                                    season.seasonLargeCoverImage = posters["full"]
-                                    season.seasonMediumCoverImage = posters["medium"]
-                                    season.seasonSmallCoverImage = posters["thumb"]
+                            if response.indices.contains(key) {
+                                let seasonInfo = response[key]
+                                if let images = seasonInfo["images"] as? [String : AnyObject] {
+                                    if let posters = images["poster"] as? [String : String] {
+                                        season.seasonLargeCoverImage = posters["full"]
+                                        season.seasonMediumCoverImage = posters["medium"]
+                                        season.seasonSmallCoverImage = posters["thumb"]
+                                    }
                                 }
+                                seasons.append(season)
                             }
-                            seasons.append(season)
                             
                             manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                                 if let response = response {
@@ -164,18 +166,20 @@ struct ActionHandler {
                         var detailedEpisodes = [DetailedEpisode]()
                         for (index, item) in response.enumerate() {
                             var episode = DetailedEpisode()
-                            episode.episode = episodes[index]
-                            if let title = item["title"] as? String {
-                                episode.episodeTitle = title
-                            }
-                            if let images = item["images"] as? [String : AnyObject] {
-                                if let screenshots = images["screenshot"] as? [String : String] {
-                                    episode.fullScreenshot = screenshots["full"]
-                                    episode.mediumScreenshot = screenshots["medium"]
-                                    episode.smallScreenshot = screenshots["thumb"]
+                            if episodes.indices.contains(index) {
+                                episode.episode = episodes[index]
+                                if let title = item["title"] as? String {
+                                    episode.episodeTitle = title
                                 }
+                                if let images = item["images"] as? [String : AnyObject] {
+                                    if let screenshots = images["screenshot"] as? [String : String] {
+                                        episode.fullScreenshot = screenshots["full"]
+                                        episode.mediumScreenshot = screenshots["medium"]
+                                        episode.smallScreenshot = screenshots["thumb"]
+                                    }
+                                }
+                                detailedEpisodes.append(episode)
                             }
-                            detailedEpisodes.append(episode)
                         }
                         
                         manager.searchTVDBSeries(Int(tvdbId)!) { response, error in

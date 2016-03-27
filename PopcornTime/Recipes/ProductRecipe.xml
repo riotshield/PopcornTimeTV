@@ -31,6 +31,7 @@
                 <text>{{YEAR}}</text>
                 <badge src="resource://mpaa-{{RATING}}" class="badge" />
                 <badge src="resource://cc" class="badge" />
+                {{AIR_DATE_TIME}}
             </row>
             <description allowsZooming="true" moreLabel="more" actionID="showDescription:{{TITLE}}:{{DESCRIPTION}}">{{DESCRIPTION}}</description>
             <row>
@@ -44,10 +45,7 @@
                     <title>Play</title>
                 </buttonLockup>
                 
-                <buttonLockup actionID="addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}">
-                    <badge src="resource://button-{{WATCHLIST_ACTION}}" />
-                    <title>Watchlist</title>
-                </buttonLockup>
+                {{WATCH_LIST_BUTTON}}
             </row>
         </stack>
         

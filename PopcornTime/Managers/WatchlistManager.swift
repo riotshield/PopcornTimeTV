@@ -15,23 +15,29 @@ public enum ItemType: String {
 
 public struct WatchItem {
     var name: String!
-    var id: Int!
+    var id: String!
     var coverImage: String!
+    var imdbId: String!
+    var tvdbId:String!
     var type: ItemType!
 
     var dictionaryRepresentation = [String : AnyObject]()
 
-    init(name: String, id: Int, coverImage: String, type: String) {
+    init(name: String, id: String, coverImage: String, type: String, imdbId: String, tvdbId: String) {
         self.name = name
         self.id = id
         self.coverImage = coverImage
         self.type = ItemType(rawValue: type)
+        self.imdbId = imdbId
+        self.tvdbId = tvdbId
 
         self.dictionaryRepresentation = [
             "name": self.name,
             "id": self.id,
             "coverImage": self.coverImage,
-            "type": self.type.rawValue
+            "type": self.type.rawValue,
+            "imdbId": self.imdbId,
+            "tvdbId": self.tvdbId
         ]
     }
 
@@ -40,7 +46,7 @@ public struct WatchItem {
             self.name = value
         }
 
-        if let value = dictionary["id"] as? Int {
+        if let value = dictionary["id"] as? String {
             self.id = value
         }
 
@@ -50,6 +56,14 @@ public struct WatchItem {
 
         if let value = dictionary["type"] as? String {
             self.type = ItemType(rawValue: value)
+        }
+        
+        if let value = dictionary["imdbId"] as? String {
+            self.imdbId = value
+        }
+        
+        if let value = dictionary["tvdbId"] as? String {
+            self.tvdbId = value
         }
     }
 }
@@ -104,7 +118,7 @@ public class WatchlistManager {
         self.readJSONFile { json in
             if let json = json {
                 var mutableJson = json
-                if let index = json.indexOf({ $0["id"] as? Int == item.id && $0["type"] as? String == item.type.rawValue }) {
+                if let index = json.indexOf({ $0["id"] as? String == item.id && $0["type"] as? String == item.type.rawValue }) {
                     mutableJson.removeAtIndex(index)
                     self.writeJSONFile(mutableJson)
                     completion?(removed: true)
@@ -129,10 +143,10 @@ public class WatchlistManager {
         }
     }
 
-    func itemExistsInWatchList(itemId id: Int, forType type: ItemType, completion: ((exists: Bool) -> Void)?) {
+    func itemExistsInWatchList(itemId id: String, forType type: ItemType, completion: ((exists: Bool) -> Void)?) {
         self.readJSONFile { json in
             if let json = json {
-                if let _ = json.indexOf({ $0["id"] as? Int == id && $0["type"] as? String == type.rawValue }) {
+                if let _ = json.indexOf({ $0["id"] as? String == id && $0["type"] as? String == type.rawValue }) {
                     completion?(exists: true)
                 } else {
                     completion?(exists: false)

@@ -37,7 +37,8 @@ struct ActionHandler {
             popular.fetchType = .Shows
             var tabBar = KitchenTabBar()
             tabBar.items = [
-                popular
+                popular,
+                ShowWatchlist()
             ]
             Kitchen.serve(recipe: tabBar)
 
@@ -74,7 +75,7 @@ struct ActionHandler {
             if let movie = movie {
                 NetworkManager.sharedManager().suggestionsForMovie(movieId: Int(pieces.last!)!, completion: { movies, error in
                     if let movies = movies {
-                        WatchlistManager.sharedManager().itemExistsInWatchList(itemId: movie.id, forType: .Movie, completion: { exists in
+                        WatchlistManager.sharedManager().itemExistsInWatchList(itemId: String(movie.id), forType: .Movie, completion: { exists in
                             let product = MovieProductRecipe(movie: movie, suggestions: movies, existsInWatchList: exists)
                             Kitchen.serve(recipe: product)
                         })
@@ -89,6 +90,7 @@ struct ActionHandler {
     }
     
     static func showShow(pieces: [String]) {
+        
         var presentedDetails = false
         let showId = pieces[1]
         let imdbSlug = pieces[2]
@@ -196,6 +198,10 @@ struct ActionHandler {
             }
         }
     }
+    
+    static func showEpisode(pieces: [String]) {
+        
+    }
 
     static func playMovie(pieces: [String]) {
         // {{MAGNET}}:https:{{IMAGE}}:http:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}
@@ -229,13 +235,22 @@ struct ActionHandler {
     }
 
     static func addWatchlist(pieces: [String]) {
+        print(pieces)
         let name = pieces[2]
         let id = pieces[1]
         let type = pieces[3]
         let cover = pieces[4] + ":" + pieces[5]
-        WatchlistManager.sharedManager().itemExistsInWatchList(itemId: Int(id)!, forType: .Movie, completion: { exists in
+        var imdb = ""
+        if pieces.indices.contains(6) {
+            imdb = pieces[6]
+        }
+        var tvdb = ""
+        if pieces.indices.contains(7) {
+            tvdb = pieces[7]
+        }
+        WatchlistManager.sharedManager().itemExistsInWatchList(itemId: id, forType: ItemType(rawValue: type)!, completion: { exists in
             if exists {
-                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: Int(id)!, coverImage: cover, type: type), completion: { removed in
+                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb), completion: { removed in
                     if removed {
                         Kitchen.serve(recipe: AlertRecipe(title: "Removed", description: "\(name) was removed from your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {
@@ -243,7 +258,7 @@ struct ActionHandler {
                     }
                 })
             } else {
-                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: Int(id)!, coverImage: cover, type: type), completion: { added in
+                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb), completion: { added in
                     if added {
                         Kitchen.serve(recipe: AlertRecipe(title: "Added", description: "\(name) was added your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {

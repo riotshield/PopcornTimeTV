@@ -154,7 +154,7 @@ public struct ShowProductRecipe: RecipeType {
     }
     
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist:\(show.id):\(show.title):show:\(show.posterImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"
@@ -219,8 +219,6 @@ public struct ShowProductRecipe: RecipeType {
                 } else {
                     xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "add")
                 }
-                xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
-                xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
             } catch {

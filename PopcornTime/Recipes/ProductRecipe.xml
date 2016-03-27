@@ -3,6 +3,9 @@
     .badge {
         tv-tint-color: rgb(255,255,255);
     }
+    .hover {
+    tv-text-highlight-style: marquee-and-show-on-highlight;
+    }
 </style>
 </head>
 <productTemplate>

@@ -110,6 +110,7 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: movie.torrents.first!.hash)
 
+                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Similar Movies")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: suggestionsString)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)

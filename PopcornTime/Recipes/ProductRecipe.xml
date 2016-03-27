@@ -57,7 +57,7 @@
     <!-- Suggestions -->
     <shelf>
         <header>
-            <title>Similar Movies</title>
+            <title>{{SUGGESTIONS_TITLE}}</title>
         </header>
         <section>
             {{SUGGESTIONS}}

@@ -28,10 +28,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PopcornKit:
-    :commit: d130f106b2d43f36f5a7d3fbbd2ac7319c52698b
+    :commit: 0f0058782f68494683bcdff2e474480b93703758
     :git: https://github.com/PopcornTimeTV/PopcornKit.git
   TVMLKitchen:
-    :commit: 65a3589e7bf055d320642b400229126565c05664
+    :commit: 8eca6e139664ca26430a3f459b985648e27655c4
     :git: https://github.com/toshi0383/TVMLKitchen.git
 
 SPEC CHECKSUMS:

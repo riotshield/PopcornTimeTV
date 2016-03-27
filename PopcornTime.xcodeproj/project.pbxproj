@@ -22,7 +22,7 @@
 		925F8DBA1CA79C36007100EB /* WelcomeRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */; };
 		925F8DBC1CA79C91007100EB /* WelcomeRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */; };
 		925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */; };
-		925F8DC01CA7ACB3007100EB /* ShowProductRecipe copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */; };
+		925F8DC01CA7ACB3007100EB /* ShowProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBF1CA7ACB3007100EB /* ShowProductRecipe.swift */; };
 		92892D221C9E489000BCD1A1 /* SearchRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92892D201C9E489000BCD1A1 /* SearchRecipe.swift */; };
 		92892D231C9E489000BCD1A1 /* MovieSearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */; };
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
@@ -54,7 +54,7 @@
 		925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WelcomeRecipe.xml; sourceTree = "<group>"; };
 		925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeRecipe.swift; sourceTree = "<group>"; };
 		925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarRecipe.swift; sourceTree = "<group>"; };
-		925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShowProductRecipe copy.swift"; sourceTree = "<group>"; };
+		925F8DBF1CA7ACB3007100EB /* ShowProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowProductRecipe.swift; sourceTree = "<group>"; };
 		92892D201C9E489000BCD1A1 /* SearchRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecipe.swift; sourceTree = "<group>"; };
 		92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MovieSearchRecipe.xml; sourceTree = "<group>"; };
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 				92925B431C9E199B0086D362 /* DescriptionRecipe.swift */,
 				92925B441C9E199B0086D362 /* DescriptionRecipe.xml */,
 				929B44611C9B73FE00805EC4 /* MovieProductRecipe.swift */,
-				925F8DBF1CA7ACB3007100EB /* ShowProductRecipe copy.swift */,
+				925F8DBF1CA7ACB3007100EB /* ShowProductRecipe.swift */,
 				929B44621C9B73FE00805EC4 /* ProductRecipe.xml */,
 				92892D201C9E489000BCD1A1 /* SearchRecipe.swift */,
 				92892D211C9E489000BCD1A1 /* MovieSearchRecipe.xml */,
@@ -391,7 +391,7 @@
 				925F8DB41CA77477007100EB /* MovieWatchlist.swift in Sources */,
 				925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */,
 				925F8DB21CA773A4007100EB /* MovieWatchlistRecipe.swift in Sources */,
-				925F8DC01CA7ACB3007100EB /* ShowProductRecipe copy.swift in Sources */,
+				925F8DC01CA7ACB3007100EB /* ShowProductRecipe.swift in Sources */,
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
 				929B44631C9B73FE00805EC4 /* CatalogRecipe.swift in Sources */,

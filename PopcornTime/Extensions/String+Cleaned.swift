@@ -15,5 +15,11 @@ extension String {
         s = s.stringByReplacingOccurrencesOfString("\"", withString: "&quot;")
         return s
     }
+    
+    var slugged: String {
+        var s = stringByReplacingOccurrencesOfString(" ", withString: "-")
+        s = s.stringByReplacingOccurrencesOfString(":", withString: "")
+        return s.lowercaseString
+    }
 
 }

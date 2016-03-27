@@ -22,30 +22,25 @@ struct ActionHandler {
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString(":")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": break
-//            let tabbar = KitchenTabBar()
-//            tabBar.items = [
-//                Popular(),
-//                Latest(),
-//                MovieWatchlist(),
-//                Search()
-//            ]
-//            Kitchen.serve(recipe: tabBar)
+        case "showMovies":
+            var tabBar = KitchenTabBar()
+            tabBar.items = [
+                Popular(),
+                Latest(),
+                MovieWatchlist(),
+                Search()
+            ]
+            Kitchen.serve(recipe: tabBar)
             
         case "showTVShows":
-//            var popular = Popular()
-//            popular.fetchType = .Shows
-//            let tabbar = KitchenTabBar()
-//            tabBar.items = [
-//                popular
-//            ]
-//            Kitchen.serve(recipe: tabBar)
-            
             var popular = Popular()
             popular.fetchType = .Shows
-            KitchenTabBar.sharedBar.items = [
+            var tabBar = KitchenTabBar()
+            tabBar.items = [
                 popular
             ]
+            Kitchen.serve(recipe: tabBar)
+
             
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
@@ -92,23 +87,53 @@ struct ActionHandler {
     }
     
     static func showShow(pieces: [String]) {
+        var presentedDetails = false
         let showId = pieces[1]
-        let tvdbId = pieces[2]
+        let imdbSlug = pieces[2]
+        let tvdbId = pieces[3]
+        
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
-            var seasons = [Season]()
-            manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
-                print(response)
-            }
-            
-            var seasonsDictionary = [Int : [Episode]]()
-            for episode in show!.episodes {
-                if let episodes = seasonsDictionary[episode.season] {
-                    var episodes = episodes
-                    episodes.append(episode)
-                    seasonsDictionary[episode.season] = episodes
-                } else {
-                    seasonsDictionary[episode.season] = [episode]
+            if let show = show {
+                var seasonsDictionary = [Int : [Episode]]()
+                for episode in show.episodes {
+                    if let episodes = seasonsDictionary[episode.season] {
+                        var episodes = episodes
+                        episodes.append(episode)
+                        seasonsDictionary[episode.season] = episodes
+                    } else {
+                        seasonsDictionary[episode.season] = [episode]
+                    }
+                }
+                
+                var seasons = [Season]()
+                manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
+                    if let response = response {
+                        for (key, value) in seasonsDictionary {
+                            var season = Season()
+                            season.seasonNumber = key
+                            season.episodes = value
+                            let seasonInfo = response[key]
+                            if let images = seasonInfo["images"] as? [String : AnyObject] {
+                                if let posters = images["poster"] as? [String : String] {
+                                    season.seasonLargeCoverImage = posters["full"]
+                                    season.seasonMediumCoverImage = posters["medium"]
+                                    season.seasonSmallCoverImage = posters["thumb"]
+                                }
+                            }
+                            seasons.append(season)
+                            
+                            manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
+                                if let response = response {
+                                    if !presentedDetails {
+                                        let recipe = ShowProductRecipe(show: show, showInfo: ShowInfo(xml: response), seasons: seasons, existsInWatchList: false)
+                                        Kitchen.serve(recipe: recipe)
+                                        presentedDetails = true
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

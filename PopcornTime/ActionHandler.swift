@@ -45,6 +45,8 @@ struct ActionHandler {
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
             
+        case "showSeason": showSeason(pieces)
+
         case "playMovie": playMovie(pieces)
         case "playPreview": playPreview(pieces)
         case "addWatchlist": addWatchlist(pieces)
@@ -130,6 +132,58 @@ struct ActionHandler {
                                         Kitchen.serve(recipe: recipe)
                                         presentedDetails = true
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    static func showSeason(pieces: [String]) {
+        var presentedDetails = false
+        let showId = pieces[1]
+        let seasonNumber = pieces[2]
+        let imdbSlug = pieces[3]
+        let tvdbId = pieces[4]
+        
+        let manager = NetworkManager.sharedManager()
+        manager.fetchShowDetails(showId) { show, error in
+            if let show = show {
+                manager.fetchTraktSeasonEpisodesInfoForIMDB(imdbSlug, season: Int(seasonNumber)!) { response, error in
+                    if let response = response {
+                        var episodes = [Episode]()
+                        for episode in show.episodes {
+                            if Int(seasonNumber)! == episode.season {
+                                episodes.append(episode)
+                            }
+                        }
+                        episodes.sortInPlace({ $0.episode < $1.episode })
+                        
+                        var detailedEpisodes = [DetailedEpisode]()
+                        for (index, item) in response.enumerate() {
+                            var episode = DetailedEpisode()
+                            episode.episode = episodes[index]
+                            if let title = item["title"] as? String {
+                                episode.episodeTitle = title
+                            }
+                            if let images = item["images"] as? [String : AnyObject] {
+                                if let screenshots = images["screenshot"] as? [String : String] {
+                                    episode.fullScreenshot = screenshots["full"]
+                                    episode.mediumScreenshot = screenshots["medium"]
+                                    episode.smallScreenshot = screenshots["thumb"]
+                                }
+                            }
+                            detailedEpisodes.append(episode)
+                        }
+                        
+                        manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
+                            if let response = response {
+                                if !presentedDetails {
+                                    let recipe = EpisodesProductRecipe(show: show, showInfo: ShowInfo(xml: response), episodes: episodes, detailedEpisodes: detailedEpisodes)
+                                    Kitchen.serve(recipe: recipe)
+                                    presentedDetails = true
                                 }
                             }
                         }

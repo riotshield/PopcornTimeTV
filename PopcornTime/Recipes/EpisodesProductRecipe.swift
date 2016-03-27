@@ -8,71 +8,34 @@
 
 import TVMLKitchen
 import PopcornKit
-import SWXMLHash
 
-public struct Season {
-    public var seasonNumber: Int!
-    public var seasonId: String!
-    public var episodes: [Episode]!
-    public var seasonLargeCoverImage: String!
-    public var seasonMediumCoverImage: String!
-    public var seasonSmallCoverImage: String!
+public struct DetailedEpisode {
+    var episodeTitle: String!
+    var episode: Episode!
+    var fullScreenshot: String!
+    var mediumScreenshot: String!
+    var smallScreenshot: String!
     
-    public init() {
+    init() {
         
     }
 }
 
-public struct ShowInfo {
-    
-    public var airDay: String!
-    public var airTime: String
-    public var contentRating: String!
-    
-    public var cast: [String]!
-    public var genres: [String]!
-    
-    public var network: String!
-    
-    public var runtime: Int!
-    
-    public init(xml: XMLIndexer) {
-        let seriesInfo = xml["Data"]["Series"]
-        
-        self.airDay = seriesInfo["Airs_DayOfWeek"].element!.text!
-        self.airTime = seriesInfo["Airs_Time"].element!.text!
-        
-        self.contentRating = seriesInfo["ContentRating"].element!.text!
-        
-        self.cast = seriesInfo["Actors"].element!.text!.componentsSeparatedByString("|")
-        self.cast.removeAtIndex(self.cast.count - 1)
-        self.cast.removeAtIndex(0)
-        
-        self.genres = seriesInfo["Genre"].element!.text!.componentsSeparatedByString("|")
-        self.genres.removeAtIndex(self.genres.count - 1)
-        self.genres.removeAtIndex(0)
-        
-        self.network = seriesInfo["Network"].element!.text!
-        
-        self.runtime = Int(seriesInfo["Runtime"].element!.text!)
-    }
-}
-
-public struct ShowProductRecipe: RecipeType {
+public struct EpisodesProductRecipe: RecipeType {
 
     let show: Show
     let showInfo: ShowInfo
-    let seasons: [Season]
-    let existsInWatchList: Bool
+    let episodes: [Episode]
+    let detailedEpisodes: [DetailedEpisode]
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.Default
 
-    public init(show: Show, showInfo: ShowInfo, seasons: [Season], existsInWatchList: Bool) {
+    public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode]) {
         self.show = show
         self.showInfo = showInfo
-        self.seasons = seasons.sort({ $0.seasonNumber < $1.seasonNumber })
-        self.existsInWatchList = existsInWatchList
+        self.episodes = episodes
+        self.detailedEpisodes = detailedEpisodes
     }
 
     public var xmlString: String {
@@ -106,11 +69,11 @@ public struct ShowProductRecipe: RecipeType {
         return "\(minutes)m"
     }
 
-    var seasonsString: String {
-        let mapped: [String] = seasons.map {
-            var string = "<lockup actionID=\"showSeason:\(show.id):\($0.seasonNumber):\(show.title.slugged):\(show.tvdbId)\">" + "\n"
-            string += "<img src=\"\($0.seasonMediumCoverImage)\" width=\"150\" height=\"226\" />" + "\n"
-            string += "<title>Season \($0.seasonNumber)</title>" + "\n"
+    var episodesString: String {
+        let mapped: [String] = detailedEpisodes.map {
+            var string = "<lockup actionID=\"playEpisode:\(show.id):\($0.episode.season):\(show.title.slugged):\(show.tvdbId)\">" + "\n"
+            string += "<img src=\"\($0.mediumScreenshot)\" width=\"300\" height=\"256\" />" + "\n"
+            string += "<title>Season \($0.episodeTitle)</title>" + "\n"
             string += "</lockup>" + "\n"
             return string
         }
@@ -131,17 +94,13 @@ public struct ShowProductRecipe: RecipeType {
     }
 
     var firstEpisode: String {
-        let season = seasons.first!
-        for episode in season.episodes {
-            if episode.season == 1 && episode.episode == 1 {
-                if let hash = episode.torrents.first!.hash {
-                    return hash
-                } else if let hash = episode.torrents.last!.hash {
-                    return hash
-                }
+        if let episode = episodes.first {
+            if let hash = episode.torrents.first!.hash {
+                return hash
+            } else if let hash = episode.torrents.last!.hash {
+                return hash
             }
         }
-        
         return ""
     }
     
@@ -174,24 +133,25 @@ public struct ShowProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
 
-                var string = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
-                string += "                    <badge src=\"resource://button-preview\" />\n"
-                string += "                    <title>Trailer</title>\n"
-                string += "                </buttonLockup>\n"
-                xml = xml.stringByReplacingOccurrencesOfString(string, withString: "")
+                var preview = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+                preview += "                    <badge src=\"resource://button-preview\" />\n"
+                preview += "                    <title>Trailer</title>\n"
+                preview += "                </buttonLockup>\n"
+                xml = xml.stringByReplacingOccurrencesOfString(preview, withString: "")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
 
-                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Seasons")
-                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: seasonsString)
+                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Episodes")
+                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: episodesString)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
-                if existsInWatchList {
-                    xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "remove")
-                } else {
-                    xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "add")
-                }
+                var string = "                <buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+                string += "                    <badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
+                string += "                    <title>Watchlist</title>\n"
+                string += "                </buttonLockup>\n"
+                xml = xml.stringByReplacingOccurrencesOfString(string, withString: "")
+                
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
             } catch {

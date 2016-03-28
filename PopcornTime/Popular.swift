@@ -17,7 +17,7 @@ enum FetchType {
 struct Popular: TabItem {
 
     let title = "Popular"
-    
+
     var fetchType: FetchType! = .Movies
 
     func handler() {
@@ -29,7 +29,7 @@ struct Popular: TabItem {
                     Kitchen.serve(recipe: recipe)
                 }
             }
-            
+
         case .Shows:
             NetworkManager.sharedManager().fetchShowsForPage(1) { shows, error in
                 if let shows = shows {

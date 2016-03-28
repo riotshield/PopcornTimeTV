@@ -21,37 +21,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.playActionIDHandler = ActionHandler.play
 
         cookbook.evaluateAppJavaScriptInContext = { appController, context in
-            
+
         }
-        
+
         Kitchen.prepare(cookbook)
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in
             if let servers = servers {
                 if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
                     manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
-                    
+
                     manager.fetchShowsForPage(1) { shows, error in
                         if let shows = shows {
                             manager.fetchMovies(limit: 5, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in
                                 if let movies = movies {
                                     var previewItems = [PreviewItem]()
-                                    
+
                                     // Syft through Movies
                                     for (index, item) in shows.enumerate() {
                                         if index == 5 {
                                             break
                                         }
-                                        
+
                                         previewItems.append(PreviewItem(fanartImage: item.fanartImage))
                                     }
-                                    
+
                                     // Syft through TV SHows
                                     for movie in movies {
                                         previewItems.append(PreviewItem(fanartImage: movie.backgroundImage))
                                     }
-                                    
+
                                     Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", items: previewItems))
                                 }
                             }

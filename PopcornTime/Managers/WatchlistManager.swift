@@ -18,7 +18,7 @@ public struct WatchItem {
     var id: String!
     var coverImage: String!
     var imdbId: String!
-    var tvdbId:String!
+    var tvdbId: String!
     var type: ItemType!
 
     var dictionaryRepresentation = [String : AnyObject]()
@@ -57,11 +57,11 @@ public struct WatchItem {
         if let value = dictionary["type"] as? String {
             self.type = ItemType(rawValue: value)
         }
-        
+
         if let value = dictionary["imdbId"] as? String {
             self.imdbId = value
         }
-        
+
         if let value = dictionary["tvdbId"] as? String {
             self.tvdbId = value
         }

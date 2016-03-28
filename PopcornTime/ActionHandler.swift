@@ -23,16 +23,16 @@ struct ActionHandler {
         let pieces = id.componentsSeparatedByString(":")
         switch pieces.first! { // swiftlint:disable:this force_cast
         case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  MovieWatchlist(), Search()]))
-            
+
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
             let tabBar = KitchenTabBar(items: [popular, ShowWatchlist()])
             Kitchen.serve(recipe: tabBar)
-            
+
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
-            
+
         case "showSeason": showSeason(pieces)
         case "showEpisode": showEpisode(pieces)
 
@@ -41,7 +41,7 @@ struct ActionHandler {
         case "addWatchlist": addWatchlist(pieces)
         case "closeAlert": Kitchen.dismissModal()
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
-            
+
         default: break
         }
 
@@ -76,13 +76,13 @@ struct ActionHandler {
             }
         }
     }
-    
+
     static func showShow(pieces: [String]) {
         var presentedDetails = false
         let showId = pieces[1]
         let imdbSlug = pieces[2]
         let tvdbId = pieces[3]
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
@@ -96,7 +96,7 @@ struct ActionHandler {
                         seasonsDictionary[episode.season] = [episode]
                     }
                 }
-                
+
                 var seasons = [Season]()
                 manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
                     if let response = response {
@@ -115,7 +115,7 @@ struct ActionHandler {
                                 }
                                 seasons.append(season)
                             }
-                            
+
                             manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                                 if let response = response {
                                     if !presentedDetails {
@@ -131,14 +131,14 @@ struct ActionHandler {
             }
         }
     }
-    
+
     static func showSeason(pieces: [String]) {
         var presentedDetails = false
         let showId = pieces[1]
         let seasonNumber = pieces[2]
         let imdbSlug = pieces[3]
         let tvdbId = pieces[4]
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
@@ -151,7 +151,7 @@ struct ActionHandler {
                             }
                         }
                         episodes.sortInPlace({ $0.episode < $1.episode })
-                        
+
                         var detailedEpisodes = [DetailedEpisode]()
                         for (index, item) in response.enumerate() {
                             var episode = DetailedEpisode()
@@ -170,7 +170,7 @@ struct ActionHandler {
                                 detailedEpisodes.append(episode)
                             }
                         }
-                        
+
                         manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                             if let response = response {
                                 if !presentedDetails {
@@ -185,7 +185,7 @@ struct ActionHandler {
             }
         }
     }
-    
+
     static func showEpisode(pieces: [String]) {
         var presentedDetails = false
         let showId = pieces[1]
@@ -193,7 +193,7 @@ struct ActionHandler {
         let imdbSlug = pieces[3]
         let tvdbId = pieces[4]
         let episodeNumber = pieces[6]
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
@@ -206,7 +206,7 @@ struct ActionHandler {
                             }
                         }
                         episodes.sortInPlace({ $0.episode < $1.episode })
-                        
+
                         var detailedEpisodes = [DetailedEpisode]()
                         for (index, item) in response.enumerate() {
                             var episode = DetailedEpisode()
@@ -225,7 +225,7 @@ struct ActionHandler {
                                 detailedEpisodes.append(episode)
                             }
                         }
-                        
+
                         manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                             if let response = response {
                                 if !presentedDetails {

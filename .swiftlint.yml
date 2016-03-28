@@ -8,3 +8,4 @@ disabled_rules:
   - variable_name
   - cyclomatic_complexity
   - nesting
+  - function_parameter_count

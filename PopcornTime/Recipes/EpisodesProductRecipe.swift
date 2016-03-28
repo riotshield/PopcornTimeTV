@@ -15,9 +15,9 @@ public struct DetailedEpisode {
     var fullScreenshot: String!
     var mediumScreenshot: String!
     var smallScreenshot: String!
-    
+
     init() {
-        
+
     }
 }
 
@@ -98,7 +98,7 @@ public struct EpisodesProductRecipe: RecipeType {
             let filteredTorrents = episode.torrents.filter {
                 $0.quality == "480p"
             }
-            
+
             if let first = filteredTorrents.first {
                 return first.hash
             } else if let last = episode.torrents.last {
@@ -107,7 +107,7 @@ public struct EpisodesProductRecipe: RecipeType {
         }
         return ""
     }
-    
+
     var themeSong: String {
         var s = "<background>\n"
         s += "<audio>\n"
@@ -116,7 +116,7 @@ public struct EpisodesProductRecipe: RecipeType {
         s += "</background>\n"
         return ""
     }
-    
+
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("ProductRecipe", withExtension: "xml") {
@@ -130,9 +130,9 @@ public struct EpisodesProductRecipe: RecipeType {
                 directors += "                {{DIRECTORS}}\n"
                 directors += "            </info>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(directors, withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{ACTORS}}", withString: actorsString)
-                
+
                 // Remove Tomatoes
                 xml = xml.stringByReplacingOccurrencesOfString("<text><badge src=\"resource://tomato-{{TOMATO_CRITIC_RATING}}\"/> {{TOMATO_CRITIC_SCORE}}%</text>", withString: "")
 
@@ -152,7 +152,7 @@ public struct EpisodesProductRecipe: RecipeType {
                 preview += "                    <title>Trailer</title>\n"
                 preview += "                </buttonLockup>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(preview, withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Episodes")
@@ -160,14 +160,14 @@ public struct EpisodesProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH)_LIST_BUTTON}}", withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
             } catch {
                 print("Could not open Catalog template")

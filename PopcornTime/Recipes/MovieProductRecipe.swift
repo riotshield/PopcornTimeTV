@@ -80,7 +80,7 @@ public struct MovieProductRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     var watchlistButton: String {
         var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
@@ -88,18 +88,18 @@ public struct MovieProductRecipe: RecipeType {
         string += "</buttonLockup>"
         return string
     }
-    
+
     var torrentHash: String {
         let filteredTorrents = movie.torrents.filter {
             $0.quality == "720p"
         }
-        
+
         if let first = filteredTorrents.first {
             return first.hash
         } else if let last = movie.torrents.last {
             return last.hash
         }
-        
+
         return ""
     }
 
@@ -129,7 +129,7 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: String(movie.year))
                 xml = xml.stringByReplacingOccurrencesOfString("{{RATING}}", withString: movie.mpaRating.lowercaseString)
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: torrentHash)
 
@@ -146,7 +146,7 @@ public struct MovieProductRecipe: RecipeType {
                 }
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: String(movie.id))
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
             } catch {
                 print("Could not open Catalog template")

@@ -36,10 +36,13 @@ PopcornTime.xcworkspace
 
 ##Version
 
+- 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
 - 0.2.0 - Fixes issues with build and minor UI tweaks.
 - 0.1.0 - Initial Commit *(rewrite)*
 
 ##Want to help?
 
 Join the project Slack channel and be part of the PopcornTime experience for AppleTV. Designer? Developer? Curious person? You're welcome! Come in and say hello. Want to report a bug, request a feature or even contribute? You can join our community Slack group to keep up-to-date and speak to the team.
+
+If you plan on contributing, make sure to follow along with the guidelines found in the `CONTRIBUTING.md` file.
 

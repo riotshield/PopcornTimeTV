@@ -151,6 +151,8 @@ public class WatchlistManager {
                 } else {
                     completion?(exists: false)
                 }
+            } else {
+                completion?(exists: false)
             }
         }
     }

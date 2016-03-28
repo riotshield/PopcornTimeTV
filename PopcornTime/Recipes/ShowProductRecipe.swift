@@ -171,7 +171,7 @@ public struct ShowProductRecipe: RecipeType {
         s += "<asset id=\"tv_theme\" src=\"http://tvthemes.plexapp.com/\(show.tvdbId).mp3\"/>"
         s += "</audio>\n"
         s += "</background>\n"
-        return s
+        return ""
     }
     
     public var template: String {

@@ -20,6 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
 
+        cookbook.evaluateAppJavaScriptInContext = { appController, context in
+            
+        }
+        
         Kitchen.prepare(cookbook)
         
         let manager = NetworkManager.sharedManager()

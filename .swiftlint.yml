@@ -7,3 +7,4 @@ disabled_rules:
   - line_length
   - variable_name
   - cyclomatic_complexity
+  - nesting

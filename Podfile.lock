@@ -9,7 +9,7 @@ PODS:
     - SWXMLHash
   - PopcornTorrent (1.0.7)
   - SWXMLHash (2.2.0)
-  - TVMLKitchen (0.6.2)
+  - TVMLKitchen (0.7.0)
   - YoutubeSourceParserKit (0.2.4)
 
 DEPENDENCIES:
@@ -28,10 +28,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PopcornKit:
-    :commit: 03701855e449950c809809666bd4aba90978779d
+    :commit: 84a73b634e21f00ba44dd1354d0163236d3b9ebe
     :git: https://github.com/PopcornTimeTV/PopcornKit.git
   TVMLKitchen:
-    :commit: 65a3589e7bf055d320642b400229126565c05664
+    :commit: 54a5eb276707ca8cb058d0d5d56e0c34100be7be
     :git: https://github.com/toshi0383/TVMLKitchen.git
 
 SPEC CHECKSUMS:
@@ -41,9 +41,9 @@ SPEC CHECKSUMS:
   PopcornKit: 07037e80c8ab915f50882f98e9d7f586bf6138e7
   PopcornTorrent: dadc197cfbfd3af624e15c8ab5a9225cd00cf05d
   SWXMLHash: cf2a62b04514211b238b39b3aa348ba4746523af
-  TVMLKitchen: e1916ec9bca767dae34e509ab59fdf8009d52d8a
+  TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
   YoutubeSourceParserKit: d1506222a62718ed41f18ab52ebbc1b1d9ecabcc
 
-PODFILE CHECKSUM: 62ab14006a152d9340b944d830ac4d9ad43f7f09
+PODFILE CHECKSUM: 0711799caa6c1ddcf9c42c00b00c3c0d98ef747e
 
 COCOAPODS: 1.0.0.beta.6

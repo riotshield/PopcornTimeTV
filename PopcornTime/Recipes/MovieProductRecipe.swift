@@ -1,5 +1,5 @@
 //
-//  ProductRecipe.swift
+//  MovieProductRecipe.swift
 //  PopcornTime
 //
 //  Created by Joe Bloggs on 13/03/2016.
@@ -9,17 +9,19 @@
 import TVMLKitchen
 import PopcornKit
 
-public struct ProductRecipe: RecipeType {
+public struct MovieProductRecipe: RecipeType {
 
     let movie: Movie
     let suggestions: [Movie]
+    let existsInWatchList: Bool
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.Default
 
-    public init(movie: Movie, suggestions: [Movie]) {
+    public init(movie: Movie, suggestions: [Movie], existsInWatchList: Bool) {
         self.movie = movie
         self.suggestions = suggestions
+        self.existsInWatchList = existsInWatchList
     }
 
     public var xmlString: String {
@@ -78,6 +80,28 @@ public struct ProductRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
+    
+    var watchlistButton: String {
+        var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+        string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
+        string += "<title>Watchlist</title>\n"
+        string += "</buttonLockup>"
+        return string
+    }
+    
+    var torrentHash: String {
+        let filteredTorrents = movie.torrents.filter {
+            $0.quality == "720p"
+        }
+        
+        if let first = filteredTorrents.first {
+            return first.hash
+        } else if let last = movie.torrents.last {
+            return last.hash
+        }
+        
+        return ""
+    }
 
     public var template: String {
         var xml = ""
@@ -104,13 +128,26 @@ public struct ProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: movie.backgroundImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: String(movie.year))
                 xml = xml.stringByReplacingOccurrencesOfString("{{RATING}}", withString: movie.mpaRating.lowercaseString)
-
+                xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
+                
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: movie.torrents.first!.hash)
+                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: torrentHash)
 
+                xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Similar Movies")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: suggestionsString)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
+
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: watchlistButton)
+                if existsInWatchList {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "remove")
+                } else {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_ACTION}}", withString: "add")
+                }
+                xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: String(movie.id))
+                xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
             } catch {
                 print("Could not open Catalog template")
             }

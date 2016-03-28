@@ -15,11 +15,13 @@ public struct CatalogRecipe: RecipeType {
     public let presentationType = PresentationType.Tab
 
     let title: String
-    let movies: [Movie]
+    let movies: [Movie]!
+    let shows: [Show]!
 
-    init(title: String, movies: [Movie]) {
+    init(title: String, movies: [Movie]? = nil, shows: [Show]? = nil) {
         self.title = title
         self.movies = movies
+        self.shows = shows
     }
 
     public var xmlString: String {
@@ -31,17 +33,25 @@ public struct CatalogRecipe: RecipeType {
     }
 
     public var movieString: String {
-        let mapped: [String] = movies.map {
-
-            let torrent = $0.torrents.filter { $0.quality == "720p" }[0]
-
-            var string = "<lockup actionID=\"showMovie:\($0.id)\" playActionID=\"playMovie:\(torrent.hash)\">"
-            string += "<img src=\"\($0.parallaxPoster)\" width=\"250\" height=\"375\" />"
-            string += "<title class=\"hover\">\($0.title.cleaned)</title>"
-            string += "</lockup>"
-            return string
+        if let movies = self.movies {
+            let mapped: [String] = movies.map {
+                var string = "<lockup actionID=\"showMovie:\($0.id)\">"
+                string += "<img src=\"\($0.parallaxPoster)\" width=\"250\" height=\"375\" />"
+                string += "<title class=\"hover\">\($0.title.cleaned)</title>"
+                string += "</lockup>"
+                return string
+            }
+            return mapped.joinWithSeparator("")
+        } else {
+            let mapped: [String] = shows.map {
+                var string = "<lockup actionID=\"showShow:\($0.id):\($0.title.slugged):\($0.tvdbId)\">"
+                string += "<img src=\"\($0.posterImage)\" width=\"250\" height=\"375\" />"
+                string += "<title class=\"hover\">\($0.title.cleaned)</title>"
+                string += "</lockup>"
+                return string
+            }
+            return mapped.joinWithSeparator("")
         }
-        return mapped.joinWithSeparator("")
     }
 
     public var template: String {

@@ -22,26 +22,13 @@ struct ActionHandler {
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString(":")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies":
-            var tabBar = KitchenTabBar()
-            tabBar.items = [
-                Popular(),
-                Latest(),
-                MovieWatchlist(),
-                Search()
-            ]
-            Kitchen.serve(recipe: tabBar)
+        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  MovieWatchlist(), Search()]))
             
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
-            var tabBar = KitchenTabBar()
-            tabBar.items = [
-                popular,
-                ShowWatchlist()
-            ]
+            let tabBar = KitchenTabBar(items: [popular, ShowWatchlist()])
             Kitchen.serve(recipe: tabBar)
-
             
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)

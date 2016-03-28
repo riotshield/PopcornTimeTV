@@ -21,7 +21,6 @@
 		925F8DB41CA77477007100EB /* MovieWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DB31CA77477007100EB /* MovieWatchlist.swift */; };
 		925F8DBA1CA79C36007100EB /* WelcomeRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */; };
 		925F8DBC1CA79C91007100EB /* WelcomeRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */; };
-		925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */; };
 		925F8DC01CA7ACB3007100EB /* ShowProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DBF1CA7ACB3007100EB /* ShowProductRecipe.swift */; };
 		925F8DC21CA86961007100EB /* EpisodesProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DC11CA86961007100EB /* EpisodesProductRecipe.swift */; };
 		925F8DC41CA89485007100EB /* ShowWatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DC31CA89485007100EB /* ShowWatchlistRecipe.swift */; };
@@ -57,7 +56,6 @@
 		925F8DB31CA77477007100EB /* MovieWatchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieWatchlist.swift; sourceTree = "<group>"; };
 		925F8DB91CA79C36007100EB /* WelcomeRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WelcomeRecipe.xml; sourceTree = "<group>"; };
 		925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeRecipe.swift; sourceTree = "<group>"; };
-		925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarRecipe.swift; sourceTree = "<group>"; };
 		925F8DBF1CA7ACB3007100EB /* ShowProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowProductRecipe.swift; sourceTree = "<group>"; };
 		925F8DC11CA86961007100EB /* EpisodesProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodesProductRecipe.swift; sourceTree = "<group>"; };
 		925F8DC31CA89485007100EB /* ShowWatchlistRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowWatchlistRecipe.swift; sourceTree = "<group>"; };
@@ -194,7 +192,6 @@
 		929B445E1C9B73FE00805EC4 /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
-				925F8DBD1CA7A62A007100EB /* TabBarRecipe.swift */,
 				925F8DC31CA89485007100EB /* ShowWatchlistRecipe.swift */,
 				925F8DB11CA773A4007100EB /* MovieWatchlistRecipe.swift */,
 				925F8DBB1CA79C91007100EB /* WelcomeRecipe.swift */,
@@ -402,7 +399,6 @@
 				92892D221C9E489000BCD1A1 /* SearchRecipe.swift in Sources */,
 				925F8DB41CA77477007100EB /* MovieWatchlist.swift in Sources */,
 				925F8DC81CA8A066007100EB /* EpisodeProductRecipe.swift in Sources */,
-				925F8DBE1CA7A62A007100EB /* TabBarRecipe.swift in Sources */,
 				925F8DC61CA89496007100EB /* ShowWatchlist.swift in Sources */,
 				925F8DB21CA773A4007100EB /* MovieWatchlistRecipe.swift in Sources */,
 				925F8DC01CA7ACB3007100EB /* ShowProductRecipe.swift in Sources */,

@@ -20,7 +20,7 @@ struct PreviewItem {
 public struct WelcomeRecipe: RecipeType {
     
     public let theme = DefaultTheme()
-    public let presentationType = PresentationType.Modal
+    public let presentationType = PresentationType.Default
     
     let title: String
     let items: [PreviewItem]

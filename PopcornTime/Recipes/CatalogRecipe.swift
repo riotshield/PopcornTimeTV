@@ -44,7 +44,6 @@ public struct CatalogRecipe: RecipeType {
             return mapped.joinWithSeparator("")
         } else {
             let mapped: [String] = shows.map {
-                
                 var string = "<lockup actionID=\"showShow:\($0.id):\($0.title.slugged):\($0.tvdbId)\">"
                 string += "<img src=\"\($0.posterImage)\" width=\"250\" height=\"375\" />"
                 string += "<title class=\"hover\">\($0.title.cleaned)</title>"

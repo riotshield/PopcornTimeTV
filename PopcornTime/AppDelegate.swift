@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                         previewItems.append(PreviewItem(fanartImage: movie.backgroundImage))
                                     }
                                     
-                                    Kitchen.serve(recipe: WelcomeRecipe(title: "", items: previewItems))
+                                    Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", items: previewItems))
                                 }
                             }
                         }

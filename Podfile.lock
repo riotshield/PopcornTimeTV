@@ -28,7 +28,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PopcornKit:
-    :commit: 84a73b634e21f00ba44dd1354d0163236d3b9ebe
+    :commit: 03bdacb6b5a34b8125111fb4b9690a52930046ed
     :git: https://github.com/PopcornTimeTV/PopcornKit.git
   TVMLKitchen:
     :commit: 54a5eb276707ca8cb058d0d5d56e0c34100be7be
@@ -46,4 +46,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0711799caa6c1ddcf9c42c00b00c3c0d98ef747e
 
-COCOAPODS: 1.0.0.beta.6
+COCOAPODS: 1.0.0.beta.3

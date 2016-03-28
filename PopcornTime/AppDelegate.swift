@@ -47,12 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                         previewItems.append(PreviewItem(fanartImage: item.fanartImage))
                                     }
 
-                                    // Syft through TV SHows
+                                    // Syft through TV Shows
                                     for movie in movies {
                                         previewItems.append(PreviewItem(fanartImage: movie.backgroundImage))
                                     }
 
                                     Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", items: previewItems))
+                                    
+                                    self.checkForUpdates()
                                 }
                             }
                         }
@@ -62,5 +64,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return true
+    }
+    
+    func checkForUpdates() {
+        if let currentVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as? String {
+            UpdateManager.sharedManager().checkForUpdates(forVersion: currentVersion) { (updateAvailable, name, releaseNotes, error) in
+                if updateAvailable {
+                    Kitchen.serve(recipe: AlertRecipe(title: "Update Available", description: "A new version of PopcornTime is available.\n\(name!)\n\n\(releaseNotes!)\n\nVisit https://github.com/PopcornTimeTV/PopcornTimeTV to update.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
+                }
+            }
+        }
     }
 }

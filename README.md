@@ -35,7 +35,7 @@ PopcornTime.xcworkspace
 
 
 ##Version
-- 0.4.0 - Re-release 0.3.0 with the porject fix and update checker.
+- 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
 - 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
 - 0.2.0 - Fixes issues with build and minor UI tweaks.
 - 0.1.0 - Initial Commit *(rewrite)*

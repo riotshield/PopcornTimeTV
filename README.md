@@ -20,7 +20,7 @@ Setting up PopcornTime is quite easy.
 cd ~/Desktop
 git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
 cd ~/Desktop/PopcornTimeTV
-git checkout 0.2.0
+git checkout 0.3.0
 pod install
 ```
 

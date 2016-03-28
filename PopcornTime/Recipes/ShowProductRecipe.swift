@@ -134,10 +134,14 @@ public struct ShowProductRecipe: RecipeType {
         let season = seasons.first!
         for episode in season.episodes {
             if episode.season == 1 && episode.episode == 1 {
-                if let hash = episode.torrents.first!.hash {
-                    return hash
-                } else if let hash = episode.torrents.last!.hash {
-                    return hash
+                let filteredTorrents = episode.torrents.filter {
+                    $0.quality == "480p"
+                }
+                
+                if let first = filteredTorrents.first {
+                    return first.hash
+                } else if let last = episode.torrents.last {
+                    return last.hash
                 }
             }
         }

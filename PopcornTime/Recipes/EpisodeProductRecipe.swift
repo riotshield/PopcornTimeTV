@@ -9,33 +9,23 @@
 import TVMLKitchen
 import PopcornKit
 
-public struct DetailedEpisode {
-    var episodeTitle: String!
-    var episode: Episode!
-    var fullScreenshot: String!
-    var mediumScreenshot: String!
-    var smallScreenshot: String!
-    
-    init() {
-        
-    }
-}
-
-public struct EpisodesProductRecipe: RecipeType {
+public struct EpisodeProductRecipe: RecipeType {
 
     let show: Show
     let showInfo: ShowInfo
     let episodes: [Episode]
     let detailedEpisodes: [DetailedEpisode]
+    let episodeNumber: Int
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.Default
 
-    public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode]) {
+    public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode], episodeNumber: Int) {
         self.show = show
         self.showInfo = showInfo
         self.episodes = episodes
         self.detailedEpisodes = detailedEpisodes
+        self.episodeNumber = episodeNumber
     }
 
     public var xmlString: String {
@@ -94,14 +84,14 @@ public struct EpisodesProductRecipe: RecipeType {
     }
 
     var firstEpisode: String {
-        if let episode = episodes.first {
-            let filteredTorrents = episode.torrents.filter {
+        if episodes.indices.contains(episodeNumber - 1) {
+            let filteredTorrents = episodes[episodeNumber - 1].torrents.filter {
                 $0.quality == "480p"
             }
             
             if let first = filteredTorrents.first {
                 return first.hash
-            } else if let last = episode.torrents.last {
+            } else if let last = episodes[episodeNumber - 1].torrents.last {
                 return last.hash
             }
         }
@@ -137,11 +127,11 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("<text><badge src=\"resource://tomato-{{TOMATO_CRITIC_RATING}}\"/> {{TOMATO_CRITIC_SCORE}}%</text>", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{RUNTIME}}", withString: runtime)
-                xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: show.title.cleaned)
+                xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: detailedEpisodes[episodeNumber - 1].episodeTitle.cleaned)
                 xml = xml.stringByReplacingOccurrencesOfString("{{GENRES}}", withString: genresString)
-                xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: show.synopsis.cleaned)
-                xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: show.synopsis.cleaned)
-                xml = xml.stringByReplacingOccurrencesOfString("{{IMAGE}}", withString: show.posterImage)
+                xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: detailedEpisodes[episodeNumber - 1].episode.overview.cleaned)
+                xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: detailedEpisodes[episodeNumber - 1].episode.overview.cleaned)
+                xml = xml.stringByReplacingOccurrencesOfString("{{IMAGE}}", withString: detailedEpisodes[episodeNumber - 1].fullScreenshot)
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: show.fanartImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
@@ -161,10 +151,10 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
                 
-                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH)_LIST_BUTTON}}", withString: "")
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: "")
-                xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
+                xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "show")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
                 

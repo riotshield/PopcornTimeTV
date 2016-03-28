@@ -88,6 +88,20 @@ public struct MovieProductRecipe: RecipeType {
         string += "</buttonLockup>"
         return string
     }
+    
+    var torrentHash: String {
+        let filteredTorrents = movie.torrents.filter {
+            $0.quality == "720p"
+        }
+        
+        if let first = filteredTorrents.first {
+            return first.hash
+        } else if let last = movie.torrents.last {
+            return last.hash
+        }
+        
+        return ""
+    }
 
     public var template: String {
         var xml = ""
@@ -117,7 +131,7 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
                 
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: movie.torrents.first!.hash)
+                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: torrentHash)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Similar Movies")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: suggestionsString)

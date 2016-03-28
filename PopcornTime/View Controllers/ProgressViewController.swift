@@ -37,7 +37,7 @@ class ProgressViewController: UIViewController {
         super.viewWillAppear(animated)
 
         if let _ = magnet, let _ = movieName, let _ = imageAddress {
-            nameLabel.text = "Downloading " + movieName + "..."
+            nameLabel.text = "Processing " + movieName + "..."
             imageView.kf_setImageWithURL(NSURL(string: "http:" + imageAddress)!)
             backgroundImageView.kf_setImageWithURL(NSURL(string: "http:" + backgroundImageAddress)!)
 
@@ -48,6 +48,9 @@ class ProgressViewController: UIViewController {
             PTTorrentStreamer.sharedStreamer().startStreamingFromFileOrMagnetLink(magnet, progress: { status in
                 self.downloading = true
                 self.progressView.progress = status.bufferingProgress
+                if self.progressView.progress <= 0.0 {
+                    self.nameLabel.text = "Downloading " + self.movieName + "..."
+                }
             }, readyToPlay: { url in
                 let mediaItem = AVPlayerItem(URL: url)
 

@@ -82,7 +82,7 @@ public struct MovieProductRecipe: RecipeType {
     }
 
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist:{{MOVIE_ID}}:{{TITLE}}:{{TYPE}}:{{IMAGE}}\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist:\(String(movie.id)):\(movie.title.cleaned):movie:\(movie.largeCoverImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"

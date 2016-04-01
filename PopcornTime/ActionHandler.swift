@@ -27,7 +27,9 @@ struct ActionHandler {
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
-            let tabBar = KitchenTabBar(items: [popular, ShowWatchlist()])
+            var search = Search()
+            search.fetchType = .Shows
+            let tabBar = KitchenTabBar(items: [popular, search, ShowWatchlist()])
             Kitchen.serve(recipe: tabBar)
 
         case "showMovie": showMovie(pieces)
@@ -56,6 +58,15 @@ struct ActionHandler {
 
     }
 
+    /**
+     The action handler for when a tab is cahnged
+     
+     - parameter id: The tabID of the element pressed
+     */
+    static func tabChanged(id: Int) {
+        
+    }
+    
     // MARK: Actions
 
     static func showMovie(pieces: [String]) {

@@ -23,7 +23,7 @@
 		925F8DE81CA9E44C007100EB /* EpisodeProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DD91CA9E44C007100EB /* EpisodeProductRecipe.swift */; };
 		925F8DE91CA9E44C007100EB /* EpisodesProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DDA1CA9E44C007100EB /* EpisodesProductRecipe.swift */; };
 		925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */; };
-		925F8DEB1CA9E44C007100EB /* MovieSearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DDC1CA9E44C007100EB /* MovieSearchRecipe.xml */; };
+		925F8DEB1CA9E44C007100EB /* SearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */; };
 		925F8DEC1CA9E44C007100EB /* MovieWatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DDD1CA9E44C007100EB /* MovieWatchlistRecipe.swift */; };
 		925F8DED1CA9E44C007100EB /* ProductRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DDE1CA9E44C007100EB /* ProductRecipe.xml */; };
 		925F8DEE1CA9E44C007100EB /* SearchRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DDF1CA9E44C007100EB /* SearchRecipe.swift */; };
@@ -58,7 +58,7 @@
 		925F8DD91CA9E44C007100EB /* EpisodeProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeProductRecipe.swift; sourceTree = "<group>"; };
 		925F8DDA1CA9E44C007100EB /* EpisodesProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodesProductRecipe.swift; sourceTree = "<group>"; };
 		925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieProductRecipe.swift; sourceTree = "<group>"; };
-		925F8DDC1CA9E44C007100EB /* MovieSearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = MovieSearchRecipe.xml; sourceTree = "<group>"; };
+		925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SearchRecipe.xml; sourceTree = "<group>"; };
 		925F8DDD1CA9E44C007100EB /* MovieWatchlistRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieWatchlistRecipe.swift; sourceTree = "<group>"; };
 		925F8DDE1CA9E44C007100EB /* ProductRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ProductRecipe.xml; sourceTree = "<group>"; };
 		925F8DDF1CA9E44C007100EB /* SearchRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchRecipe.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 				925F8DD91CA9E44C007100EB /* EpisodeProductRecipe.swift */,
 				925F8DDA1CA9E44C007100EB /* EpisodesProductRecipe.swift */,
 				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
-				925F8DDC1CA9E44C007100EB /* MovieSearchRecipe.xml */,
+				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
 				925F8DDD1CA9E44C007100EB /* MovieWatchlistRecipe.swift */,
 				925F8DDE1CA9E44C007100EB /* ProductRecipe.xml */,
 				925F8DDF1CA9E44C007100EB /* SearchRecipe.swift */,
@@ -226,8 +226,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
-				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
 				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
+				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,
@@ -289,7 +289,7 @@
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,
 				925F8DE71CA9E44C007100EB /* DescriptionRecipe.xml in Resources */,
 				925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */,
-				925F8DEB1CA9E44C007100EB /* MovieSearchRecipe.xml in Resources */,
+				925F8DEB1CA9E44C007100EB /* SearchRecipe.xml in Resources */,
 				925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */,
 				925F8DED1CA9E44C007100EB /* ProductRecipe.xml in Resources */,
 			);

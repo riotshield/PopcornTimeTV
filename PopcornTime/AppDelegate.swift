@@ -19,11 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let cookbook = Cookbook(launchOptions: launchOptions)
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
-
-        cookbook.evaluateAppJavaScriptInContext = { appController, context in
-
-        }
-
+        cookbook.tabChangedHandler =  ActionHandler.tabChanged
         Kitchen.prepare(cookbook)
 
         let manager = NetworkManager.sharedManager()
@@ -32,6 +28,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
                     manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
 
+                    // Save the amount of TV Show pages
+                    manager.fetchShowPageNumbers({ (pageNumbers, error) in
+                        if let pageNumbers = pageNumbers {
+                            NSUserDefaults.standardUserDefaults().setInteger(pageNumbers.count, forKey: "EZTVPageCount")
+                        }
+                    })
+                    
                     manager.fetchShowsForPage(1) { shows, error in
                         if let shows = shows {
                             manager.fetchMovies(limit: 5, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in

@@ -28,7 +28,7 @@ class YIFYSearchRecipe: SearchRecipe {
                     return string
                 }
 
-                if let file = NSBundle.mainBundle().URLForResource("MovieSearchRecipe", withExtension: "xml") {
+                if let file = NSBundle.mainBundle().URLForResource("SearchRecipe", withExtension: "xml") {
                     do {
                         var xml = try String(contentsOfURL: file)
 
@@ -45,4 +45,55 @@ class YIFYSearchRecipe: SearchRecipe {
 
     }
 
+}
+
+class EZTVSearchRecipe: SearchRecipe {
+    
+    var recipe: String? {
+        if let file = NSBundle.mainBundle().URLForResource("SearchRecipe", withExtension: "xml") {
+            do {
+                return try String(contentsOfURL: file)
+            } catch {
+                print("Could not open Catalog template")
+            }
+        }
+        return nil
+    }
+    
+    override init(type: PresentationType = .Search) {
+        super.init(type: type)
+    }
+    
+    override func filterSearchText(text: String, callback: (String -> Void)) {
+        if let pageCount = NSUserDefaults.standardUserDefaults().objectForKey("EZTVPageCount") as? Int {
+            var results = [Show]()
+            let group = dispatch_group_create()
+            for index in 0...pageCount {
+                dispatch_group_enter(group)
+                NetworkManager.sharedManager().searchEZTV(index, searchTerm: text) { shows, error in
+                    if let shows = shows {
+                        results += shows
+                    }
+                    dispatch_group_leave(group)
+                }
+            }
+            
+            dispatch_group_notify(group, dispatch_get_main_queue(), { 
+                let mapped: [String] = results.map { show in
+                    var string = "<lockup actionID=\"showShow:\(show.id):\(show.title.slugged):\(show.tvdbId)\">"
+                    string += "<img src=\"\(show.posterImage)\" width=\"250\" height=\"375\" />"
+                    string += "<title style=\"tv-text-highlight-style: marquee-and-show-on-highlight;\">\(show.title.cleaned)</title>"
+                    string += "</lockup>"
+                    return string
+                }
+                if let recipe = self.recipe {
+                    var xml = recipe
+                    xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: "Found \(results.count) \(results.count == 1 ? "show" : "shows") for \"\(text.cleaned)\"")
+                    xml = xml.stringByReplacingOccurrencesOfString("{{RESULTS}}", withString: mapped.joinWithSeparator("\n"))
+                    callback(xml)
+                }
+            })
+        }
+        
+    }
 }

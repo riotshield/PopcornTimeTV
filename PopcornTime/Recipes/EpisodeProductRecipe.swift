@@ -18,7 +18,7 @@ public struct EpisodeProductRecipe: RecipeType {
     let episodeNumber: Int
 
     public let theme = DefaultTheme()
-    public let presentationType = PresentationType.Default
+    public let presentationType = PresentationType.DefaultWithLoadingIndicator
 
     public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode], episodeNumber: Int) {
         self.show = show

@@ -66,7 +66,7 @@ public struct ShowProductRecipe: RecipeType {
     let existsInWatchList: Bool
 
     public let theme = DefaultTheme()
-    public let presentationType = PresentationType.Default
+    public let presentationType = PresentationType.DefaultWithLoadingIndicator
 
     public init(show: Show, showInfo: ShowInfo, seasons: [Season], existsInWatchList: Bool) {
         self.show = show

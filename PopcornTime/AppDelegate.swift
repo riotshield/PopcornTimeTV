@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let cookbook = Cookbook(launchOptions: launchOptions)
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
-        cookbook.tabChangedHandler =  ActionHandler.tabChanged
         Kitchen.prepare(cookbook)
 
         let manager = NetworkManager.sharedManager()

@@ -32,8 +32,7 @@
 		925F8DF11CA9E44C007100EB /* WelcomeRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DE21CA9E44C007100EB /* WelcomeRecipe.swift */; };
 		925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DE31CA9E44C007100EB /* WelcomeRecipe.xml */; };
 		925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF41CA9E464007100EB /* WatchlistManager.swift */; };
-		925F8DF81CA9E477007100EB /* MovieWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF61CA9E477007100EB /* MovieWatchlist.swift */; };
-		925F8DF91CA9E477007100EB /* ShowWatchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF71CA9E477007100EB /* ShowWatchlist.swift */; };
+		925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF61CA9E477007100EB /* Watchlist.swift */; };
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
 		92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B301C9CA5BC0086D362 /* ProgressViewController.swift */; };
 		92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B331C9CAB360086D362 /* PlayerViewController.swift */; };
@@ -67,8 +66,7 @@
 		925F8DE21CA9E44C007100EB /* WelcomeRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeRecipe.swift; sourceTree = "<group>"; };
 		925F8DE31CA9E44C007100EB /* WelcomeRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WelcomeRecipe.xml; sourceTree = "<group>"; };
 		925F8DF41CA9E464007100EB /* WatchlistManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistManager.swift; sourceTree = "<group>"; };
-		925F8DF61CA9E477007100EB /* MovieWatchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieWatchlist.swift; sourceTree = "<group>"; };
-		925F8DF71CA9E477007100EB /* ShowWatchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowWatchlist.swift; sourceTree = "<group>"; };
+		925F8DF61CA9E477007100EB /* Watchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Watchlist.swift; sourceTree = "<group>"; };
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		92925B301C9CA5BC0086D362 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProgressViewController.swift; path = "View Controllers/ProgressViewController.swift"; sourceTree = "<group>"; };
 		92925B331C9CAB360086D362 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = "View Controllers/PlayerViewController.swift"; sourceTree = "<group>"; };
@@ -93,8 +91,7 @@
 		280910301C99DFA200C8EC1C /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				925F8DF61CA9E477007100EB /* MovieWatchlist.swift */,
-				925F8DF71CA9E477007100EB /* ShowWatchlist.swift */,
+				925F8DF61CA9E477007100EB /* Watchlist.swift */,
 				923860561CA0E40500A21F3B /* Latest.swift */,
 				280910311C99DFDA00C8EC1C /* Popular.swift */,
 				280910331C99E0E000C8EC1C /* Search.swift */,
@@ -399,7 +396,6 @@
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
 				925F8DEC1CA9E44C007100EB /* MovieWatchlistRecipe.swift in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
-				925F8DF91CA9E477007100EB /* ShowWatchlist.swift in Sources */,
 				925F8DF01CA9E44C007100EB /* ShowWatchlistRecipe.swift in Sources */,
 				925F8DEF1CA9E44C007100EB /* ShowProductRecipe.swift in Sources */,
 				925F8DE81CA9E44C007100EB /* EpisodeProductRecipe.swift in Sources */,
@@ -414,7 +410,7 @@
 				92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */,
 				925F8DF11CA9E44C007100EB /* WelcomeRecipe.swift in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
-				925F8DF81CA9E477007100EB /* MovieWatchlist.swift in Sources */,
+				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
 				925F8DE91CA9E44C007100EB /* EpisodesProductRecipe.swift in Sources */,
 			);

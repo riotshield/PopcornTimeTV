@@ -22,14 +22,19 @@ struct ActionHandler {
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString(":")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  MovieWatchlist(), Search()]))
+        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  Watchlist(), Search()]))
 
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
+            
             var search = Search()
             search.fetchType = .Shows
-            let tabBar = KitchenTabBar(items: [popular, search, ShowWatchlist()])
+            
+            var watchlist = Watchlist()
+            watchlist.fetchType = .Shows
+            
+            let tabBar = KitchenTabBar(items: [popular, search, watchlist])
             Kitchen.serve(recipe: tabBar)
 
         case "showMovie": showMovie(pieces)
@@ -56,15 +61,6 @@ struct ActionHandler {
      */
     static func play(id: String) {
 
-    }
-
-    /**
-     The action handler for when a tab is cahnged
-     
-     - parameter id: The tabID of the element pressed
-     */
-    static func tabChanged(id: Int) {
-        
     }
     
     // MARK: Actions

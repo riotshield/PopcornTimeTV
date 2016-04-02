@@ -1,10 +1,17 @@
 #PopcornTime TV
-===
 [![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
 
 An Apple TV 4 application to torrent movies and tv shows for streaming.
 A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
+
+*Note:* TV Show search is still being worked on. When a new version is released you'll see it in the release notes below. 
+
+##Version
+- 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
+- 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
+- 0.2.0 - Fixes issues with build and minor UI tweaks.
+- 0.1.0 - Initial Commit *(rewrite)*
 
 ##Setup
 
@@ -33,12 +40,6 @@ PopcornTime.xcworkspace
 ![Home](http://i.imgur.com/DqIbp3N.jpg)
 ![Movie Details](http://i.imgur.com/HQYB6Ky.jpg)
 
-
-##Version
-- 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
-- 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
-- 0.2.0 - Fixes issues with build and minor UI tweaks.
-- 0.1.0 - Initial Commit *(rewrite)*
 
 ##Want to help?
 

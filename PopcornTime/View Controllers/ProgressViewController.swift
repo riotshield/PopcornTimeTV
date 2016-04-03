@@ -26,6 +26,7 @@ class ProgressViewController: UIViewController {
     var shortDescription: String!
 
     var downloading = false
+    var streaming = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +84,7 @@ class ProgressViewController: UIViewController {
                 playerController.player = AVPlayer(playerItem: mediaItem)
                 playerController.player?.play()
                 Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
+                self.streaming = true
             }) { error in
                 print(error)
             }
@@ -91,7 +93,10 @@ class ProgressViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        if !self.streaming {
+            PTTorrentStreamer.sharedStreamer().cancelStreaming()
+        }
     }
-
 
 }

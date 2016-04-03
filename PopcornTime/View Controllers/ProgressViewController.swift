@@ -26,6 +26,7 @@ class ProgressViewController: UIViewController {
     var shortDescription: String!
 
     var downloading = false
+    var streaming = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +37,10 @@ class ProgressViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        if let _ = magnet, let _ = movieName, let _ = imageAddress {
+        if let _ = magnet, let _ = movieName, let _ = imageAddress, let _ = backgroundImageAddress {
             nameLabel.text = "Processing " + movieName + "..."
-            imageView.kf_setImageWithURL(NSURL(string: "http:" + imageAddress)!)
-            backgroundImageView.kf_setImageWithURL(NSURL(string: "http:" + backgroundImageAddress)!)
+            imageView.kf_setImageWithURL(NSURL(string: imageAddress)!)
+            backgroundImageView.kf_setImageWithURL(NSURL(string: backgroundImageAddress)!)
 
             if downloading {
                 return
@@ -52,37 +53,13 @@ class ProgressViewController: UIViewController {
                     self.nameLabel.text = "Downloading " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
-                let mediaItem = AVPlayerItem(URL: url)
-
-                let titleMetadataItem = AVMutableMetadataItem()
-                titleMetadataItem.locale = NSLocale.currentLocale()
-                titleMetadataItem.key = AVMetadataCommonKeyTitle
-                titleMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                titleMetadataItem.value = self.movieName
-                mediaItem.externalMetadata.append(titleMetadataItem)
-
-                let descriptionMetadataItem = AVMutableMetadataItem()
-                descriptionMetadataItem.locale = NSLocale.currentLocale()
-                descriptionMetadataItem.key = AVMetadataCommonKeyDescription
-                descriptionMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                descriptionMetadataItem.value = self.shortDescription
-                mediaItem.externalMetadata.append(descriptionMetadataItem)
-
-                if let image = self.imageView.image {
-                    let artworkMetadataItem = AVMutableMetadataItem()
-                    artworkMetadataItem.locale = NSLocale.currentLocale()
-                    artworkMetadataItem.key = AVMetadataCommonKeyArtwork
-                    artworkMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                    artworkMetadataItem.value = UIImagePNGRepresentation(image)
-
-                    mediaItem.externalMetadata.append(artworkMetadataItem)
+                if url.pathExtension == "mp4" {
+                    // Use the default player for handling video
+                    self.playNativeVideo(url)
+                } else {
+                    // Use VLC to play the video
+                    PTTorrentStreamer.sharedStreamer().cancelStreaming()
                 }
-
-                Kitchen.appController.navigationController.popViewControllerAnimated(false)
-                let playerController = PlayerViewController()
-                playerController.player = AVPlayer(playerItem: mediaItem)
-                playerController.player?.play()
-                Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
             }) { error in
                 print(error)
             }
@@ -91,7 +68,45 @@ class ProgressViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+
+        if !self.streaming {
+            PTTorrentStreamer.sharedStreamer().cancelStreaming()
+        }
     }
 
+    func playNativeVideo(url: NSURL) {
+        let mediaItem = AVPlayerItem(URL: url)
+
+        let titleMetadataItem = AVMutableMetadataItem()
+        titleMetadataItem.locale = NSLocale.currentLocale()
+        titleMetadataItem.key = AVMetadataCommonKeyTitle
+        titleMetadataItem.keySpace = AVMetadataKeySpaceCommon
+        titleMetadataItem.value = self.movieName
+        mediaItem.externalMetadata.append(titleMetadataItem)
+
+        let descriptionMetadataItem = AVMutableMetadataItem()
+        descriptionMetadataItem.locale = NSLocale.currentLocale()
+        descriptionMetadataItem.key = AVMetadataCommonKeyDescription
+        descriptionMetadataItem.keySpace = AVMetadataKeySpaceCommon
+        descriptionMetadataItem.value = self.shortDescription
+        mediaItem.externalMetadata.append(descriptionMetadataItem)
+
+        if let image = self.imageView.image {
+            let artworkMetadataItem = AVMutableMetadataItem()
+            artworkMetadataItem.locale = NSLocale.currentLocale()
+            artworkMetadataItem.key = AVMetadataCommonKeyArtwork
+            artworkMetadataItem.keySpace = AVMetadataKeySpaceCommon
+            artworkMetadataItem.value = UIImagePNGRepresentation(image)
+
+            mediaItem.externalMetadata.append(artworkMetadataItem)
+        }
+
+        Kitchen.appController.navigationController.popViewControllerAnimated(false)
+        let playerController = PlayerViewController()
+        playerController.player = AVPlayer(playerItem: mediaItem)
+        playerController.player?.play()
+        Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
+        self.streaming = true
+    }
 
 }

@@ -12,7 +12,7 @@ import PopcornTorrent
 import YoutubeSourceParserKit
 import AVKit
 
-struct ActionHandler {
+struct ActionHandler { // swiftlint:disable:this type_body_length
 
     /**
      The action handler for when the primary (select) button is pressed
@@ -20,20 +20,20 @@ struct ActionHandler {
      - parameter id: The actionID of the element pressed
      */
     static func primary(id: String) {
-        let pieces = id.componentsSeparatedByString(":")
+        let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
         case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  Watchlist(), Search()]))
 
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
-            
+
             var search = Search()
             search.fetchType = .Shows
-            
+
             var watchlist = Watchlist()
             watchlist.fetchType = .Shows
-            
+
             let tabBar = KitchenTabBar(items: [popular, search, watchlist])
             Kitchen.serve(recipe: tabBar)
 
@@ -49,6 +49,8 @@ struct ActionHandler {
         case "closeAlert": Kitchen.dismissModal()
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
+        case "streamTorrent": streamTorrent(pieces)
+
         default: break
         }
 
@@ -62,7 +64,7 @@ struct ActionHandler {
     static func play(id: String) {
 
     }
-    
+
     // MARK: Actions
 
     static func showMovie(pieces: [String]) {
@@ -249,22 +251,55 @@ struct ActionHandler {
     }
 
     static func playMovie(pieces: [String]) {
+        print(pieces.count)
         print(pieces)
-        // {{MAGNET}}:https:{{IMAGE}}:http:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}
-        let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
 
+        let torrentsString = pieces[5]
+        if torrentsString == "" || torrentsString == "{{TORRENTS}}" {
+            // NO torrents found
+            Kitchen.serve(recipe: AlertRecipe(title: "No torrents found", description: "A torrent could not be found for \(pieces[3]).".cleaned, buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
+            return
+        }
+        let allTorrents = torrentsString.componentsSeparatedByString("•")
+        var torrents = [[String : String]]()
+        for torrent in allTorrents {
+            let components = torrent.componentsSeparatedByString("&")
+            var torrentDict = [String : String]()
+            for keyValuePair in components {
+                let pairComponents = keyValuePair.componentsSeparatedByString("=")
+                if let key = pairComponents.first, let value = pairComponents.last {
+                    torrentDict[key] = value
+                }
+            }
+            torrents.append(torrentDict)
+        }
+
+        var buttons = [AlertButton]()
+        for torrent in torrents {
+            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3])»\(pieces[4])"))
+        }
+
+        Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[3])".cleaned, buttons: buttons, presentationType: .Modal))
+    }
+
+    static func streamTorrent(pieces: [String]) {
+        // {{MAGNET}}:{{IMAGE}}:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}:{{TORRENTS}}
+
+        Kitchen.dismissModal()
+        let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
             viewController.magnet = magnet
-            viewController.imageAddress = pieces[3]
-            viewController.backgroundImageAddress = pieces[5]
-            viewController.movieName = pieces[6]
-            viewController.shortDescription = pieces[7]
+            viewController.imageAddress = pieces[2]
+            viewController.backgroundImageAddress = pieces[3]
+            viewController.movieName = pieces[4]
+            viewController.shortDescription = pieces[5]
 
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
         }
+
     }
 
     static func playPreview(pieces: [String]) {
@@ -285,7 +320,7 @@ struct ActionHandler {
         let name = pieces[2]
         let id = pieces[1]
         let type = pieces[3]
-        let cover = pieces[4] + ":" + pieces[5]
+        let cover = pieces[4]
         var imdb = ""
         if pieces.indices.contains(6) {
             imdb = pieces[6]

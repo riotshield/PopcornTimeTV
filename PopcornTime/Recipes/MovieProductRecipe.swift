@@ -59,8 +59,8 @@ public struct MovieProductRecipe: RecipeType {
 
     var suggestionsString: String {
         let mapped: [String] = suggestions.map {
-            var string = "<lockup actionID=\"showMovie:\($0.id)\">" + "\n"
-            string += "<img src=\"\($0.parallaxPoster)\" width=\"150\" height=\"226\" />" + "\n"
+            var string = "<lockup actionID=\"showMovie»\($0.id)\">" + "\n"
+            string += "<img src=\"\($0.mediumCoverImage)\" width=\"150\" height=\"226\" />" + "\n"
             string += "<title class=\"hover\">\($0.title.cleaned)</title>" + "\n"
             string += "</lockup>" + "\n"
             return string
@@ -82,7 +82,7 @@ public struct MovieProductRecipe: RecipeType {
     }
 
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist:\(String(movie.id)):\(movie.title.cleaned):movie:\(movie.largeCoverImage)\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist»\(String(movie.id))»\(movie.title.cleaned)»movie»\(movie.largeCoverImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"
@@ -101,6 +101,14 @@ public struct MovieProductRecipe: RecipeType {
         }
 
         return ""
+    }
+
+
+    var torrents: String {
+        let filteredTorrents: [String] = movie.torrents.map { torrent in
+            return "quality=\(torrent.quality)&hash=\(torrent.hash)"
+        }
+        return filteredTorrents.joinWithSeparator("•")
     }
 
     public var template: String {
@@ -131,7 +139,6 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: torrentHash)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Similar Movies")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: suggestionsString)
@@ -148,6 +155,8 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
+
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

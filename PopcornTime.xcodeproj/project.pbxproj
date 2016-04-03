@@ -169,24 +169,72 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		925F8DD41CA9E44C007100EB /* Recipes */ = {
+		924213FE1CB19DAA0055FA15 /* Product */ = {
+			isa = PBXGroup;
+			children = (
+				925F8DE01CA9E44C007100EB /* ShowProductRecipe.swift */,
+				925F8DD91CA9E44C007100EB /* EpisodeProductRecipe.swift */,
+				925F8DDA1CA9E44C007100EB /* EpisodesProductRecipe.swift */,
+				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
+				925F8DDE1CA9E44C007100EB /* ProductRecipe.xml */,
+			);
+			name = Product;
+			sourceTree = "<group>";
+		};
+		924213FF1CB19DB40055FA15 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
 				925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */,
 				925F8DD61CA9E44C007100EB /* CatalogRecipe.xml */,
+			);
+			name = Catalog;
+			sourceTree = "<group>";
+		};
+		924214001CB19DB90055FA15 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
 				925F8DD71CA9E44C007100EB /* DescriptionRecipe.swift */,
 				925F8DD81CA9E44C007100EB /* DescriptionRecipe.xml */,
-				925F8DD91CA9E44C007100EB /* EpisodeProductRecipe.swift */,
-				925F8DDA1CA9E44C007100EB /* EpisodesProductRecipe.swift */,
-				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
-				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
+			);
+			name = Alert;
+			sourceTree = "<group>";
+		};
+		924214011CB19DC20055FA15 /* WatchList */ = {
+			isa = PBXGroup;
+			children = (
 				925F8DDD1CA9E44C007100EB /* MovieWatchlistRecipe.swift */,
-				925F8DDE1CA9E44C007100EB /* ProductRecipe.xml */,
-				925F8DDF1CA9E44C007100EB /* SearchRecipe.swift */,
-				925F8DE01CA9E44C007100EB /* ShowProductRecipe.swift */,
 				925F8DE11CA9E44C007100EB /* ShowWatchlistRecipe.swift */,
+			);
+			name = WatchList;
+			sourceTree = "<group>";
+		};
+		924214021CB19DCA0055FA15 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
+				925F8DDF1CA9E44C007100EB /* SearchRecipe.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		924214031CB19DD10055FA15 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
 				925F8DE21CA9E44C007100EB /* WelcomeRecipe.swift */,
 				925F8DE31CA9E44C007100EB /* WelcomeRecipe.xml */,
+			);
+			name = Welcome;
+			sourceTree = "<group>";
+		};
+		925F8DD41CA9E44C007100EB /* Recipes */ = {
+			isa = PBXGroup;
+			children = (
+				924214031CB19DD10055FA15 /* Welcome */,
+				924213FF1CB19DB40055FA15 /* Catalog */,
+				924213FE1CB19DAA0055FA15 /* Product */,
+				924214021CB19DCA0055FA15 /* Search */,
+				924214011CB19DC20055FA15 /* WatchList */,
+				924214001CB19DB90055FA15 /* Alert */,
 			);
 			path = Recipes;
 			sourceTree = "<group>";
@@ -223,8 +271,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
-				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
 				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
+				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,
@@ -254,7 +302,6 @@
 				TargetAttributes = {
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = HHS94TKB2U;
 					};
 				};
 			};

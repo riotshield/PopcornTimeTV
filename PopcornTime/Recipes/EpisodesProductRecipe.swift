@@ -71,7 +71,7 @@ public struct EpisodesProductRecipe: RecipeType {
 
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
-            var string = "<lockup actionID=\"showEpisode:\(show.id):\($0.episode.season):\(show.title.slugged):\(show.tvdbId):\($0.episode.tvdbId):\($0.episode.episode)\">" + "\n"
+            var string = "<lockup actionID=\"showEpisode»\(show.id)»\($0.episode.season)»\(show.title.slugged)»\(show.tvdbId)»\($0.episode.tvdbId)»\($0.episode.episode)\">" + "\n"
             string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
             string += "<title>\($0.episodeTitle)</title>" + "\n"
             string += "</lockup>" + "\n"
@@ -93,17 +93,13 @@ public struct EpisodesProductRecipe: RecipeType {
         return mapped.joinWithSeparator("\n")
     }
 
-    var firstEpisode: String {
-        if let episode = episodes.first {
-            let filteredTorrents = episode.torrents.filter {
-                $0.quality == "480p"
+    var torrents: String {
+        if let firstEpisode = episodes.first {
+            let torrents: [Torrent] = firstEpisode.torrents.filter({ $0.quality != "0" })
+            let filteredTorrents: [String] = torrents.map { torrent in
+                return "quality=\(torrent.quality)&hash=\(torrent.hash)"
             }
-
-            if let first = filteredTorrents.first {
-                return first.hash
-            } else if let last = episode.torrents.last {
-                return last.hash
-            }
+            return filteredTorrents.joinWithSeparator("•")
         }
         return ""
     }
@@ -147,13 +143,11 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "<text>\(showInfo.airDay)'s \(showInfo.airTime)</text>")
 
-                var preview = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+                var preview = "                <buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
                 preview += "                    <badge src=\"resource://button-preview\" />\n"
                 preview += "                    <title>Trailer</title>\n"
                 preview += "                </buttonLockup>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(preview, withString: "")
-
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Episodes")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: episodesString)
@@ -169,6 +163,8 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
+
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

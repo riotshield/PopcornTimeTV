@@ -20,7 +20,7 @@ struct ActionHandler {
      - parameter id: The actionID of the element pressed
      */
     static func primary(id: String) {
-        let pieces = id.componentsSeparatedByString(":")
+        let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
         case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  Watchlist(), Search()]))
 
@@ -49,6 +49,8 @@ struct ActionHandler {
         case "closeAlert": Kitchen.dismissModal()
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
+        case "streamTorrent": streamTorrent(pieces)
+            
         default: break
         }
 
@@ -249,24 +251,49 @@ struct ActionHandler {
     }
 
     static func playMovie(pieces: [String]) {
-        print(pieces)
-        // {{MAGNET}}:https:{{IMAGE}}:http:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}
-        let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
+        let torrentsString = pieces[6]
+        let allTorrents = torrentsString.componentsSeparatedByString("•")
+        var torrents = [[String : String]]()
+        for torrent in allTorrents {
+            let components = torrent.componentsSeparatedByString("&")
+            var torrentDict = [String : String]()
+            for keyValuePair in components {
+                let pairComponents = keyValuePair.componentsSeparatedByString("=")
+                if let key = pairComponents.first, let value = pairComponents.last {
+                    torrentDict[key] = value
+                }
+            }
+            torrents.append(torrentDict)
+        }
+        
+        var buttons = [AlertButton]()
+        for torrent in torrents {
+            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[2])»\(pieces[3])»\(pieces[4])»\(pieces[5])"))
+        }
+        // 1 = hash, 2 & 3 = image, 4 & 5 = background, 6 = name, 7 = description
+        Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[4])".cleaned, buttons: buttons, presentationType: .Modal))
+    }
 
+    static func streamTorrent(pieces: [String]) {
+        // {{MAGNET}}:{{IMAGE}}:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}:{{TORRENTS}}
+        
+        Kitchen.dismissModal()
+        let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
             viewController.magnet = magnet
-            viewController.imageAddress = pieces[3]
-            viewController.backgroundImageAddress = pieces[5]
-            viewController.movieName = pieces[6]
-            viewController.shortDescription = pieces[7]
-
+            viewController.imageAddress = pieces[2]
+            viewController.backgroundImageAddress = pieces[3]
+            viewController.movieName = pieces[4]
+            viewController.shortDescription = pieces[5]
+            
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
         }
-    }
 
+    }
+    
     static func playPreview(pieces: [String]) {
         Youtube.h264videosWithYoutubeURL(NSURL(string: pieces.last!)!, completion: { videoInfo, error in
             if let videoInfo = videoInfo {
@@ -285,7 +312,7 @@ struct ActionHandler {
         let name = pieces[2]
         let id = pieces[1]
         let type = pieces[3]
-        let cover = pieces[4] + ":" + pieces[5]
+        let cover = pieces[4]
         var imdb = ""
         if pieces.indices.contains(6) {
             imdb = pieces[6]

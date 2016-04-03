@@ -59,7 +59,7 @@ public struct MovieProductRecipe: RecipeType {
 
     var suggestionsString: String {
         let mapped: [String] = suggestions.map {
-            var string = "<lockup actionID=\"showMovie:\($0.id)\">" + "\n"
+            var string = "<lockup actionID=\"showMovie»\($0.id)\">" + "\n"
             string += "<img src=\"\($0.mediumCoverImage)\" width=\"150\" height=\"226\" />" + "\n"
             string += "<title class=\"hover\">\($0.title.cleaned)</title>" + "\n"
             string += "</lockup>" + "\n"
@@ -82,7 +82,7 @@ public struct MovieProductRecipe: RecipeType {
     }
 
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist:\(String(movie.id)):\(movie.title.cleaned):movie:\(movie.largeCoverImage)\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist»\(String(movie.id))»\(movie.title.cleaned)»movie»\(movie.largeCoverImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"
@@ -103,6 +103,14 @@ public struct MovieProductRecipe: RecipeType {
         return ""
     }
 
+    
+    var torrents: String {
+        let filteredTorrents: [String] = movie.torrents.map { torrent in
+            return "quality=\(torrent.quality)&hash=\(torrent.hash)"
+        }
+        return filteredTorrents.joinWithSeparator("•")
+    }
+    
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("ProductRecipe", withExtension: "xml") {
@@ -148,6 +156,8 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

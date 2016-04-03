@@ -108,7 +108,7 @@ public struct ShowProductRecipe: RecipeType {
 
     var seasonsString: String {
         let mapped: [String] = seasons.map {
-            var string = "<lockup actionID=\"showSeason:\(show.id):\($0.seasonNumber):\(show.title.slugged):\(show.tvdbId)\">" + "\n"
+            var string = "<lockup actionID=\"showSeason»\(show.id)»\($0.seasonNumber)»\(show.title.slugged)»\(show.tvdbId)\">" + "\n"
             string += "<img src=\"\($0.seasonMediumCoverImage)\" width=\"150\" height=\"226\" />" + "\n"
             string += "<title>Season \($0.seasonNumber)</title>" + "\n"
             string += "</lockup>" + "\n"
@@ -150,7 +150,7 @@ public struct ShowProductRecipe: RecipeType {
     }
 
     var previewButton: String {
-        var preview = "<buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+        var preview = "<buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
         preview += "<badge src=\"resource://button-preview\" />\n"
         preview += "<title>Trailer</title>\n"
         preview += "</buttonLockup>\n"
@@ -158,7 +158,7 @@ public struct ShowProductRecipe: RecipeType {
     }
 
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist:\(show.id):\(show.title):show:\(show.posterImage)\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist»\(show.id)»\(show.title)»show»\(show.posterImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"
@@ -204,7 +204,7 @@ public struct ShowProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "<text>\(showInfo.airDay)'s \(showInfo.airTime)</text>")
 
-                var string = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+                var string = "                <buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
                 string += "                    <badge src=\"resource://button-preview\" />\n"
                 string += "                    <title>Trailer</title>\n"
                 string += "                </buttonLockup>\n"

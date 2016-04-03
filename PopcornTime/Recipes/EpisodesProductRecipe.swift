@@ -71,7 +71,7 @@ public struct EpisodesProductRecipe: RecipeType {
 
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
-            var string = "<lockup actionID=\"showEpisode:\(show.id):\($0.episode.season):\(show.title.slugged):\(show.tvdbId):\($0.episode.tvdbId):\($0.episode.episode)\">" + "\n"
+            var string = "<lockup actionID=\"showEpisode»\(show.id)»\($0.episode.season)»\(show.title.slugged)»\(show.tvdbId)»\($0.episode.tvdbId)»\($0.episode.episode)\">" + "\n"
             string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
             string += "<title>\($0.episodeTitle)</title>" + "\n"
             string += "</lockup>" + "\n"
@@ -147,7 +147,7 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("mpaa-{{RATING}}", withString: showInfo.contentRating.lowercaseString)
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "<text>\(showInfo.airDay)'s \(showInfo.airTime)</text>")
 
-                var preview = "                <buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
+                var preview = "                <buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
                 preview += "                    <badge src=\"resource://button-preview\" />\n"
                 preview += "                    <title>Trailer</title>\n"
                 preview += "                </buttonLockup>\n"

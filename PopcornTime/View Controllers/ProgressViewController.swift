@@ -37,10 +37,10 @@ class ProgressViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        if let _ = magnet, let _ = movieName, let _ = imageAddress {
+        if let _ = magnet, let _ = movieName, let _ = imageAddress, let _ = backgroundImageAddress {
             nameLabel.text = "Processing " + movieName + "..."
-            imageView.kf_setImageWithURL(NSURL(string: "http:" + imageAddress)!)
-            backgroundImageView.kf_setImageWithURL(NSURL(string: "http:" + backgroundImageAddress)!)
+            imageView.kf_setImageWithURL(NSURL(string: imageAddress)!)
+            backgroundImageView.kf_setImageWithURL(NSURL(string: backgroundImageAddress)!)
 
             if downloading {
                 return

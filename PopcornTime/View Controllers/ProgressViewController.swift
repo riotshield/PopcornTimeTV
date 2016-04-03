@@ -53,38 +53,44 @@ class ProgressViewController: UIViewController {
                     self.nameLabel.text = "Downloading " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
-                let mediaItem = AVPlayerItem(URL: url)
+                if url.pathExtension == "mp4" {
+                    // Use the default player for handling video
+                    let mediaItem = AVPlayerItem(URL: url)
 
-                let titleMetadataItem = AVMutableMetadataItem()
-                titleMetadataItem.locale = NSLocale.currentLocale()
-                titleMetadataItem.key = AVMetadataCommonKeyTitle
-                titleMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                titleMetadataItem.value = self.movieName
-                mediaItem.externalMetadata.append(titleMetadataItem)
+                    let titleMetadataItem = AVMutableMetadataItem()
+                    titleMetadataItem.locale = NSLocale.currentLocale()
+                    titleMetadataItem.key = AVMetadataCommonKeyTitle
+                    titleMetadataItem.keySpace = AVMetadataKeySpaceCommon
+                    titleMetadataItem.value = self.movieName
+                    mediaItem.externalMetadata.append(titleMetadataItem)
 
-                let descriptionMetadataItem = AVMutableMetadataItem()
-                descriptionMetadataItem.locale = NSLocale.currentLocale()
-                descriptionMetadataItem.key = AVMetadataCommonKeyDescription
-                descriptionMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                descriptionMetadataItem.value = self.shortDescription
-                mediaItem.externalMetadata.append(descriptionMetadataItem)
+                    let descriptionMetadataItem = AVMutableMetadataItem()
+                    descriptionMetadataItem.locale = NSLocale.currentLocale()
+                    descriptionMetadataItem.key = AVMetadataCommonKeyDescription
+                    descriptionMetadataItem.keySpace = AVMetadataKeySpaceCommon
+                    descriptionMetadataItem.value = self.shortDescription
+                    mediaItem.externalMetadata.append(descriptionMetadataItem)
 
-                if let image = self.imageView.image {
-                    let artworkMetadataItem = AVMutableMetadataItem()
-                    artworkMetadataItem.locale = NSLocale.currentLocale()
-                    artworkMetadataItem.key = AVMetadataCommonKeyArtwork
-                    artworkMetadataItem.keySpace = AVMetadataKeySpaceCommon
-                    artworkMetadataItem.value = UIImagePNGRepresentation(image)
+                    if let image = self.imageView.image {
+                        let artworkMetadataItem = AVMutableMetadataItem()
+                        artworkMetadataItem.locale = NSLocale.currentLocale()
+                        artworkMetadataItem.key = AVMetadataCommonKeyArtwork
+                        artworkMetadataItem.keySpace = AVMetadataKeySpaceCommon
+                        artworkMetadataItem.value = UIImagePNGRepresentation(image)
 
-                    mediaItem.externalMetadata.append(artworkMetadataItem)
+                        mediaItem.externalMetadata.append(artworkMetadataItem)
+                    }
+
+                    Kitchen.appController.navigationController.popViewControllerAnimated(false)
+                    let playerController = PlayerViewController()
+                    playerController.player = AVPlayer(playerItem: mediaItem)
+                    playerController.player?.play()
+                    Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
+                    self.streaming = true
+                } else {
+                    // Use VLC to play the video
+                    PTTorrentStreamer.sharedStreamer().cancelStreaming()
                 }
-
-                Kitchen.appController.navigationController.popViewControllerAnimated(false)
-                let playerController = PlayerViewController()
-                playerController.player = AVPlayer(playerItem: mediaItem)
-                playerController.player?.play()
-                Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
-                self.streaming = true
             }) { error in
                 print(error)
             }

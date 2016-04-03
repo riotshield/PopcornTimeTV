@@ -110,7 +110,7 @@ public struct EpisodeProductRecipe: RecipeType {
         }
         return ""
     }
-    
+
     var themeSong: String {
         var s = "<background>\n"
         s += "<audio>\n"
@@ -170,7 +170,7 @@ public struct EpisodeProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")

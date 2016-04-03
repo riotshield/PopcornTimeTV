@@ -103,14 +103,14 @@ public struct MovieProductRecipe: RecipeType {
         return ""
     }
 
-    
+
     var torrents: String {
         let filteredTorrents: [String] = movie.torrents.map { torrent in
             return "quality=\(torrent.quality)&hash=\(torrent.hash)"
         }
         return filteredTorrents.joinWithSeparator("•")
     }
-    
+
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("ProductRecipe", withExtension: "xml") {
@@ -155,7 +155,7 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")

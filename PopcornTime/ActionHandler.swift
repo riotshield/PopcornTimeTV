@@ -12,7 +12,7 @@ import PopcornTorrent
 import YoutubeSourceParserKit
 import AVKit
 
-struct ActionHandler {
+struct ActionHandler { // swiftlint:disable:this type_body_length
 
     /**
      The action handler for when the primary (select) button is pressed
@@ -27,13 +27,13 @@ struct ActionHandler {
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
-            
+
             var search = Search()
             search.fetchType = .Shows
-            
+
             var watchlist = Watchlist()
             watchlist.fetchType = .Shows
-            
+
             let tabBar = KitchenTabBar(items: [popular, search, watchlist])
             Kitchen.serve(recipe: tabBar)
 
@@ -50,7 +50,7 @@ struct ActionHandler {
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
         case "streamTorrent": streamTorrent(pieces)
-            
+
         default: break
         }
 
@@ -64,7 +64,7 @@ struct ActionHandler {
     static func play(id: String) {
 
     }
-    
+
     // MARK: Actions
 
     static func showMovie(pieces: [String]) {
@@ -253,7 +253,7 @@ struct ActionHandler {
     static func playMovie(pieces: [String]) {
         print(pieces.count)
         print(pieces)
-        
+
         let torrentsString = pieces[5]
         if torrentsString == "" || torrentsString == "{{TORRENTS}}" {
             // NO torrents found
@@ -273,18 +273,18 @@ struct ActionHandler {
             }
             torrents.append(torrentDict)
         }
-        
+
         var buttons = [AlertButton]()
         for torrent in torrents {
             buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3])»\(pieces[4])"))
         }
-        
+
         Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[3])".cleaned, buttons: buttons, presentationType: .Modal))
     }
 
     static func streamTorrent(pieces: [String]) {
         // {{MAGNET}}:{{IMAGE}}:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}:{{TORRENTS}}
-        
+
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -294,14 +294,14 @@ struct ActionHandler {
             viewController.backgroundImageAddress = pieces[3]
             viewController.movieName = pieces[4]
             viewController.shortDescription = pieces[5]
-            
+
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
         }
 
     }
-    
+
     static func playPreview(pieces: [String]) {
         Youtube.h264videosWithYoutubeURL(NSURL(string: pieces.last!)!, completion: { videoInfo, error in
             if let videoInfo = videoInfo {

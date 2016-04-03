@@ -92,7 +92,7 @@ public struct EpisodesProductRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     var torrents: String {
         if let firstEpisode = episodes.first {
             let torrents: [Torrent] = firstEpisode.torrents.filter({ $0.quality != "0" })
@@ -163,7 +163,7 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")

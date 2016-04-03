@@ -144,7 +144,7 @@ public struct ShowProductRecipe: RecipeType {
 
         return ""
     }
-    
+
     var previewButton: String {
         var preview = "<buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
         preview += "<badge src=\"resource://button-preview\" />\n"
@@ -219,7 +219,7 @@ public struct ShowProductRecipe: RecipeType {
                 }
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
-                
+
                 xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: firstEpisode.cleaned)
             } catch {
                 print("Could not open Catalog template")

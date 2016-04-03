@@ -46,7 +46,7 @@ class YIFYSearchRecipe: SearchRecipe {
 }
 
 class EZTVSearchRecipe: SearchRecipe {
-    
+
     var recipe: String? {
         if let file = NSBundle.mainBundle().URLForResource("SearchRecipe", withExtension: "xml") {
             do {
@@ -57,11 +57,11 @@ class EZTVSearchRecipe: SearchRecipe {
         }
         return nil
     }
-    
+
     override init(type: PresentationType = .Search) {
         super.init(type: type)
     }
-    
+
     override func filterSearchText(text: String, callback: (String -> Void)) {
         if let pageCount = NSUserDefaults.standardUserDefaults().objectForKey("EZTVPageCount") as? Int {
             var results = [Show]()
@@ -75,8 +75,8 @@ class EZTVSearchRecipe: SearchRecipe {
                     dispatch_group_leave(group)
                 }
             }
-            
-            dispatch_group_notify(group, dispatch_get_main_queue(), { 
+
+            dispatch_group_notify(group, dispatch_get_main_queue(), {
                 let mapped: [String] = results.map { show in
                     var string = "<lockup actionID=\"showShow»\(show.id)»\(show.title.slugged)»\(show.tvdbId)\">"
                     string += "<img src=\"\(show.posterImage)\" width=\"250\" height=\"375\" />"
@@ -92,6 +92,6 @@ class EZTVSearchRecipe: SearchRecipe {
                 }
             })
         }
-        
+
     }
 }

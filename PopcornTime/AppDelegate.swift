@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             NSUserDefaults.standardUserDefaults().setInteger(pageNumbers.count, forKey: "EZTVPageCount")
                         }
                     })
-                    
+
                     manager.fetchShowsForPage(1) { shows, error in
                         if let shows = shows {
                             manager.fetchMovies(limit: 5, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in
@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     }
 
                                     Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", items: previewItems))
-                                    
+
                                     self.checkForUpdates()
                                 }
                             }
@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-    
+
     func checkForUpdates() {
         if let currentVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as? String {
             UpdateManager.sharedManager().checkForUpdates(forVersion: currentVersion) { (updateAvailable, name, releaseNotes, error) in

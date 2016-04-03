@@ -8,6 +8,7 @@ PopcornTime experience to Apple TV.
 *Note:* TV Show search is still being worked on. When a new version is released you'll see it in the release notes below. 
 
 ##Version
+- 0.4.1 - Added TV Show Search, fix adding/removing items to the watchlist, video quality picker (Note: TV Shows can only play 480p as VLC support isn't added yet.)
 - 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
 - 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
 - 0.2.0 - Fixes issues with build and minor UI tweaks.

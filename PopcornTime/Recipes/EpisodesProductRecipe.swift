@@ -92,18 +92,14 @@ public struct EpisodesProductRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-
-    var firstEpisode: String {
-        if let episode = episodes.first {
-            let filteredTorrents = episode.torrents.filter {
-                $0.quality == "480p"
+    
+    var torrents: String {
+        if let firstEpisode = episodes.first {
+            let torrents: [Torrent] = firstEpisode.torrents.filter({ $0.quality != "0" })
+            let filteredTorrents: [String] = torrents.map { torrent in
+                return "quality=\(torrent.quality)&hash=\(torrent.hash)"
             }
-
-            if let first = filteredTorrents.first {
-                return first.hash
-            } else if let last = episode.torrents.last {
-                return last.hash
-            }
+            return filteredTorrents.joinWithSeparator("•")
         }
         return ""
     }
@@ -153,8 +149,6 @@ public struct EpisodesProductRecipe: RecipeType {
                 preview += "                </buttonLockup>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(preview, withString: "")
 
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
-
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Episodes")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: episodesString)
 
@@ -169,6 +163,8 @@ public struct EpisodesProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

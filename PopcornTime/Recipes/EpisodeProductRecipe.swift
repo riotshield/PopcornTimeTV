@@ -98,6 +98,19 @@ public struct EpisodeProductRecipe: RecipeType {
         return ""
     }
 
+    var torrents: String {
+        if episodes.indices.contains(episodeNumber - 1) {
+            if let firstEpisode = episodes.first {
+                let torrents: [Torrent] = firstEpisode.torrents.filter({ $0.quality != "0" })
+                let filteredTorrents: [String] = torrents.map { torrent in
+                    return "quality=\(torrent.quality)&hash=\(torrent.hash)"
+                }
+                return filteredTorrents.joinWithSeparator("•")
+            }
+        }
+        return ""
+    }
+    
     var themeSong: String {
         var s = "<background>\n"
         s += "<audio>\n"
@@ -143,8 +156,6 @@ public struct EpisodeProductRecipe: RecipeType {
                 preview += "                </buttonLockup>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(preview, withString: "")
 
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
-
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Episodes")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: episodesString)
 
@@ -159,6 +170,8 @@ public struct EpisodeProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCH_LIST_BUTTON}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

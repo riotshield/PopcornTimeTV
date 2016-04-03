@@ -134,21 +134,17 @@ public struct ShowProductRecipe: RecipeType {
         let season = seasons.first!
         for episode in season.episodes {
             if episode.season == 1 && episode.episode == 1 {
-                let filteredTorrents = episode.torrents.filter {
-                    $0.quality == "480p"
+                let torrents: [Torrent] = episode.torrents.filter({ $0.quality != "0" })
+                let filteredTorrents: [String] = torrents.map { torrent in
+                    return "quality=\(torrent.quality)&hash=\(torrent.hash)"
                 }
-
-                if let first = filteredTorrents.first {
-                    return first.hash
-                } else if let last = episode.torrents.last {
-                    return last.hash
-                }
+                return filteredTorrents.joinWithSeparator("•")
             }
         }
 
         return ""
     }
-
+    
     var previewButton: String {
         var preview = "<buttonLockup actionID=\"playPreview»{{YOUTUBE_PREVIEW_URL}}\">\n"
         preview += "<badge src=\"resource://button-preview\" />\n"
@@ -210,8 +206,6 @@ public struct ShowProductRecipe: RecipeType {
                 string += "                </buttonLockup>\n"
                 xml = xml.stringByReplacingOccurrencesOfString(string, withString: "")
 
-                xml = xml.stringByReplacingOccurrencesOfString("{{MAGNET}}", withString: firstEpisode)
-
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS_TITLE}}", withString: "Seasons")
                 xml = xml.stringByReplacingOccurrencesOfString("{{SUGGESTIONS}}", withString: seasonsString)
 
@@ -225,6 +219,8 @@ public struct ShowProductRecipe: RecipeType {
                 }
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
+                
+                xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: firstEpisode.cleaned)
             } catch {
                 print("Could not open Catalog template")
             }

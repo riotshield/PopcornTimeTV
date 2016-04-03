@@ -251,7 +251,15 @@ struct ActionHandler {
     }
 
     static func playMovie(pieces: [String]) {
-        let torrentsString = pieces[6]
+        print(pieces.count)
+        print(pieces)
+        
+        let torrentsString = pieces[5]
+        if torrentsString == "" || torrentsString == "{{TORRENTS}}" {
+            // NO torrents found
+            Kitchen.serve(recipe: AlertRecipe(title: "No torrents found", description: "A torrent could not be found for \(pieces[3]).".cleaned, buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
+            return
+        }
         let allTorrents = torrentsString.componentsSeparatedByString("•")
         var torrents = [[String : String]]()
         for torrent in allTorrents {
@@ -268,10 +276,10 @@ struct ActionHandler {
         
         var buttons = [AlertButton]()
         for torrent in torrents {
-            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[2])»\(pieces[3])»\(pieces[4])»\(pieces[5])"))
+            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3])»\(pieces[4])"))
         }
-        // 1 = hash, 2 & 3 = image, 4 & 5 = background, 6 = name, 7 = description
-        Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[4])".cleaned, buttons: buttons, presentationType: .Modal))
+        
+        Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[3])".cleaned, buttons: buttons, presentationType: .Modal))
     }
 
     static func streamTorrent(pieces: [String]) {

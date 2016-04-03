@@ -36,7 +36,7 @@ public struct CatalogRecipe: RecipeType {
         if let movies = self.movies {
             let mapped: [String] = movies.map {
                 var string = "<lockup actionID=\"showMovie»\($0.id)\">"
-                string += "<img src=\"\($0.parallaxPoster)\" width=\"250\" height=\"375\" />"
+                string += "<img src=\"\($0.mediumCoverImage)\" width=\"250\" height=\"375\" />"
                 string += "<title class=\"hover\">\($0.title.cleaned)</title>"
                 string += "</lockup>"
                 return string

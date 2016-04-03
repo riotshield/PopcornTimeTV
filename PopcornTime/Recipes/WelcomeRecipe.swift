@@ -29,6 +29,11 @@ public struct WelcomeRecipe: RecipeType {
         self.title = title
         self.items = items
     }
+    
+    init(title: String) {
+        self.title = title
+        self.items = []
+    }
 
     public var xmlString: String {
         var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"

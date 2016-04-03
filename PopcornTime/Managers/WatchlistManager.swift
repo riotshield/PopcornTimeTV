@@ -71,7 +71,7 @@ public struct WatchItem {
 public class WatchlistManager {
 
     private var jsonFilePath: String! {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         if let path = paths.first {
             return String((path as NSString).stringByAppendingPathComponent("watchlist.json"))
         }
@@ -160,7 +160,7 @@ public class WatchlistManager {
     // MARK: Private parts
 
     func readJSONFile(completion: ((json: [[String : AnyObject]]?) -> Void)?) {
-        if let jsonFilePath = self.jsonFilePath {
+        /*if let jsonFilePath = self.jsonFilePath {
             if let data = NSData(contentsOfFile: jsonFilePath) {
                 do {
                     if let response = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as? [[String : AnyObject]] {
@@ -172,16 +172,26 @@ public class WatchlistManager {
             } else {
                 completion?(json: nil)
             }
+        }*/
+        if let watchlist = NSUserDefaults.standardUserDefaults().objectForKey("watchlist") {
+            do {
+                if let response = try NSJSONSerialization.JSONObjectWithData(watchlist as! NSData, options: .AllowFragments) as? [[String : AnyObject]] {
+                    completion?(json: response)
+                }
+            } catch {
+                print("Could not parse Watchlist")
+            }
+        } else {
+            completion?(json: nil)
         }
     }
 
     func writeJSONFile(json: [[String : AnyObject]]) {
         do {
-            print(json)
             let json = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            try json.writeToFile(self.jsonFilePath, options: .AtomicWrite)
+            NSUserDefaults.standardUserDefaults().setObject(json, forKey: "watchlist")
         } catch {
-            fatalError("Could not write Watchlist to JSON")
+            print("Could not write Watchlist to JSON")
         }
     }
 }

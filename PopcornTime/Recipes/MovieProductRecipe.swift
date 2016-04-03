@@ -113,7 +113,7 @@ public struct MovieProductRecipe: RecipeType {
 
     public var template: String {
         var xml = ""
-        if let file = NSBundle.mainBundle().URLForResource("ProductRecipe", withExtension: "xml") {
+        if let file = NSBundle.mainBundle().URLForResource("MovieProductRecipe", withExtension: "xml") {
             do {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{DIRECTORS}}", withString: directorsString)

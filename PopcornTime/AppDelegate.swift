@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.playActionIDHandler = ActionHandler.play
         Kitchen.prepare(cookbook)
 
-        /*let manager = NetworkManager.sharedManager()
+        let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in
             if let servers = servers {
                 if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
@@ -63,26 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             }
-        }*/
-        
-        let manager = NetworkManager.sharedManager()
-        manager.fetchServers { servers, error in
-            if let servers = servers {
-                if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
-                    manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
-                }
-                
-                manager.fetchShowPageNumbers({ (pageNumbers, error) in
-                    if let pageNumbers = pageNumbers {
-                        NSUserDefaults.standardUserDefaults().setInteger(pageNumbers.count, forKey: "EZTVPageCount")
-                    }
-                })
-                
-                Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime"))
-                self.checkForUpdates()
-            }
         }
-
 
         return true
     }

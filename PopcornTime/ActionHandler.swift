@@ -168,34 +168,34 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
-                var seasonsDictionary = [Int : [Episode]]()
+                
+                var existingSeasons = Set<Int>()
+                
                 for episode in show.episodes {
-                    if let episodes = seasonsDictionary[episode.season] {
-                        var episodes = episodes
-                        episodes.append(episode)
-                        seasonsDictionary[episode.season] = episodes
-                    } else {
-                        seasonsDictionary[episode.season] = [episode]
-                    }
+                    existingSeasons.insert(episode.season)
                 }
+                
+                let seasonsArray = Array(existingSeasons).sort()
                 
                 var seasons = [Season]()
                 manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
                     if let response = response {
-                        for (key, value) in seasonsDictionary {
+                        for seasonNumber in seasonsArray {
                             var season = Season()
-                            season.seasonNumber = key
-                            season.episodes = value
-                            if response.indices.contains(key) {
-                                let seasonInfo = response[key]
-                                if let images = seasonInfo["images"] as? [String : AnyObject] {
-                                    if let posters = images["poster"] as? [String : String] {
-                                        season.seasonLargeCoverImage = posters["full"]
-                                        season.seasonMediumCoverImage = posters["medium"]
-                                        season.seasonSmallCoverImage = posters["thumb"]
+                            season.seasonNumber = seasonNumber
+                            for (_, item) in response.enumerate() {
+                                if item["number"] as? Int == seasonNumber {
+                                    let seasonInfo = item
+                                    if let images = seasonInfo["images"] as? [String : AnyObject] {
+                                        if let posters = images["poster"] as? [String : String] {
+                                            season.seasonLargeCoverImage = posters["full"]
+                                            season.seasonMediumCoverImage = posters["medium"]
+                                            season.seasonSmallCoverImage = posters["thumb"]
+                                        }
                                     }
+                                    seasons.append(season)
+                                    break
                                 }
-                                seasons.append(season)
                             }
                         }
                         

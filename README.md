@@ -38,10 +38,7 @@ PopcornTime.xcworkspace
 
 ##Screenshots
 
-![Home](http://i.imgur.com/mIWq0LP.jpg)
-![Movie Details](http://i.imgur.com/0JghPit.jpg)
-![TV Shows](https://i.imgur.com/0OholcQ.jpg)
-
+![Screenshots](http://i.imgur.com/VvRRFCi.jpg)
 
 ##Want to help?
 

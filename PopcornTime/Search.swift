@@ -9,7 +9,7 @@
 import TVMLKitchen
 
 struct Search: TabItem {
-    
+
     let title = "Search"
 
     var fetchType: FetchType! = .Movies
@@ -23,5 +23,5 @@ struct Search: TabItem {
             Kitchen.serve(recipe: EZTVSearchRecipe(type: .TabSearch))
         }
     }
-    
+
 }

@@ -16,9 +16,9 @@ public struct Season {
     public var seasonLargeCoverImage: String!
     public var seasonMediumCoverImage: String!
     public var seasonSmallCoverImage: String!
-    
+
     public init() {
-        
+
     }
 }
 
@@ -27,12 +27,12 @@ public struct SeasonPickerRecipe: RecipeType {
     let show: Show
     let seasons: [Season]
     public let presentationType = PresentationType.Modal
-    
+
     public init(show: Show, seasons: [Season]) {
         self.show = show
         self.seasons = seasons.sort({ $0.seasonNumber < $1.seasonNumber })
     }
-    
+
     public var xmlString: String {
         var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
         xml += "<document>"
@@ -40,7 +40,7 @@ public struct SeasonPickerRecipe: RecipeType {
         xml += "</document>"
         return xml
     }
-    
+
     var seasonsString: String {
         let mapped: [String] = seasons.map {
             var string = "<lockup actionID=\"showSeason»\(show.id)»\(show.title.slugged)»\(show.tvdbId)»\($0.seasonNumber)\">" + "\n"
@@ -51,11 +51,11 @@ public struct SeasonPickerRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("SeasonPickerRecipe", withExtension: "xml") {
-            do{
+            do {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: show.title.cleaned)
                 xml = xml.stringByReplacingOccurrencesOfString("{{SEASONS}}", withString: seasonsString)
@@ -66,5 +66,5 @@ public struct SeasonPickerRecipe: RecipeType {
         }
         return xml
     }
-    
+
 }

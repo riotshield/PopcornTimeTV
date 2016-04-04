@@ -16,7 +16,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     /**
      The action handler for when the primary (select) button is pressed
-     
+
      - parameter id: The actionID of the element pressed
      */
     static func primary(id: String) {
@@ -35,13 +35,13 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             let tabBar = KitchenTabBar(items: [popular, search, watchlist])
             Kitchen.serve(recipe: tabBar)
-            
+
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
-            
+
         case "showSeason": showSeason(pieces)
         case "showSeasons": showSeasons(pieces)
-            
+
         case "playMovie": playMovie(pieces)
         case "playPreview": playPreview(pieces)
         case "addWatchlist": addWatchlist(pieces)
@@ -51,20 +51,20 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "streamTorrent": streamTorrent(pieces)
         default: break
         }
-        
+
     }
-    
+
     /**
      The action handler for when the play button is pressed
-     
+
      - parameter id: The actionID of the element pressed
      */
     static func play(id: String) {
-        
+
     }
 
     // MARK: Actions
-    
+
     static func showMovie(pieces: [String]) {
         NetworkManager.sharedManager().showDetailsForMovie(movieId: Int(pieces.last!)!, withImages: false, withCast: true) { movie, error in
             if let movie = movie {
@@ -75,43 +75,43 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                             Kitchen.serve(recipe: product)
                         })
                     } else if let _ = error {
-                        
+
                     }
                 })
             } else if let _ = error {
-                
+
             }
         }
     }
-    
-    static func showShow(pieces:[String]) {
+
+    static func showShow(pieces: [String]) {
         showSeasonWithNumber(pieces, seasonNumber: -1)
     }
-    
-    static func showSeason(pieces: [String]){
+
+    static func showSeason(pieces: [String]) {
         showSeasonWithNumber(pieces, seasonNumber: Int(pieces[4])!)
     }
-    
+
     static func showSeasonWithNumber(pieces: [String], seasonNumber: Int) {
         var presentedDetails = false
         let showId = pieces[1]
         let imdbSlug = pieces[2]
         let tvdbId = pieces[3]
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
-                
+
                 var existingSeasons = Set<Int>()
-                
+
                 for episode in show.episodes {
                     existingSeasons.insert(episode.season)
                 }
-                
+
                 let seasons = Array(existingSeasons).sort()
-                
-                let seasonInfo = SeasonInfo(last:seasons.last!, first: seasons.first!, current: (seasonNumber == -1 ? seasons.last! : seasonNumber));
-                
+
+                let seasonInfo = SeasonInfo(last:seasons.last!, first: seasons.first!, current: (seasonNumber == -1 ? seasons.last! : seasonNumber))
+
                 manager.fetchTraktSeasonEpisodesInfoForIMDB(imdbSlug, season: seasonInfo.current) { response, error in
                     if let response = response {
                         var episodes = [Episode]()
@@ -121,7 +121,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                             }
                         }
                         episodes.sortInPlace({ $0.episode < $1.episode })
-                        
+
                         var detailedEpisodes = [DetailedEpisode]()
                         for (_, item) in response.enumerate() {
                             var episode = DetailedEpisode()
@@ -142,7 +142,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                 }
                             }
                         }
-                        
+
                         manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                             if let response = response {
                                 if !presentedDetails {
@@ -160,23 +160,23 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
         }
     }
-    
+
     static func showSeasons(pieces: [String]) {
         let showId = pieces[1]
         let imdbSlug = pieces[2]
-        
+
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
             if let show = show {
-                
+
                 var existingSeasons = Set<Int>()
-                
+
                 for episode in show.episodes {
                     existingSeasons.insert(episode.season)
                 }
-                
+
                 let seasonsArray = Array(existingSeasons).sort()
-                
+
                 var seasons = [Season]()
                 manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
                     if let response = response {
@@ -198,17 +198,17 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                 }
                             }
                         }
-                        
+
                         let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
                         Kitchen.serve(recipe: recipe)
                     }
                 }
             }
         }
-        
-        
+
+
     }
-    
+
     static func playMovie(pieces: [String]) {
         print(pieces.count)
         print(pieces)
@@ -243,7 +243,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     static func streamTorrent(pieces: [String]) {
         // {{MAGNET}}:{{IMAGE}}:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}:{{TORRENTS}}
-        
+
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -260,7 +260,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         }
 
     }
-    
+
     static func playPreview(pieces: [String]) {
         Youtube.h264videosWithYoutubeURL(NSURL(string: pieces.last!)!, completion: { videoInfo, error in
             if let videoInfo = videoInfo {
@@ -273,7 +273,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
         })
     }
-    
+
     static func addWatchlist(pieces: [String]) {
         let name = pieces[2]
         let id = pieces[1]
@@ -305,8 +305,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     }
                 })
             }
-            
+
         })
     }
-    
+
 }

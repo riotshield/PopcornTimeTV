@@ -9,3 +9,4 @@ disabled_rules:
   - cyclomatic_complexity
   - nesting
   - function_parameter_count
+  - function_body_length

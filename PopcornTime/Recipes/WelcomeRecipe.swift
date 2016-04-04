@@ -29,7 +29,7 @@ public struct WelcomeRecipe: RecipeType {
         self.title = title
         self.items = items
     }
-    
+
     init(title: String) {
         self.title = title
         self.items = []

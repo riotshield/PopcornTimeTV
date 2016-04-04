@@ -158,7 +158,7 @@ public class WatchlistManager {
     }
 
     // MARK: Private parts
-    
+
     func readJSONFile(completion: ((json: [[String : AnyObject]]?) -> Void)?) {
         if let jsonFilePath = self.jsonFilePath {
             if let data = NSData(contentsOfFile: jsonFilePath) {
@@ -174,7 +174,7 @@ public class WatchlistManager {
             }
         }
     }
-    
+
     func writeJSONFile(json: [[String : AnyObject]]) {
         do {
             print(json)

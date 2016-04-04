@@ -5,8 +5,6 @@ An Apple TV 4 application to torrent movies and tv shows for streaming.
 A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
 
-*Note:* TV Show search is still being worked on. When a new version is released you'll see it in the release notes below. 
-
 ##Version
 - 0.4.1 - Added TV Show Search, fix adding/removing items to the watchlist, video quality picker (Note: TV Shows can only play 480p as VLC support isn't added yet.)
 - 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
@@ -28,7 +26,7 @@ Setting up PopcornTime is quite easy.
 cd ~/Desktop
 git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
 cd ~/Desktop/PopcornTimeTV
-git checkout 0.4.0
+git checkout 0.4.1
 pod install
 ```
 
@@ -38,8 +36,9 @@ PopcornTime.xcworkspace
 
 ##Screenshots
 
-![Home](http://i.imgur.com/DqIbp3N.jpg)
-![Movie Details](http://i.imgur.com/HQYB6Ky.jpg)
+![Home](http://i.imgur.com/mIWq0LP.jpg)
+![Movie Details](http://i.imgur.com/0JghPit.jpg)
+![TV Shows](https://i.imgur.com/0OholcQ.jpg)
 
 
 ##Want to help?

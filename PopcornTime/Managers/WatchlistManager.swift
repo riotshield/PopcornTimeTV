@@ -71,7 +71,7 @@ public struct WatchItem {
 public class WatchlistManager {
 
     private var jsonFilePath: String! {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
         if let path = paths.first {
             return String((path as NSString).stringByAppendingPathComponent("watchlist.json"))
         }

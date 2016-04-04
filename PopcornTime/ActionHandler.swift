@@ -123,21 +123,23 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                         episodes.sortInPlace({ $0.episode < $1.episode })
                         
                         var detailedEpisodes = [DetailedEpisode]()
-                        for (index, item) in response.enumerate() {
+                        for (_, item) in response.enumerate() {
                             var episode = DetailedEpisode()
-                            if episodes.indices.contains(index) {
-                                episode.episode = episodes[index]
-                                if let title = item["title"] as? String {
-                                    episode.episodeTitle = title
-                                }
-                                if let images = item["images"] as? [String : AnyObject] {
-                                    if let screenshots = images["screenshot"] as? [String : String] {
-                                        episode.fullScreenshot = screenshots["full"]
-                                        episode.mediumScreenshot = screenshots["medium"]
-                                        episode.smallScreenshot = screenshots["thumb"]
+                            for ep in episodes {
+                                if ep.episode == item["number"] as? Int {
+                                    episode.episode = ep
+                                    if let title = item["title"] as? String {
+                                        episode.episodeTitle = title
                                     }
+                                    if let images = item["images"] as? [String : AnyObject] {
+                                        if let screenshots = images["screenshot"] as? [String : String] {
+                                            episode.fullScreenshot = screenshots["full"]
+                                            episode.mediumScreenshot = screenshots["medium"]
+                                            episode.smallScreenshot = screenshots["thumb"]
+                                        }
+                                    }
+                                    detailedEpisodes.append(episode)
                                 }
-                                detailedEpisodes.append(episode)
                             }
                         }
                         

@@ -1,6 +1,8 @@
 #PopcornTime TV
 [![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
 
+[![Slack Status](https://popcorntimetv.herokuapp.com/badge.svg)](http://popcorntimetv.herokuapp.com)
+
 An Apple TV 4 application to torrent movies and tv shows for streaming.
 A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.

@@ -132,14 +132,6 @@ public struct SeasonProductRecipe: RecipeType {
         return mapped.joinWithSeparator("\n")
     }
     
-    var previewButton: String {
-        var preview = "<buttonLockup actionID=\"playPreview:{{YOUTUBE_PREVIEW_URL}}\">\n"
-        preview += "<badge src=\"resource://button-preview\" />\n"
-        preview += "<title>Trailer</title>\n"
-        preview += "</buttonLockup>\n"
-        return preview
-    }
-    
     var watchlistButton: String {
         var string = "<buttonLockup actionID=\"addWatchlist»\(show.id)»\(show.title)»show»\(show.posterImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"

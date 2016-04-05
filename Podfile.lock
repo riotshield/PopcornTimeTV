@@ -7,7 +7,7 @@ PODS:
     - ObjectMapper
     - PopcornTorrent
     - SWXMLHash
-  - PopcornTorrent (1.0.7)
+  - PopcornTorrent (1.0.8)
   - SWXMLHash (2.2.0)
   - TVMLKitchen (0.7.0)
   - YoutubeSourceParserKit (0.2.4)
@@ -39,9 +39,11 @@ SPEC CHECKSUMS:
   Kingfisher: 350869ed88d6451803b390475d977abdd9f0a357
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   PopcornKit: 6c86f7c0bd0e9675eb6605b6b9f4c86bb766939a
-  PopcornTorrent: dadc197cfbfd3af624e15c8ab5a9225cd00cf05d
+  PopcornTorrent: 45a54935ec048db8939590e4a6c9cf0f079167ba
   SWXMLHash: cf2a62b04514211b238b39b3aa348ba4746523af
   TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
   YoutubeSourceParserKit: d1506222a62718ed41f18ab52ebbc1b1d9ecabcc
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 0711799caa6c1ddcf9c42c00b00c3c0d98ef747e
+
+COCOAPODS: 1.0.0.beta.6

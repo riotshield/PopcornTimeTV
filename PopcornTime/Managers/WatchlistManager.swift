@@ -70,14 +70,6 @@ public struct WatchItem {
 
 public class WatchlistManager {
 
-    private var jsonFilePath: String! {
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        if let path = paths.first {
-            return String((path as NSString).stringByAppendingPathComponent("watchlist.json"))
-        }
-        return nil
-    }
-
     class func sharedManager() -> WatchlistManager {
         struct Struct {
             static let Instance = WatchlistManager()
@@ -160,28 +152,14 @@ public class WatchlistManager {
     // MARK: Private parts
 
     func readJSONFile(completion: ((json: [[String : AnyObject]]?) -> Void)?) {
-        if let jsonFilePath = self.jsonFilePath {
-            if let data = NSData(contentsOfFile: jsonFilePath) {
-                do {
-                    if let response = try NSJSONSerialization.JSONObjectWithData(data, options: .AllowFragments) as? [[String : AnyObject]] {
-                        completion?(json: response)
-                    }
-                } catch {
-                    fatalError("Could not parse Watchlist")
-                }
-            } else {
-                completion?(json: nil)
-            }
+        if let json = NSUserDefaults.standardUserDefaults().objectForKey("Watchlist") as? [[String : AnyObject]] {
+            completion?(json: json)
+        } else {
+            completion?(json: nil)
         }
     }
 
     func writeJSONFile(json: [[String : AnyObject]]) {
-        do {
-            print(json)
-            let json = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            try json.writeToFile(self.jsonFilePath, options: .AtomicWrite)
-        } catch {
-            fatalError("Could not write Watchlist to JSON")
-        }
+        NSUserDefaults.standardUserDefaults().setObject(json, forKey: "Watchlist")
     }
 }

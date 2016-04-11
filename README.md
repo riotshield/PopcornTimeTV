@@ -8,6 +8,7 @@ A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
 
 ##Version
+- 0.4.2 - Fix a bunch of crashes and implement the new layout for TV Shows. (Note: TV Shows can only play 480p as VLC support isn't added yet.)
 - 0.4.1 - Added TV Show Search, fix adding/removing items to the watchlist, video quality picker (Note: TV Shows can only play 480p as VLC support isn't added yet.)
 - 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
 - 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.

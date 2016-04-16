@@ -53,13 +53,7 @@ class ProgressViewController: UIViewController {
                     self.nameLabel.text = "Downloading " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
-                if url.pathExtension == "mp4" {
-                    // Use the default player for handling video
-                    self.playNativeVideo(url)
-                } else {
-                    // Use VLC to play the video
-                    PTTorrentStreamer.sharedStreamer().cancelStreaming()
-                }
+                self.playVLCVideo(url)
             }) { error in
                 print(error)
             }
@@ -72,6 +66,14 @@ class ProgressViewController: UIViewController {
         if !self.streaming {
             PTTorrentStreamer.sharedStreamer().cancelStreaming()
         }
+    }
+    
+    func playVLCVideo(url: NSURL) {
+        Kitchen.appController.navigationController.popViewControllerAnimated(false)
+        let playerViewController = PopcornVLCPlayerViewController()
+        playerViewController.url = url
+        Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
+        self.streaming = true
     }
 
     func playNativeVideo(url: NSURL) {

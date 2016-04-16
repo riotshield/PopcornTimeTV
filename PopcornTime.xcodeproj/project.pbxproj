@@ -34,6 +34,26 @@
 		92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B301C9CA5BC0086D362 /* ProgressViewController.swift */; };
 		92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B331C9CAB360086D362 /* PlayerViewController.swift */; };
 		92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */; };
+		E60F4E201CC1F65E0053021B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E131CC1F65E0053021B /* CoreMedia.framework */; };
+		E60F4E211CC1F65E0053021B /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E141CC1F65E0053021B /* CoreVideo.framework */; };
+		E60F4E221CC1F65E0053021B /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E151CC1F65E0053021B /* libc++.tbd */; };
+		E60F4E231CC1F65E0053021B /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E161CC1F65E0053021B /* Security.framework */; };
+		E60F4E241CC1F65E0053021B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E171CC1F65E0053021B /* QuartzCore.framework */; };
+		E60F4E251CC1F65E0053021B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E181CC1F65E0053021B /* libiconv.tbd */; };
+		E60F4E261CC1F65E0053021B /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E191CC1F65E0053021B /* libbz2.tbd */; };
+		E60F4E271CC1F65E0053021B /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1A1CC1F65E0053021B /* CoreText.framework */; };
+		E60F4E281CC1F65E0053021B /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1B1CC1F65E0053021B /* OpenGLES.framework */; };
+		E60F4E291CC1F65E0053021B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1C1CC1F65E0053021B /* UIKit.framework */; };
+		E60F4E2A1CC1F65E0053021B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1D1CC1F65E0053021B /* Foundation.framework */; };
+		E60F4E2B1CC1F65E0053021B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1E1CC1F65E0053021B /* CoreGraphics.framework */; };
+		E60F4E2C1CC1F65E0053021B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E1F1CC1F65E0053021B /* AudioToolbox.framework */; };
+		E60F4E381CC1F70D0053021B /* TVVLCKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E60F4E371CC1F70D0053021B /* TVVLCKit.framework */; };
+		E60F4E3C1CC1F7EE0053021B /* PopcornVLCPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E3B1CC1F7EE0053021B /* PopcornVLCPlayerViewController.swift */; };
+		E60F4E431CC1F8110053021B /* PlaybackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E3E1CC1F8110053021B /* PlaybackBar.swift */; };
+		E60F4E441CC1F8110053021B /* PlayerControlsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E3F1CC1F8110053021B /* PlayerControlsLabel.swift */; };
+		E60F4E451CC1F8110053021B /* PlayerPlaybackControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E401CC1F8110053021B /* PlayerPlaybackControls.swift */; };
+		E60F4E461CC1F8110053021B /* PositionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E411CC1F8110053021B /* PositionIndicator.swift */; };
+		E60F4E471CC1F8110053021B /* VLCPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60F4E421CC1F8110053021B /* VLCPlayerViewController.swift */; };
 		E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */; };
 		E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */; };
 		E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */; };
@@ -71,6 +91,27 @@
 		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E31248A9DC45B7AEBE724E1D /* Pods-PopcornTime.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PopcornTime.release.xcconfig"; path = "Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime.release.xcconfig"; sourceTree = "<group>"; };
+		E60F4E0F1CC1F6470053021B /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
+		E60F4E131CC1F65E0053021B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		E60F4E141CC1F65E0053021B /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		E60F4E151CC1F65E0053021B /* libc++.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		E60F4E161CC1F65E0053021B /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E60F4E171CC1F65E0053021B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E60F4E181CC1F65E0053021B /* libiconv.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		E60F4E191CC1F65E0053021B /* libbz2.tbd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		E60F4E1A1CC1F65E0053021B /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		E60F4E1B1CC1F65E0053021B /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		E60F4E1C1CC1F65E0053021B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		E60F4E1D1CC1F65E0053021B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E60F4E1E1CC1F65E0053021B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E60F4E1F1CC1F65E0053021B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		E60F4E371CC1F70D0053021B /* TVVLCKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TVVLCKit.framework; sourceTree = "<group>"; };
+		E60F4E3B1CC1F7EE0053021B /* PopcornVLCPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PopcornVLCPlayerViewController.swift; path = "View Controllers/PopcornVLCPlayerViewController.swift"; sourceTree = "<group>"; };
+		E60F4E3E1CC1F8110053021B /* PlaybackBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackBar.swift; sourceTree = "<group>"; };
+		E60F4E3F1CC1F8110053021B /* PlayerControlsLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerControlsLabel.swift; sourceTree = "<group>"; };
+		E60F4E401CC1F8110053021B /* PlayerPlaybackControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerPlaybackControls.swift; sourceTree = "<group>"; };
+		E60F4E411CC1F8110053021B /* PositionIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PositionIndicator.swift; sourceTree = "<group>"; };
+		E60F4E421CC1F8110053021B /* VLCPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VLCPlayerViewController.swift; sourceTree = "<group>"; };
 		E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeasonPickerRecipe.swift; sourceTree = "<group>"; };
 		E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SeasonPickerRecipe.xml; sourceTree = "<group>"; };
 		E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeasonProductRecipe.swift; sourceTree = "<group>"; };
@@ -83,7 +124,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E60F4E2B1CC1F65E0053021B /* CoreGraphics.framework in Frameworks */,
+				E60F4E201CC1F65E0053021B /* CoreMedia.framework in Frameworks */,
+				E60F4E291CC1F65E0053021B /* UIKit.framework in Frameworks */,
+				E60F4E231CC1F65E0053021B /* Security.framework in Frameworks */,
+				E60F4E241CC1F65E0053021B /* QuartzCore.framework in Frameworks */,
+				E60F4E381CC1F70D0053021B /* TVVLCKit.framework in Frameworks */,
 				4D6953C8BDE957ED2E9EFD94 /* Pods_PopcornTime.framework in Frameworks */,
+				E60F4E251CC1F65E0053021B /* libiconv.tbd in Frameworks */,
+				E60F4E281CC1F65E0053021B /* OpenGLES.framework in Frameworks */,
+				E60F4E2A1CC1F65E0053021B /* Foundation.framework in Frameworks */,
+				E60F4E271CC1F65E0053021B /* CoreText.framework in Frameworks */,
+				E60F4E221CC1F65E0053021B /* libc++.tbd in Frameworks */,
+				E60F4E2C1CC1F65E0053021B /* AudioToolbox.framework in Frameworks */,
+				E60F4E211CC1F65E0053021B /* CoreVideo.framework in Frameworks */,
+				E60F4E261CC1F65E0053021B /* libbz2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +201,7 @@
 		287B85491C988AD600EEF5C8 /* Supporting FIles */ = {
 			isa = PBXGroup;
 			children = (
+				E60F4E3D1CC1F8010053021B /* VLCPlayer */,
 				287B853E1C9873A200EEF5C8 /* Assets.xcassets */,
 				287B85401C9873A200EEF5C8 /* Info.plist */,
 				92925B2D1C9CA4E80086D362 /* Main.storyboard */,
@@ -253,15 +309,43 @@
 		92925B321C9CA5BE0086D362 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E60F4E3B1CC1F7EE0053021B /* PopcornVLCPlayerViewController.swift */,
 				92925B301C9CA5BC0086D362 /* ProgressViewController.swift */,
 				92925B331C9CAB360086D362 /* PlayerViewController.swift */,
+				E60F4E0F1CC1F6470053021B /* PopcornTime-Bridging-Header.h */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		E60F4E3D1CC1F8010053021B /* VLCPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				E60F4E3E1CC1F8110053021B /* PlaybackBar.swift */,
+				E60F4E3F1CC1F8110053021B /* PlayerControlsLabel.swift */,
+				E60F4E401CC1F8110053021B /* PlayerPlaybackControls.swift */,
+				E60F4E411CC1F8110053021B /* PositionIndicator.swift */,
+				E60F4E421CC1F8110053021B /* VLCPlayerViewController.swift */,
+			);
+			name = VLCPlayer;
 			sourceTree = "<group>";
 		};
 		F1EDDAB5F2E1772C41C22B7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E60F4E371CC1F70D0053021B /* TVVLCKit.framework */,
+				E60F4E131CC1F65E0053021B /* CoreMedia.framework */,
+				E60F4E141CC1F65E0053021B /* CoreVideo.framework */,
+				E60F4E151CC1F65E0053021B /* libc++.tbd */,
+				E60F4E161CC1F65E0053021B /* Security.framework */,
+				E60F4E171CC1F65E0053021B /* QuartzCore.framework */,
+				E60F4E181CC1F65E0053021B /* libiconv.tbd */,
+				E60F4E191CC1F65E0053021B /* libbz2.tbd */,
+				E60F4E1A1CC1F65E0053021B /* CoreText.framework */,
+				E60F4E1B1CC1F65E0053021B /* OpenGLES.framework */,
+				E60F4E1C1CC1F65E0053021B /* UIKit.framework */,
+				E60F4E1D1CC1F65E0053021B /* Foundation.framework */,
+				E60F4E1E1CC1F65E0053021B /* CoreGraphics.framework */,
+				E60F4E1F1CC1F65E0053021B /* AudioToolbox.framework */,
 				C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */,
 			);
 			name = Frameworks;
@@ -444,18 +528,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E60F4E3C1CC1F7EE0053021B /* PopcornVLCPlayerViewController.swift in Sources */,
 				280910321C99DFDA00C8EC1C /* Popular.swift in Sources */,
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
+				E60F4E471CC1F8110053021B /* VLCPlayerViewController.swift in Sources */,
 				E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */,
 				925F8DEC1CA9E44C007100EB /* MovieWatchlistRecipe.swift in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
 				925F8DF01CA9E44C007100EB /* ShowWatchlistRecipe.swift in Sources */,
 				92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */,
+				E60F4E461CC1F8110053021B /* PositionIndicator.swift in Sources */,
+				E60F4E431CC1F8110053021B /* PlaybackBar.swift in Sources */,
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
 				92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */,
+				E60F4E441CC1F8110053021B /* PlayerControlsLabel.swift in Sources */,
 				280910341C99E0E000C8EC1C /* Search.swift in Sources */,
 				925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */,
 				E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */,
+				E60F4E451CC1F8110053021B /* PlayerPlaybackControls.swift in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
@@ -578,6 +668,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -598,6 +689,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 			};
 			name = Release;
 		};

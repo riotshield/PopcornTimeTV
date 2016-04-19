@@ -34,10 +34,6 @@ git checkout 0.4.3
 pod install
 ```
 
-**If you are still expieriencing issues with streaming movie,s run these few commands**
-
-*Open the podfile and change pod 'PopcornTorrent' to pod 'PopcornTorrent', '1.0.7'. Delete the Pods directory and the Podfile.lock then run pod install*
-
 **Open the project with**
 
 PopcornTime.xcworkspace

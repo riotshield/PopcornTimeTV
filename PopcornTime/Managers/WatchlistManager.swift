@@ -20,16 +20,18 @@ public struct WatchItem {
     var imdbId: String!
     var tvdbId: String!
     var type: ItemType!
+    var slugged: String!
 
     var dictionaryRepresentation = [String : AnyObject]()
 
-    init(name: String, id: String, coverImage: String, type: String, imdbId: String, tvdbId: String) {
+    init(name: String, id: String, coverImage: String, type: String, imdbId: String, tvdbId: String, slugged: String) {
         self.name = name
         self.id = id
         self.coverImage = coverImage
         self.type = ItemType(rawValue: type)
         self.imdbId = imdbId
         self.tvdbId = tvdbId
+        self.slugged = slugged
 
         self.dictionaryRepresentation = [
             "name": self.name,
@@ -37,7 +39,8 @@ public struct WatchItem {
             "coverImage": self.coverImage,
             "type": self.type.rawValue,
             "imdbId": self.imdbId,
-            "tvdbId": self.tvdbId
+            "tvdbId": self.tvdbId,
+            "slugged": self.slugged
         ]
     }
 
@@ -64,6 +67,10 @@ public struct WatchItem {
 
         if let value = dictionary["tvdbId"] as? String {
             self.tvdbId = value
+        }
+        
+        if let value = dictionary["slugged"] as? String {
+            self.slugged = value
         }
     }
 }

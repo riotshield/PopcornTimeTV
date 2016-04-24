@@ -22,7 +22,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  Watchlist(), Search()]))
+        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Watchlist(), Search()]))
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows

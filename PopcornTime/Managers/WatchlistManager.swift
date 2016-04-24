@@ -68,7 +68,7 @@ public struct WatchItem {
         if let value = dictionary["tvdbId"] as? String {
             self.tvdbId = value
         }
-        
+
         if let value = dictionary["slugged"] as? String {
             self.slugged = value
         }

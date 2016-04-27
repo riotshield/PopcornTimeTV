@@ -1,39 +1,50 @@
-PopcornTime tvOS
-================
-
-![header](https://github.com/PopcornTimeTV/PopcornTimeTV/raw/master/Assets/Header-TV.png?raw=true)
-
-
+#PopcornTime TV
 [![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
 
-### Slack
-Join the project Slack channel and be part of the PopcornTime experience for AppleTV. Designer? Developer? Curious person? **You're welcome!** Come in and say hello.
+[![Slack Status](https://popcorntimetv.herokuapp.com/badge.svg)](http://popcorntimetv.herokuapp.com)
 
-[![Slack Status](https://popcorntimeappletv.herokuapp.com/badge.svg)](https://popcorntimeappletv.herokuapp.com/)
+An Apple TV 4 application to torrent movies and tv shows for streaming.
+A simple and easy to use application based on TVML to bring the native desktop
+PopcornTime experience to Apple TV.
 
+##Version
+- 0.4.3 - Fix an issue with streaming torrents. PopcornTorrent is now bumped to v1.0.9
+- 0.4.2 - Fix a bunch of crashes and implement the new layout for TV Shows. (Note: TV Shows can only play 480p as VLC support isn't added yet.)
+- 0.4.1 - Added TV Show Search, fix adding/removing items to the watchlist, video quality picker (Note: TV Shows can only play 480p as VLC support isn't added yet.)
+- 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
+- 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
+- 0.2.0 - Fixes issues with build and minor UI tweaks.
+- 0.1.0 - Initial Commit *(rewrite)*
 
-### Setup
+##Setup
 
-1. Git clone the repository `https://github.com/pepibumur/PopcornTimeTV.git`
-2. Install gem dependencies `bundle install`
-3. Install the pod dependencies `bundle exec pod install`
-4. Open the project using `PopcornTime.xcworkspace`
+PopcornTime requires cocoapods. 
+To install it simply open Terminal and enter the following command
 
+`gem install cocoapods`
 
-### Do you want to contribute?
-1. Join the Slack channel and say Hello
-2. Read the [Contribution Guidelines](https://github.com/PopcornTimeTV/Project/blob/master/CONTRIBUTING.md) and [Code of Conduct](https://github.com/PopcornTimeTV/Project/blob/master/CONDUCT.md).
-3. Pick up an issue from the [Issues list](https://github.com/PopcornTimeTV/PopcornTimeTV/issues) and once completed, create your PR.
+Setting up PopcornTime is quite easy.
+*Open Terminal to run the following commands*
 
-**Ideas**
-- Fix bugs found.
-- Add a new feature not existing before.
-- Improve the code structure / architecture.
-- Design a new component for the app.
+```
+cd ~/Desktop
+git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
+cd ~/Desktop/PopcornTimeTV
+git checkout 0.4.3
+pod install
+```
 
-### References
-- VLCKit - [Reference](https://wiki.videolan.org/VLCKit/)
-- YTS.ag - [API](https://yts.ag/api)
-- Popcorn Time for iOS - [Link](https://github.com/danylokostyshyn/popcorntime-ios)
-- Libtorrent - [Reference](http://www.rasterbar.com/products/libtorrent/reference.html)
-- Libtorrent - [Manual](http://www.rasterbar.com/products/libtorrent/manual.html)
+**Open the project with**
+
+PopcornTime.xcworkspace
+
+##Screenshots
+
+![Screenshots](http://i.imgur.com/VvRRFCi.jpg)
+
+##Want to help?
+
+Join the project Slack channel and be part of the PopcornTime experience for AppleTV. Designer? Developer? Curious person? You're welcome! Come in and say hello. Want to report a bug, request a feature or even contribute? You can join our community Slack group to keep up-to-date and speak to the team.
+
+If you plan on contributing, make sure to follow along with the guidelines found in the `CONTRIBUTING.md` file.
+

@@ -1,20 +1,19 @@
-use_frameworks!
 
-source "https://github.com/PopcornTimeTV/Specs.git"
+source 'https://github.com/PopcornTimeTV/Specs.git'
 source 'https://github.com/CocoaPods/Specs'
 
-target 'PopcornTime' do
-  link_with 'PopcornTime', 'PopcornKit', 'PopcornKitTests', 'PopcornExtension'
-  pod 'Genome'
-  pod "SnapKit"
-  pod "RXHTTPCommander"
-  pod 'ReduxKit', '~> 0.1'
-  pod 'Localize-Swift', :git => "https://github.com/pepibumur/localize-swift"
-  pod "PopcornTorrent"
+platform :tvos
+use_frameworks!
+
+def pods
+  pod 'YoutubeSourceParserKit'
+  pod 'Kingfisher'
+  pod 'TVMLKitchen', :git => 'https://github.com/toshi0383/TVMLKitchen.git', :branch => 'swift2.2'
+  pod 'PopcornKit', :git => 'https://github.com/PopcornTimeTV/PopcornKit.git'
+  pod 'PopcornTorrent'
 end
 
-target 'Tests' do
-  link_with 'PopcornKitTests'
-  pod 'Quick'
-  pod 'Nimble'
+target 'PopcornTime' do
+  pods
 end
+

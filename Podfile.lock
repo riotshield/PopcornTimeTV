@@ -1,52 +1,49 @@
 PODS:
-  - Alamofire (3.1.5)
-  - Genome (2.0.1):
-    - PureJsonSerializer (~> 1.0.0)
-  - Localize-Swift (1.0.1)
-  - Nimble (3.1.0)
-  - PopcornTorrent (1.0.4)
-  - PureJsonSerializer (1.0.2)
-  - Quick (0.8.0)
-  - ReduxKit (0.1.4)
-  - RXCommander (0.0.8):
-    - RxSwift (~> 2.1.0)
-  - RXHTTPCommander (0.0.2):
-    - Alamofire (~> 3.1)
-    - RXCommander (~> 0.0)
-  - RxSwift (2.1.0)
-  - SnapKit (0.19.0)
+  - Alamofire (3.3.1)
+  - Kingfisher (2.2.2)
+  - ObjectMapper (1.2.0)
+  - PopcornKit (0.0.1):
+    - Alamofire
+    - ObjectMapper
+    - PopcornTorrent
+    - SWXMLHash
+  - PopcornTorrent (1.0.9)
+  - SWXMLHash (2.3.1)
+  - TVMLKitchen (0.7.0)
+  - YoutubeSourceParserKit (0.2.4)
 
 DEPENDENCIES:
-  - Genome
-  - Localize-Swift (from `https://github.com/pepibumur/localize-swift`)
-  - Nimble
+  - Kingfisher
+  - PopcornKit (from `https://github.com/PopcornTimeTV/PopcornKit.git`)
   - PopcornTorrent
-  - Quick
-  - ReduxKit (~> 0.1)
-  - RXHTTPCommander
-  - SnapKit
+  - TVMLKitchen (from `https://github.com/toshi0383/TVMLKitchen.git`, branch `swift2.2`)
+  - YoutubeSourceParserKit
 
 EXTERNAL SOURCES:
-  Localize-Swift:
-    :git: https://github.com/pepibumur/localize-swift
+  PopcornKit:
+    :git: https://github.com/PopcornTimeTV/PopcornKit.git
+  TVMLKitchen:
+    :branch: swift2.2
+    :git: https://github.com/toshi0383/TVMLKitchen.git
 
 CHECKOUT OPTIONS:
-  Localize-Swift:
-    :commit: 85181e4dee18df3c1345ff378d70a659b91a82ef
-    :git: https://github.com/pepibumur/localize-swift
+  PopcornKit:
+    :commit: 296ed2aeeadc643d122678170f94d1c9b7e05d2f
+    :git: https://github.com/PopcornTimeTV/PopcornKit.git
+  TVMLKitchen:
+    :commit: 54a5eb276707ca8cb058d0d5d56e0c34100be7be
+    :git: https://github.com/toshi0383/TVMLKitchen.git
 
 SPEC CHECKSUMS:
-  Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
-  Genome: 503add4d4156631f0b43587432148994f3f7e783
-  Localize-Swift: 25c3b9c6c86fc269164ba40dc5ad013ecc3736df
-  Nimble: 79d40f4d69d47314229bbabacaa02b8838c779b9
-  PopcornTorrent: 3ce4afca2e76c45bcc1d8fc9e7ff1a501ac5ec52
-  PureJsonSerializer: 81d6bc0e21ed4b837193279aa3d29981f75f9057
-  Quick: 563d0f6ec5f72e394645adb377708639b7dd38ab
-  ReduxKit: 74682057a5ee5c13abb71550ab867c03810c3623
-  RXCommander: 4a5b565ad5eead5cef395cfb94177fb3b1b83287
-  RXHTTPCommander: b6cdcba6677e7314497d6b08a3c35302bb8fbd1b
-  RxSwift: 110fb07f81c17c2c3b3254d168363057b1880d18
-  SnapKit: 57c00a21bac67a863f2192e816330f6665585938
+  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Kingfisher: 7e8de5b0cf7b5dc8ec559d193029a0859df93ef1
+  ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
+  PopcornKit: 6c86f7c0bd0e9675eb6605b6b9f4c86bb766939a
+  PopcornTorrent: b4e0343ffa33581761e35a15e02cea90c9c3828c
+  SWXMLHash: 795c66e74f4cc9473ad6465c6653c5a6f59f417e
+  TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
+  YoutubeSourceParserKit: d1506222a62718ed41f18ab52ebbc1b1d9ecabcc
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 0711799caa6c1ddcf9c42c00b00c3c0d98ef747e
+
+COCOAPODS: 1.0.0.beta.6

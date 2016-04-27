@@ -1,0 +1,9 @@
+<grid>
+    <header>
+        <title>{{TITLE}}</title>
+    </header>
+    
+    <section id="Results">
+        {{RESULTS}}
+    </section>
+</grid>

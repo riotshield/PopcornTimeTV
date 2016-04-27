@@ -1,0 +1,20 @@
+<paradeTemplate>
+    <list>
+        <header>
+            <title></title>
+        </header>
+        <section>
+            <listItemLockup actionID="showMovies">
+                <title>Movies</title>
+            </listItemLockup>
+            <listItemLockup actionID="showTVShows">
+                <title>TV Shows</title>
+            </listItemLockup>
+        </section>
+        <relatedContent>
+            <imgDeck>
+                {{TOP_SHOWS_MOVIES}}
+            </imgDeck>
+        </relatedContent>
+    </list>
+</paradeTemplate>

@@ -2,46 +2,26 @@
 
 export SCRIPT_DIR=$(dirname "$0")
 
-##
-## Bootstrap Process
-##
+set -e
 
-main ()
-{
-    local submodules=$(git submodule status)
-    local result=$?
+cd "$(dirname "$0")/.."
 
-    if [ "$result" -ne "0" ]
-    then
-        exit $result
-    fi
+if [ -f ".ruby-version" ] && [ -z "$(rbenv version-name 2>/dev/null)" ]; then
+  echo "==> Installing Ruby..."
+  rbenv install --skip-existing
+  which bundle >/dev/null 2>&1  || {
+    gem install bundler
+    rbenv rehash
+  }
+fi
 
-    if [ -n "$submodules" ]
-    then
-        echo "*** Updating submodules..."
-        update_submodules
-    fi
-}
+if [ -f "Gemfile" ]; then
+  echo "==> Installing gem dependencies..."
+  bundle install
+fi
 
-bootstrap_submodule ()
-{
-    local bootstrap="script/bootstrap"
+if [ -f "Podfile" ]; then
+  echo "==> Installing pod dependencies..."
+  bundle exec pod install
+fi
 
-    if [ -e "$bootstrap" ]
-    then
-        echo "*** Bootstrapping $name..."
-        "$bootstrap" >/dev/null
-    else
-        update_submodules
-    fi
-}
-
-update_submodules ()
-{
-    git submodule sync --quiet && git submodule update --init && git submodule foreach --quiet bootstrap_submodule
-}
-
-export -f bootstrap_submodule
-export -f update_submodules
-
-main

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0720"
+   LastUpgradeVersion = "0730"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2350264B1C2C59EB00015F01"
+               BlueprintIdentifier = "287B85331C9873A200EEF5C8"
                BuildableName = "PopcornTime.app"
                BlueprintName = "PopcornTime"
                ReferencedContainer = "container:PopcornTime.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2350264B1C2C59EB00015F01"
+            BlueprintIdentifier = "287B85331C9873A200EEF5C8"
             BuildableName = "PopcornTime.app"
             BlueprintName = "PopcornTime"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
@@ -55,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2350264B1C2C59EB00015F01"
+            BlueprintIdentifier = "287B85331C9873A200EEF5C8"
             BuildableName = "PopcornTime.app"
             BlueprintName = "PopcornTime"
             ReferencedContainer = "container:PopcornTime.xcodeproj">
@@ -74,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2350264B1C2C59EB00015F01"
+            BlueprintIdentifier = "287B85331C9873A200EEF5C8"
             BuildableName = "PopcornTime.app"
             BlueprintName = "PopcornTime"
             ReferencedContainer = "container:PopcornTime.xcodeproj">

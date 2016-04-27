@@ -1,0 +1,19 @@
+<head>
+    <style>
+        .hover {
+        tv-text-highlight-style: marquee-and-show-on-highlight;
+        }
+        .white-color{
+        color: rgb(255,255,255);
+        }
+    </style>
+</head>
+<descriptiveAlertTemplate>
+        <title>{{TITLE}}</title>
+        <shelf centered="true">
+            <section>
+            {{SEASONS}}
+            </section>
+        </shelf>
+</descriptiveAlertTemplate>
+

@@ -68,6 +68,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+
+    func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+        if url.host == nil {
+            return true
+        }
+
+        let urlString = url.absoluteString
+        let queryArray = urlString.componentsSeparatedByString("/")
+
+        let action = queryArray[2..<queryArray.endIndex].joinWithSeparator("»")
+
+        ActionHandler.primary(action)
+
+        return true
+    }
+
     func checkForUpdates() {
         if let currentVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as? String {
             UpdateManager.sharedManager().checkForUpdates(forVersion: currentVersion) { (updateAvailable, name, releaseNotes, error) in

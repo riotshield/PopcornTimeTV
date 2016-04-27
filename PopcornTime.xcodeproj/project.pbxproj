@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		002682121CD0B76200F51D31 /* TVServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 002682111CD0B76200F51D31 /* TVServices.framework */; };
+		002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002682141CD0B76200F51D31 /* ServiceProvider.swift */; };
+		002682191CD0B76200F51D31 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 002682101CD0B76200F51D31 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
 		280910321C99DFDA00C8EC1C /* Popular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910311C99DFDA00C8EC1C /* Popular.swift */; };
 		280910341C99E0E000C8EC1C /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910331C99E0E000C8EC1C /* Search.swift */; };
 		280910381C99E6CA00C8EC1C /* Loading.xml in Resources */ = {isa = PBXBuildFile; fileRef = 280910371C99E6CA00C8EC1C /* Loading.xml */; };
@@ -40,7 +44,35 @@
 		E6B5F7911CB08FDE000F0644 /* SeasonProductRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = E6B5F7901CB08FDE000F0644 /* SeasonProductRecipe.xml */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		002682171CD0B76200F51D31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 287B852C1C9873A200EEF5C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0026820F1CD0B76200F51D31;
+			remoteInfo = TopShelf;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0026821D1CD0B76300F51D31 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				002682191CD0B76200F51D31 /* TopShelf.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		002682101CD0B76200F51D31 /* TopShelf.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TopShelf.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		002682111CD0B76200F51D31 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
+		002682141CD0B76200F51D31 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		280910311C99DFDA00C8EC1C /* Popular.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popular.swift; sourceTree = "<group>"; };
 		280910331C99E0E000C8EC1C /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		280910371C99E6CA00C8EC1C /* Loading.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Loading.xml; sourceTree = "<group>"; };
@@ -79,6 +111,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0026820D1CD0B76200F51D31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002682121CD0B76200F51D31 /* TVServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		287B85311C9873A200EEF5C8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -90,6 +130,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		002682131CD0B76200F51D31 /* TopShelf */ = {
+			isa = PBXGroup;
+			children = (
+				002682141CD0B76200F51D31 /* ServiceProvider.swift */,
+				002682161CD0B76200F51D31 /* Info.plist */,
+			);
+			path = TopShelf;
+			sourceTree = "<group>";
+		};
 		280910301C99DFA200C8EC1C /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				287B85361C9873A200EEF5C8 /* PopcornTime */,
+				002682131CD0B76200F51D31 /* TopShelf */,
 				287B85351C9873A200EEF5C8 /* Products */,
 				5F2FC6E89C601B1D29CD992F /* Pods */,
 				F1EDDAB5F2E1772C41C22B7A /* Frameworks */,
@@ -123,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				287B85341C9873A200EEF5C8 /* PopcornTime.app */,
+				002682101CD0B76200F51D31 /* TopShelf.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -263,6 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */,
+				002682111CD0B76200F51D31 /* TVServices.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -270,6 +322,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0026820F1CD0B76200F51D31 /* TopShelf */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
+			buildPhases = (
+				0026820C1CD0B76200F51D31 /* Sources */,
+				0026820D1CD0B76200F51D31 /* Frameworks */,
+				0026820E1CD0B76200F51D31 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TopShelf;
+			productName = TopShelf;
+			productReference = 002682101CD0B76200F51D31 /* TopShelf.appex */;
+			productType = "com.apple.product-type.tv-app-extension";
+		};
 		287B85331C9873A200EEF5C8 /* PopcornTime */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
@@ -283,10 +352,12 @@
 				1B4490875F574D4B15982419 /* 📦 Copy Pods Resources */,
 				5F0A8FD16E3C29A44C805B14 /* Embed Pods Frameworks */,
 				38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */,
+				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				002682181CD0B76200F51D31 /* PBXTargetDependency */,
 			);
 			name = PopcornTime;
 			productName = PopcornTime;
@@ -303,6 +374,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = PopcornTime;
 				TargetAttributes = {
+					0026820F1CD0B76200F51D31 = {
+						CreatedOnToolsVersion = 7.3;
+					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -322,11 +396,19 @@
 			projectRoot = "";
 			targets = (
 				287B85331C9873A200EEF5C8 /* PopcornTime */,
+				0026820F1CD0B76200F51D31 /* TopShelf */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0026820E1CD0B76200F51D31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		287B85321C9873A200EEF5C8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -440,6 +522,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0026820C1CD0B76200F51D31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */,
+				0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		287B85301C9873A200EEF5C8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -469,6 +560,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		002682181CD0B76200F51D31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0026820F1CD0B76200F51D31 /* TopShelf */;
+			targetProxy = 002682171CD0B76200F51D31 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		92925B2D1C9CA4E80086D362 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -481,6 +580,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0026821A1CD0B76300F51D31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Debug;
+		};
+		0026821B1CD0B76300F51D31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = TopShelf/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = Release;
+		};
 		287B85411C9873A200EEF5C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -570,6 +697,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -590,6 +718,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -604,6 +733,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0026821A1CD0B76300F51D31 /* Debug */,
+				0026821B1CD0B76300F51D31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		287B852F1C9873A200EEF5C8 /* Build configuration list for PBXProject "PopcornTime" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

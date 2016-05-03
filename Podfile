@@ -17,3 +17,6 @@ target 'PopcornTime' do
   pods
 end
 
+target 'TopShelf' do
+    pods
+end

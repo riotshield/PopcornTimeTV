@@ -228,6 +228,7 @@
 				E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */,
 				E6B5F7901CB08FDE000F0644 /* SeasonProductRecipe.xml */,
 				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
+				E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */,
 				E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */,
 			);
 			name = Product;
@@ -247,7 +248,6 @@
 			children = (
 				925F8DD71CA9E44C007100EB /* DescriptionRecipe.swift */,
 				925F8DD81CA9E44C007100EB /* DescriptionRecipe.xml */,
-				E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */,
 				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
 			);
 			name = Alert;

@@ -25,7 +25,6 @@
                 <outlet property="middleSubsConstraint" destination="2uK-k0-l8J" id="jvg-lo-R5m"/>
                 <outlet property="osdView" destination="XGm-VG-ZTZ" id="YCH-Dn-cvG"/>
                 <outlet property="preferredFocusedView" destination="XGm-VG-ZTZ" id="CTh-VV-WxR"/>
-                <outlet property="progressView" destination="iZi-53-Bv3" id="2Wi-ff-NAP"/>
                 <outlet property="rightLabel" destination="2UG-Bi-GdO" id="QqX-qD-SDy"/>
                 <outlet property="subTabBarCollectionView" destination="mKj-1k-JOw" id="CSP-Y5-3nJ"/>
                 <outlet property="subValueDelayButton" destination="75H-uT-MX6" id="Ojb-Mf-p0A"/>
@@ -54,14 +53,14 @@
                     <rect key="frame" x="0.0" y="0.0" width="1920" height="1080"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading logo" translatesAutoresizingMaskIntoConstraints="NO" id="wJG-J6-EmN">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="wJG-J6-EmN">
                     <rect key="frame" x="840" y="435" width="240" height="170"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="240" id="2Td-oN-eau"/>
                         <constraint firstAttribute="height" constant="170" id="FaH-3z-XaS"/>
                     </constraints>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iZi-53-Bv3" customClass="SYLoadingProgressView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iZi-53-Bv3">
                     <rect key="frame" x="640" y="614" width="640" height="92"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -375,7 +374,4 @@
             <point key="canvasLocation" x="924" y="1180"/>
         </view>
     </objects>
-    <resources>
-        <image name="loading logo" width="102" height="94"/>
-    </resources>
 </document>

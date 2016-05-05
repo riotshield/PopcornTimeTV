@@ -22,7 +22,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(),  Watchlist(), Search()]))
+        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Watchlist(), Search()]))
         case "showTVShows":
             var popular = Popular()
             popular.fetchType = .Shows
@@ -287,9 +287,13 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         if pieces.indices.contains(7) {
             tvdb = pieces[7]
         }
+        var slugged = ""
+        if pieces.indices.contains(8) {
+            slugged = pieces[8]
+        }
         WatchlistManager.sharedManager().itemExistsInWatchList(itemId: id, forType: ItemType(rawValue: type)!, completion: { exists in
             if exists {
-                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb), completion: { removed in
+                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { removed in
                     if removed {
                         Kitchen.serve(recipe: AlertRecipe(title: "Removed", description: "\(name) was removed from your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {
@@ -297,7 +301,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     }
                 })
             } else {
-                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb), completion: { added in
+                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { added in
                     if added {
                         Kitchen.serve(recipe: AlertRecipe(title: "Added", description: "\(name) was added your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {

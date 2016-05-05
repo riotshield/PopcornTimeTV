@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (3.3.1)
-  - Kingfisher (2.2.2)
+  - Kingfisher (2.4.0)
   - ObjectMapper (1.2.0)
   - PopcornKit (0.0.1):
     - Alamofire
@@ -10,7 +10,6 @@ PODS:
   - PopcornTorrent (1.0.9)
   - SWXMLHash (2.3.1)
   - TVMLKitchen (0.7.0)
-  - TVVLCKit (3.0.0)
   - YoutubeSourceParserKit (0.2.4)
 
 DEPENDENCIES:
@@ -18,7 +17,6 @@ DEPENDENCIES:
   - PopcornKit (from `https://github.com/PopcornTimeTV/PopcornKit.git`)
   - PopcornTorrent
   - TVMLKitchen (from `https://github.com/toshi0383/TVMLKitchen.git`, branch `swift2.2`)
-  - TVVLCKit
   - YoutubeSourceParserKit
 
 EXTERNAL SOURCES:
@@ -38,15 +36,14 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  Kingfisher: 7e8de5b0cf7b5dc8ec559d193029a0859df93ef1
+  Kingfisher: 9171a424ee7f8031f518f649bb850d1eab541247
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   PopcornKit: 6c86f7c0bd0e9675eb6605b6b9f4c86bb766939a
   PopcornTorrent: b4e0343ffa33581761e35a15e02cea90c9c3828c
   SWXMLHash: 795c66e74f4cc9473ad6465c6653c5a6f59f417e
   TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
-  TVVLCKit: a0c2cbb9ec3764905c3293009de5ecabf1aea502
   YoutubeSourceParserKit: d1506222a62718ed41f18ab52ebbc1b1d9ecabcc
 
-PODFILE CHECKSUM: 849298dfe46712e00a09c876a609b0bb2afd47fd
+PODFILE CHECKSUM: cf6c2bd08353da679818525587457ee355e553ff
 
-COCOAPODS: 1.0.0.beta.6
+COCOAPODS: 1.0.0.rc.1

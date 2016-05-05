@@ -9,30 +9,31 @@
 import TVMLKitchen
 import PopcornKit
 
-struct PreviewItem {
-    var fanartImage: String!
-
-    init(fanartImage: String) {
-        self.fanartImage = fanartImage
-    }
-}
-
 public struct WelcomeRecipe: RecipeType {
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.Default
 
     let title: String
-    let items: [PreviewItem]
+    let movies: [Movie]
+    let shows: [Show]
+    let watchListMovies: [WatchItem]
+    let watchListShows: [WatchItem]
 
-    init(title: String, items: [PreviewItem]) {
+    init(title: String, movies: [Movie], shows: [Show], watchListMovies: [WatchItem], watchListShows: [WatchItem]) {
         self.title = title
-        self.items = items
+        self.movies = movies
+        self.shows = shows
+        self.watchListMovies = watchListMovies
+        self.watchListShows = watchListShows
     }
 
     init(title: String) {
         self.title = title
-        self.items = []
+        self.movies = []
+        self.shows = []
+        self.watchListMovies = []
+        self.watchListShows = []
     }
 
     public var xmlString: String {
@@ -43,19 +44,70 @@ public struct WelcomeRecipe: RecipeType {
         return xml
     }
 
-    public var topShowsAndMovies: String {
-        let mapped: [String] = items.map {
-            return "<img src=\"\($0.fanartImage)\"/>"
+    public var popularMovies: String {
+        let mapped: [String] = movies.map {
+            return $0.lockUp
         }
-        return mapped.joinWithSeparator("")
+        return mapped.joinWithSeparator("\n")
+    }
+
+    public var popularShows: String {
+        let mapped: [String] = shows.map {
+            return $0.lockUp
+        }
+        return mapped.joinWithSeparator("\n")
+    }
+
+    public var moviesWatchList: String {
+        let mapped: [String] = watchListMovies.map {
+            var string = "<lockup actionID=\"showMovie»\($0.id)\">"
+            string += "<img src=\"\($0.coverImage)\" width=\"250\" height=\"375\" />"
+            string += "<title class=\"hover\">\($0.name.cleaned)</title>"
+            string += "</lockup>"
+            return string
+        }
+        return mapped.joinWithSeparator("\n")
+    }
+
+    public var showsWatchList: String {
+        let mapped: [String] = watchListShows.map {
+            var string = "<lockup actionID=\"showShow»\($0.id)»\($0.slugged)»\($0.tvdbId)\">"
+            string += "<img src=\"\($0.coverImage)\" width=\"250\" height=\"375\" />"
+            string += "<title class=\"hover\">\($0.name.cleaned)</title>"
+            string += "</lockup>"
+            return string
+        }
+        return mapped.joinWithSeparator("\n")
+    }
+
+    func buildShelf(title: String, content: String) -> String {
+        var shelf = "<shelf><header><title>"
+        shelf += title
+        shelf += "</title></header><section>"
+        shelf += content
+        shelf += "</section></shelf>"
+        return shelf
     }
 
     public var template: String {
         var xml = ""
+        var shelfs = ""
         if let file = NSBundle.mainBundle().URLForResource("WelcomeRecipe", withExtension: "xml") {
             do {
                 xml = try String(contentsOfURL: file)
-                xml = xml.stringByReplacingOccurrencesOfString("{{TOP_SHOWS_MOVIES}}", withString: topShowsAndMovies)
+                if popularMovies.characters.count > 10 {
+                    shelfs += self.buildShelf("Popular Movies", content: popularMovies)
+                }
+                if popularShows.characters.count > 10 {
+                    shelfs += self.buildShelf("Popular TV Shows", content: popularShows)
+                }
+                if moviesWatchList.characters.count > 10 {
+                    shelfs += self.buildShelf("Movies Watchlist", content: moviesWatchList)
+                }
+                if showsWatchList.characters.count > 10 {
+                    shelfs += self.buildShelf("TV Shows Watchlist", content: showsWatchList)
+                }
+                xml = xml.stringByReplacingOccurrencesOfString("{{SHELFS}}", withString: shelfs)
             } catch {
                 print("Could not open Catalog template")
             }

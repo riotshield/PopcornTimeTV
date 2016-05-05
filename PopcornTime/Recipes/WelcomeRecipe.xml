@@ -1,20 +1,34 @@
-<paradeTemplate>
-    <list>
-        <header>
-            <title></title>
-        </header>
-        <section>
-            <listItemLockup actionID="showMovies">
-                <title>Movies</title>
-            </listItemLockup>
-            <listItemLockup actionID="showTVShows">
-                <title>TV Shows</title>
-            </listItemLockup>
-        </section>
-        <relatedContent>
-            <imgDeck>
-                {{TOP_SHOWS_MOVIES}}
-            </imgDeck>
-        </relatedContent>
-    </list>
-</paradeTemplate>
+<head>
+    <style>
+        .round {
+            tv-img-treatment:corner-small;
+        }
+        .hover {
+            tv-text-highlight-style: marquee-and-show-on-highlight;
+        }
+    </style>
+</head>
+
+<stackTemplate>
+    <collectionList>
+        <shelf>
+            <section>
+                <lockup actionID="showMovies">
+                    <img class="round" src="http://i.imgur.com/tIeG9iN.png" width="550" height="230"></img>
+                    <title>Movies</title>
+                </lockup>
+                <lockup actionID="showTVShows">
+                    <img class="round" src="http://i.imgur.com/GAxTU2A.png" width="550" height="230"></img>
+                    <title>TV Shows</title>
+                </lockup>
+                <lockup actionID="showMovies">
+                    <img class="round" src="http://i.imgur.com/EZsElYu.png" width="550" height="230"></img>
+                    <title>Settings</title>
+                </lockup>
+            </section>
+        </shelf>
+        
+        {{SHELFS}}
+        
+    </collectionList>
+</stackTemplate>

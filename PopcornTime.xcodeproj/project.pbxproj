@@ -11,6 +11,8 @@
 		002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002682141CD0B76200F51D31 /* ServiceProvider.swift */; };
 		002682191CD0B76200F51D31 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 002682101CD0B76200F51D31 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
+		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
+		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
 		280910321C99DFDA00C8EC1C /* Popular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910311C99DFDA00C8EC1C /* Popular.swift */; };
 		280910341C99E0E000C8EC1C /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910331C99E0E000C8EC1C /* Search.swift */; };
 		280910381C99E6CA00C8EC1C /* Loading.xml in Resources */ = {isa = PBXBuildFile; fileRef = 280910371C99E6CA00C8EC1C /* Loading.xml */; };
@@ -19,6 +21,7 @@
 		287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B85461C98771300EEF5C8 /* ActionHandler.swift */; };
 		28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
 		4D6953C8BDE957ED2E9EFD94 /* Pods_PopcornTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */; };
+		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
 		925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */; };
 		925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DD61CA9E44C007100EB /* CatalogRecipe.xml */; };
@@ -73,6 +76,8 @@
 		002682111CD0B76200F51D31 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
 		002682141CD0B76200F51D31 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
+		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
 		280910311C99DFDA00C8EC1C /* Popular.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popular.swift; sourceTree = "<group>"; };
 		280910331C99E0E000C8EC1C /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		280910371C99E6CA00C8EC1C /* Loading.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Loading.xml; sourceTree = "<group>"; };
@@ -82,6 +87,8 @@
 		287B85401C9873A200EEF5C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		287B85461C98771300EEF5C8 /* ActionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionHandler.swift; sourceTree = "<group>"; };
 		28EB626B1CA3364300985F78 /* String+Cleaned.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Cleaned.swift"; path = "Extensions/String+Cleaned.swift"; sourceTree = "<group>"; };
+		599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.release.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.release.xcconfig"; sourceTree = "<group>"; };
+		5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TopShelf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
 		925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatalogRecipe.swift; sourceTree = "<group>"; };
 		925F8DD61CA9E44C007100EB /* CatalogRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CatalogRecipe.xml; sourceTree = "<group>"; };
@@ -101,6 +108,7 @@
 		92925B301C9CA5BC0086D362 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProgressViewController.swift; path = "View Controllers/ProgressViewController.swift"; sourceTree = "<group>"; };
 		92925B331C9CAB360086D362 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = "View Controllers/PlayerViewController.swift"; sourceTree = "<group>"; };
 		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
+		AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.debug.xcconfig"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E31248A9DC45B7AEBE724E1D /* Pods-PopcornTime.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PopcornTime.release.xcconfig"; path = "Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime.release.xcconfig"; sourceTree = "<group>"; };
 		E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeasonPickerRecipe.swift; sourceTree = "<group>"; };
@@ -116,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				002682121CD0B76200F51D31 /* TVServices.framework in Frameworks */,
+				6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +218,8 @@
 			children = (
 				92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */,
 				28EB626B1CA3364300985F78 /* String+Cleaned.swift */,
+				00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */,
+				00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -218,6 +229,8 @@
 			children = (
 				F2F65676E59D10FCE8C9BE15 /* Pods-PopcornTime.debug.xcconfig */,
 				E31248A9DC45B7AEBE724E1D /* Pods-PopcornTime.release.xcconfig */,
+				AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */,
+				599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -315,6 +328,7 @@
 			children = (
 				C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */,
 				002682111CD0B76200F51D31 /* TVServices.framework */,
+				5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -326,9 +340,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
 			buildPhases = (
+				D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */,
 				0026820C1CD0B76200F51D31 /* Sources */,
 				0026820D1CD0B76200F51D31 /* Frameworks */,
 				0026820E1CD0B76200F51D31 /* Resources */,
+				C7D00E5B2BF0BC3307FB3BE0 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -504,6 +520,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		C7D00E5B2BF0BC3307FB3BE0 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -537,6 +583,7 @@
 			files = (
 				280910321C99DFDA00C8EC1C /* Popular.swift in Sources */,
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
+				00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */,
 				E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */,
 				925F8DEC1CA9E44C007100EB /* MovieWatchlistRecipe.swift in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
@@ -554,6 +601,7 @@
 				925F8DF11CA9E44C007100EB /* WelcomeRecipe.swift in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
+				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +630,7 @@
 /* Begin XCBuildConfiguration section */
 		0026821A1CD0B76300F51D31 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -596,6 +645,7 @@
 		};
 		0026821B1CD0B76300F51D31 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -740,6 +790,7 @@
 				0026821B1CD0B76300F51D31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		287B852F1C9873A200EEF5C8 /* Build configuration list for PBXProject "PopcornTime" */ = {
 			isa = XCConfigurationList;

@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (3.3.1)
-  - Kingfisher (2.2.2)
+  - Kingfisher (2.4.0)
   - ObjectMapper (1.2.0)
   - PopcornKit (0.0.1):
     - Alamofire
@@ -36,7 +36,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  Kingfisher: 7e8de5b0cf7b5dc8ec559d193029a0859df93ef1
+  Kingfisher: 9171a424ee7f8031f518f649bb850d1eab541247
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   PopcornKit: 6c86f7c0bd0e9675eb6605b6b9f4c86bb766939a
   PopcornTorrent: b4e0343ffa33581761e35a15e02cea90c9c3828c
@@ -44,6 +44,6 @@ SPEC CHECKSUMS:
   TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
   YoutubeSourceParserKit: d1506222a62718ed41f18ab52ebbc1b1d9ecabcc
 
-PODFILE CHECKSUM: 0711799caa6c1ddcf9c42c00b00c3c0d98ef747e
+PODFILE CHECKSUM: cf6c2bd08353da679818525587457ee355e553ff
 
-COCOAPODS: 1.0.0.beta.6
+COCOAPODS: 1.0.0.rc.1

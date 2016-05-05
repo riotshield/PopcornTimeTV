@@ -28,23 +28,7 @@
             </section>
         </shelf>
         
-        <shelf>
-            <header>
-                <title>Movies Watchlist</title>
-            </header>
-            <section>
-                {{MOVIES_WATCHLIST}}
-            </section>
-        </shelf>
-        
-        <shelf>
-            <header>
-                <title>TV Show Watchlist</title>
-            </header>
-            <section>
-                {{SHOWS_WATCHLIST}}
-            </section>
-        </shelf>
+        {{SHELFS}}
         
     </collectionList>
 </stackTemplate>

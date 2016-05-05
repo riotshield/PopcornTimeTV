@@ -138,6 +138,8 @@ public class WatchlistManager {
                     }
                 }
                 completion?(parsedItems)
+            } else {
+                completion?([])
             }
         }
     }

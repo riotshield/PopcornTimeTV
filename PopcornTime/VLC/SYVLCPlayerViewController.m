@@ -801,7 +801,8 @@ static NSString *const kText = @"kText";
             
             // Si hay entrado realmente en el video
             // guarda el ratio
-            if (_videoDidOpened && _hash.length > 0) {
+            if (_videoDidOpened) {
+//            if (_videoDidOpened && _hash.length > 0) {
                 
                 float ratio = [self currentTimeAsPercentage];
                 if (ratio > 0.95) {
@@ -814,6 +815,7 @@ static NSString *const kText = @"kText";
                     
                     id object = viewControllers[i];
                     
+                    /*
                     if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
                         SQMovieDetailViewController *detailViewController = (SQMovieDetailViewController *) object;
                         [[SYContentController shareController]setRatio:ratio toMovie:detailViewController.imdb];
@@ -828,6 +830,7 @@ static NSString *const kText = @"kText";
                                                              }];
                         break;
                     }
+                     */
                 }
                 
                 [self rememberAudioSub];
@@ -840,7 +843,7 @@ static NSString *const kText = @"kText";
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
-            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
+//            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
             [self dismissViewControllerAnimated:YES completion:^{
                 [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
@@ -851,7 +854,7 @@ static NSString *const kText = @"kText";
         UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
         
         if (!sender || panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-            
+            /*
             if (_hash.length > 0) {
                 float ratio = 1.0;
                 
@@ -878,6 +881,7 @@ static NSString *const kText = @"kText";
                 
                 [self rememberAudioSub];
             }
+             */
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLoadingRatio) object:nil];
             
@@ -885,7 +889,7 @@ static NSString *const kText = @"kText";
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
-            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
+//            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
             [self dismissViewControllerAnimated:YES completion:^{
                 [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
@@ -1277,6 +1281,7 @@ static NSString *const kText = @"kText";
     }
     else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
+        /*
         [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
                                                   forHash:_hash
                                                 withBlock:^(NSData *data, NSError *error) {
@@ -1287,6 +1292,7 @@ static NSString *const kText = @"kText";
                                                         _currentSubParsed = @{};
                                                     }
                                                 }];
+        */
     }
     
 }
@@ -1328,6 +1334,7 @@ static NSString *const kText = @"kText";
 
 - (void) createAudioSubsDatasource
 {
+    /*
     [[SQClientController shareClient]subtitlesListForHash:_hash
                                                 withBlock:^(NSData *data, NSError *error) {
                                                     
@@ -1407,6 +1414,7 @@ static NSString *const kText = @"kText";
                                                         }
                                                     }
                                                 }];
+     */
     
 }// createOptionsRoll
 

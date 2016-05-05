@@ -3,3 +3,4 @@
 //
 
 #import <TVVLCKit/TVVLCKit.h>
+#import "SYVLCPlayerViewController.h"

@@ -104,8 +104,6 @@ public struct WelcomeRecipe: RecipeType {
                 if moviesWatchList.characters.count > 10 {
                     shelfs += self.buildShelf("Movies Watchlist", content: moviesWatchList)
                 }
-                print(moviesWatchList)
-                print(showsWatchList)
                 if showsWatchList.characters.count > 10 {
                     shelfs += self.buildShelf("TV Shows Watchlist", content: showsWatchList)
                 }

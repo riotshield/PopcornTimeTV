@@ -38,12 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         if let shows = shows {
                             manager.fetchMovies(limit: 50, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in
                                 if let movies = movies {
-                                    print(movies.count)
-//                                    Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", movies: movies, shows: shows, watchListMovies: [], watchListShows: []))
                                     let watchlist = WatchlistManager.sharedManager()
                                     watchlist.fetchWatchListItems(forType: .Movie) { watchListMovies in
-                                        print(watchListMovies)
-
                                         watchlist.fetchWatchListItems(forType: .Show) { watchListShows in
                                             Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", movies: movies, shows: shows, watchListMovies: watchListMovies, watchListShows: watchListShows))
                                         }

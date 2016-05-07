@@ -70,8 +70,7 @@ class ProgressViewController: UIViewController {
     
     func playVLCVideo(url: NSURL) {
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
-        let playerViewController = PopcornVLCPlayerViewController()
-        playerViewController.url = url
+        let playerViewController = SYVLCPlayerViewController(URL: url, andHash: "")
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
         self.streaming = true
     }

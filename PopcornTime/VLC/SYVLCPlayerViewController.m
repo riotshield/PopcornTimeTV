@@ -8,7 +8,7 @@
 //#import "SQClientController.h"
 //#import "SYContentController.h"
 //#import "SYLoadingProgressView.h"
-#import "SQTabMenuCollectionViewCell.h"
+//#import "SQTabMenuCollectionViewCell.h"
 #import <TVVLCKit/TVVLCKit.h>
 //#import "SQSubSetting.h"
 
@@ -17,7 +17,7 @@ static NSString *const kStart = @"kStart";
 static NSString *const kEnd = @"kEnd";
 static NSString *const kText = @"kText";
 
-@interface SYVLCPlayerViewController () <VLCMediaPlayerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, SQTabMenuCollectionViewCellDelegate, UIGestureRecognizerDelegate> {
+@interface SYVLCPlayerViewController () <VLCMediaPlayerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIGestureRecognizerDelegate> { //, SQTabMenuCollectionViewCellDelegate> {
     
     VLCMediaPlayer *_mediaplayer;
     NSURL *_url;
@@ -445,6 +445,7 @@ static NSString *const kText = @"kText";
     
     //NSLog(@"didUpdateFocusInContext : %@", context.nextFocusedView);
     
+    /*
     if ([context.nextFocusedView isKindOfClass:[UIButton class]]) {
         //NSLog(@"next: button (%li)", context.nextFocusedView.tag);
     }
@@ -512,7 +513,7 @@ static NSString *const kText = @"kText";
         [self activeHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocusedBackground] forState:UIControlStateFocused];
     }
-
+     */
 }
 
 
@@ -526,6 +527,7 @@ static NSString *const kText = @"kText";
 
 - (void) openTopMenu
 {
+    return; // Disbale this for now
     [self hideSwipeMessage];
     
     self.subsButton.enabled      = NO;
@@ -550,6 +552,7 @@ static NSString *const kText = @"kText";
 
 - (void) closeTopMenu
 {
+    return; // Diable this for now
     self.topTopMenuSpace.constant = -232.0;
     
     _panGestureRecognizer.enabled = YES;
@@ -813,7 +816,7 @@ static NSString *const kText = @"kText";
                 
                 for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
                     
-                    id object = viewControllers[i];
+//                    id object = viewControllers[i];
                     
                     /*
                     if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
@@ -924,10 +927,12 @@ static NSString *const kText = @"kText";
     switch(player.state) {
         case VLCMediaPlayerStateStopped: {
             //NSLog(@"VLCMediaPlayerStateStopped");
+            /*
             SYAppDelegate *appDelegate = (SYAppDelegate *) [UIApplication sharedApplication].delegate;
             if (![[appDelegate visibleViewController]isKindOfClass:[UIAlertController class]]) {
                 [self done:nil];
             }
+             */
             break;
         }
         case VLCMediaPlayerStateOpening:
@@ -984,7 +989,7 @@ static NSString *const kText = @"kText";
         
         [UIView animateWithDuration:0.3 animations:^{
             self.loadingLogo.alpha = .0;
-            self.progressView.alpha = .0;
+//            self.progressView.alpha = .0;
             self.indicatorView.alpha = 1.0;
         }];
         
@@ -1085,6 +1090,7 @@ static NSString *const kText = @"kText";
 
 - (void) activeCollectionViews
 {
+    /*
     for (SQTabMenuCollectionViewCell *cell in [self.subTabBarCollectionView visibleCells]) {
         NSIndexPath *indexPath = [self.subTabBarCollectionView indexPathForCell:cell];
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocused : kAlphaNotFocused;
@@ -1096,11 +1102,13 @@ static NSString *const kText = @"kText";
         float alpha = (indexPath.row == _lastIndexPathAudio.row) ? kAlphaFocused : kAlphaNotFocused;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
     }
+     */
 }
 
 
 - (void) deactiveCollectionViews
 {
+    /*
     for (SQTabMenuCollectionViewCell *cell in [self.subTabBarCollectionView visibleCells]) {
         NSIndexPath *indexPath = [self.subTabBarCollectionView indexPathForCell:cell];
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
@@ -1112,6 +1120,7 @@ static NSString *const kText = @"kText";
         float alpha = (indexPath.row == _lastIndexPathAudio.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
     }
+     */
 }
 
 
@@ -1161,6 +1170,7 @@ static NSString *const kText = @"kText";
 
 - (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     static NSString *identifier = @"TabMenuCollectionViewCell";
     
     NSDictionary *item = ([collectionView isEqual:self.subTabBarCollectionView]) ? [_subsTracks objectAtIndex:indexPath.row] : [_audioTracks objectAtIndex:indexPath.row];
@@ -1181,6 +1191,8 @@ static NSString *const kText = @"kText";
     }
     
     return cell;
+     */
+    return nil;
     
 }// collectionView:cellForItemAtIndexPath
 
@@ -1205,6 +1217,7 @@ static NSString *const kText = @"kText";
 {
     [self performSelector:@selector(showMiddleButton) withObject:nil afterDelay:1.0];
     
+    /*
     if ([cell isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
         SQTabMenuCollectionViewCell *tabCell = (SQTabMenuCollectionViewCell *) cell;
         
@@ -1244,6 +1257,7 @@ static NSString *const kText = @"kText";
             [self performSelector:@selector(newAudioSelected) withObject:nil afterDelay:2.0];
         }
     }
+     */
     
 }// newItemSelected
 

@@ -1,6 +1,6 @@
 
 #import <UIKit/UIKit.h>
-#import "SQTabMenuCollectionViewCell.h"
+//#import "SQTabMenuCollectionViewCell.h"
 
 @protocol SYVLCPlayerViewControllerDelegate <NSObject>
 
@@ -8,8 +8,6 @@
 - (float) currentRatio;
 
 @end
-
-@class SYLoadingProgressView;
 
 
 @interface SYVLCPlayerViewController : UIViewController
@@ -25,7 +23,6 @@
 @property (nonatomic, weak) IBOutlet UILabel *swipeMesaggeLabel;
 
 @property (nonatomic, weak) IBOutlet UIImageView *loadingLogo;
-@property (nonatomic, weak) IBOutlet SYLoadingProgressView *progressView;
 
 // Focus
 @property (nonatomic, weak) IBOutlet UIView *topMenuContainerView;
@@ -68,7 +65,7 @@
 @property (nonatomic, assign) BOOL isFile;
 @property (nonatomic, assign) float currentSubTitleDelay;
 @property (nonatomic, weak)   UIViewController <SYVLCPlayerViewControllerDelegate> *rootViewController;
-@property (nonatomic, weak) id <SQTabMenuCollectionViewCellDelegate> delegate;
+//@property (nonatomic, weak) id <SQTabMenuCollectionViewCellDelegate> delegate;
 
 - (id) initWithURL:(NSURL *) url andHash:(NSString *) hash;
 

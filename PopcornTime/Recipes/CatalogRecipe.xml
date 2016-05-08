@@ -6,6 +6,9 @@
     </style>
 </head>
 <stackTemplate>
+    <background>
+        <img src="http://i.cubeupload.com/DYdaxx.png"></img>
+    </background>
     <banner>
         <title>{{TITLE}}</title>
     </banner>

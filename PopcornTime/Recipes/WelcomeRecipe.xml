@@ -2,6 +2,7 @@
     <style>
         .round {
             tv-img-treatment:corner-small;
+            
         }
         .hover {
             tv-text-highlight-style: marquee-and-show-on-highlight;
@@ -10,25 +11,43 @@
 </head>
 
 <stackTemplate>
+    
+    <background>
+        <img src="http://i.cubeupload.com/DYdaxx.png"></img>
+    </background>
+    
     <collectionList>
         <shelf>
             <section>
                 <lockup actionID="showMovies">
-                    <img class="round" src="http://i.imgur.com/tIeG9iN.png" width="550" height="230"></img>
-                    <title>Movies</title>
+                    <img class="round" src="http://cdn.playbuzz.com/cdn/f36db57d-9a9c-4c35-8bb9-2e3735942331/43e78b5a-5521-44e7-b4fd-fba5ce42ee92.jpg" width="480" height="270"></img>
+                    <overlay>
+                        <title>Movies</title>
+                    </overlay>
                 </lockup>
                 <lockup actionID="showTVShows">
-                    <img class="round" src="http://i.imgur.com/GAxTU2A.png" width="550" height="230"></img>
-                    <title>TV Shows</title>
+                    <img class="round" src="http://unspoiledpodcasts.com/wp-content/uploads/2014/09/Breaking-Bad.jpg" width="480" height="270"></img>
+                    <overlay>
+                        <title>TV Shows</title>
+                    </overlay>
                 </lockup>
-                <lockup actionID="showMovies">
-                    <img class="round" src="http://i.imgur.com/EZsElYu.png" width="550" height="230"></img>
-                    <title>Settings</title>
+                <lockup actionID="#">
+                    <img class="round" src="#" width="480" height="270"></img>
+                    <overlay>
+                        <title>Watchlist</title>
+                    </overlay>
+                </lockup>
+                <lockup actionID="#">
+                    <img class="round" src="#" width="480" height="270"></img>
+                    <overlay>
+                        <title>Settings</title>
+                    </overlay>
                 </lockup>
             </section>
         </shelf>
-        
+    
         {{SHELFS}}
         
     </collectionList>
+    
 </stackTemplate>

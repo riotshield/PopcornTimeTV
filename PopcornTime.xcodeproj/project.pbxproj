@@ -358,8 +358,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
 			buildPhases = (
-				DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */,
 				D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */,
+				DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */,
 				0026820C1CD0B76200F51D31 /* Sources */,
 				0026820D1CD0B76200F51D31 /* Frameworks */,
 				0026820E1CD0B76200F51D31 /* Resources */,
@@ -379,8 +379,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
-				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
 				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
+				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,

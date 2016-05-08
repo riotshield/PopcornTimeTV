@@ -50,7 +50,7 @@ class ProgressViewController: UIViewController {
                 self.downloading = true
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress <= 0.0 {
-                    self.nameLabel.text = "Downloading " + self.movieName + "..."
+                    self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
                 self.playVLCVideo(url)

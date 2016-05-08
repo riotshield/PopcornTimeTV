@@ -50,16 +50,10 @@ class ProgressViewController: UIViewController {
                 self.downloading = true
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress <= 0.0 {
-                    self.nameLabel.text = "Downloading " + self.movieName + "..."
+                    self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
-                if url.pathExtension == "mp4" {
-                    // Use the default player for handling video
-                    self.playNativeVideo(url)
-                } else {
-                    // Use VLC to play the video
-                    PTTorrentStreamer.sharedStreamer().cancelStreaming()
-                }
+                self.playVLCVideo(url, hash: self.magnet)
             }) { error in
                 print(error)
             }
@@ -72,6 +66,13 @@ class ProgressViewController: UIViewController {
         if !self.streaming {
             PTTorrentStreamer.sharedStreamer().cancelStreaming()
         }
+    }
+
+    func playVLCVideo(url: NSURL, hash: String) {
+        Kitchen.appController.navigationController.popViewControllerAnimated(false)
+        let playerViewController = SYVLCPlayerViewController(URL: url, andHash: hash)
+        Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
+        self.streaming = true
     }
 
     func playNativeVideo(url: NSURL) {

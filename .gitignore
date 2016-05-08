@@ -92,6 +92,10 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
+## TVVLCKit Framework
+
+TVVLCKit.framework/
+
 
 ### Objective-C ###
 # Xcode

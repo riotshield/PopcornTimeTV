@@ -2,7 +2,6 @@
 //  SeasonsRecipe.swift
 //  PopcornTime
 //
-//  Created by Tomi De Lucca on 3/31/16.
 //  Copyright © 2016 PopcornTime. All rights reserved.
 //
 

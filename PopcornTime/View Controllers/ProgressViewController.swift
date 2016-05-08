@@ -53,7 +53,7 @@ class ProgressViewController: UIViewController {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
             }, readyToPlay: { url in
-                self.playVLCVideo(url)
+                self.playVLCVideo(url, hash: self.magnet)
             }) { error in
                 print(error)
             }
@@ -68,9 +68,9 @@ class ProgressViewController: UIViewController {
         }
     }
 
-    func playVLCVideo(url: NSURL) {
+    func playVLCVideo(url: NSURL, hash: String) {
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
-        let playerViewController = SYVLCPlayerViewController(URL: url, andHash: "")
+        let playerViewController = SYVLCPlayerViewController(URL: url, andHash: hash)
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
         self.streaming = true
     }

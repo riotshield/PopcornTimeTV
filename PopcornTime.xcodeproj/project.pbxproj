@@ -39,6 +39,9 @@
 		925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DE31CA9E44C007100EB /* WelcomeRecipe.xml */; };
 		925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF41CA9E464007100EB /* WatchlistManager.swift */; };
 		925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DF61CA9E477007100EB /* Watchlist.swift */; };
+		926A48771CDFAB7000D02962 /* SQSubSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A48731CDFAB7000D02962 /* SQSubSetting.m */; };
+		926A48781CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A48751CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m */; };
+		926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A48761CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib */; };
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
 		92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B301C9CA5BC0086D362 /* ProgressViewController.swift */; };
 		92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B331C9CAB360086D362 /* PlayerViewController.swift */; };
@@ -110,6 +113,11 @@
 		925F8DE31CA9E44C007100EB /* WelcomeRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WelcomeRecipe.xml; sourceTree = "<group>"; };
 		925F8DF41CA9E464007100EB /* WatchlistManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistManager.swift; sourceTree = "<group>"; };
 		925F8DF61CA9E477007100EB /* Watchlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Watchlist.swift; sourceTree = "<group>"; };
+		926A48721CDFAB7000D02962 /* SQSubSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQSubSetting.h; sourceTree = "<group>"; };
+		926A48731CDFAB7000D02962 /* SQSubSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQSubSetting.m; sourceTree = "<group>"; };
+		926A48741CDFAB7000D02962 /* SQTabMenuCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQTabMenuCollectionViewCell.h; sourceTree = "<group>"; };
+		926A48751CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQTabMenuCollectionViewCell.m; sourceTree = "<group>"; };
+		926A48761CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SQTabMenuCollectionViewCell.xib; sourceTree = "<group>"; };
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		92925B301C9CA5BC0086D362 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProgressViewController.swift; path = "View Controllers/ProgressViewController.swift"; sourceTree = "<group>"; };
 		92925B331C9CAB360086D362 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = "View Controllers/PlayerViewController.swift"; sourceTree = "<group>"; };
@@ -246,6 +254,11 @@
 		9211E3EB1CDC0A8C00BEEB9D /* VLC */ = {
 			isa = PBXGroup;
 			children = (
+				926A48721CDFAB7000D02962 /* SQSubSetting.h */,
+				926A48731CDFAB7000D02962 /* SQSubSetting.m */,
+				926A48741CDFAB7000D02962 /* SQTabMenuCollectionViewCell.h */,
+				926A48751CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m */,
+				926A48761CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib */,
 				9211E3EC1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.h */,
 				9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */,
 				9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */,
@@ -456,6 +469,7 @@
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,
 				925F8DE71CA9E44C007100EB /* DescriptionRecipe.xml in Resources */,
 				E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */,
+				926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */,
 				925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */,
 				925F8DEB1CA9E44C007100EB /* SearchRecipe.xml in Resources */,
 				925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */,
@@ -645,6 +659,7 @@
 				280910341C99E0E000C8EC1C /* Search.swift in Sources */,
 				925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */,
 				E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */,
+				926A48771CDFAB7000D02962 /* SQSubSetting.m in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
@@ -655,6 +670,7 @@
 				9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */,
 				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
+				926A48781CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

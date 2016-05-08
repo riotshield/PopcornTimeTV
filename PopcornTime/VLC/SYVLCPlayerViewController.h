@@ -25,7 +25,6 @@
 @property (nonatomic, weak) IBOutlet UILabel *swipeMesaggeLabel;
 
 @property (nonatomic, weak) IBOutlet UIImageView *loadingLogo;
-@property (nonatomic, weak) IBOutlet SYLoadingProgressView *progressView;
 
 // Focus
 @property (nonatomic, weak) IBOutlet UIView *topMenuContainerView;

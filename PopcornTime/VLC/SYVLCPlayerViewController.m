@@ -10,7 +10,8 @@
 //#import "SYLoadingProgressView.h"
 #import "SQTabMenuCollectionViewCell.h"
 #import <TVVLCKit/TVVLCKit.h>
-//#import "SQSubSetting.h"
+#import "SQSubSetting.h"
+#import <PopcornTorrent/PopcornTorrent.h>
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -52,6 +53,7 @@ static NSString *const kText = @"kText";
     BOOL _panChangingTime;
     NSUInteger _lastButtonSelectedTag;
 
+    SQSubSetting *subSetting;
 }
 
 @end
@@ -83,7 +85,7 @@ static NSString *const kText = @"kText";
         _panChangingTime = NO;
         
         // Settings object
-//        subSetting = [SQSubSetting loadFromDisk];
+        subSetting = [SQSubSetting loadFromDisk];
     }
     
     return self;
@@ -96,14 +98,12 @@ static NSString *const kText = @"kText";
     [super viewDidLoad];
     
     // Sub back
-    /*
     if (subSetting.backgroundType == SQSubSettingBackgroundBlack) {
         self.backSubtitleView.backgroundColor = [UIColor colorWithWhite:.0 alpha:0.9];
     }
     else if (subSetting.backgroundType == SQSubSettingBackgroundWhite) {
         self.backSubtitleView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     }
-    */
     
     // Subs
     {
@@ -813,7 +813,7 @@ static NSString *const kText = @"kText";
                 
                 for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
                     
-                    id object = viewControllers[i];
+//                    id object = viewControllers[i];
                     
                     /*
                     if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
@@ -845,9 +845,9 @@ static NSString *const kText = @"kText";
             
 //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [self dismissViewControllerAnimated:YES completion:^{
-                [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
-            }];
+            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+            
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
     else if (!sender || [sender isKindOfClass:[UIPanGestureRecognizer class]]) {
@@ -891,10 +891,9 @@ static NSString *const kText = @"kText";
             
 //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [self dismissViewControllerAnimated:YES completion:^{
-                [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
-            }];
+            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
             
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
     
@@ -924,10 +923,7 @@ static NSString *const kText = @"kText";
     switch(player.state) {
         case VLCMediaPlayerStateStopped: {
             //NSLog(@"VLCMediaPlayerStateStopped");
-            SYAppDelegate *appDelegate = (SYAppDelegate *) [UIApplication sharedApplication].delegate;
-            if (![[appDelegate visibleViewController]isKindOfClass:[UIAlertController class]]) {
-                [self done:nil];
-            }
+            [self done:nil];
             break;
         }
         case VLCMediaPlayerStateOpening:
@@ -984,7 +980,7 @@ static NSString *const kText = @"kText";
         
         [UIView animateWithDuration:0.3 animations:^{
             self.loadingLogo.alpha = .0;
-            self.progressView.alpha = .0;
+//            self.progressView.alpha = .0;
             self.indicatorView.alpha = 1.0;
         }];
         
@@ -1461,11 +1457,10 @@ static NSString *const kText = @"kText";
         
         CGRect rectBack = [string boundingRectWithSize:CGSizeMake(1920, 1080)
                                                options:NSStringDrawingUsesLineFragmentOrigin
-                                            attributes:nil //[subSetting attributes]
+                                            attributes:[subSetting attributes]
                                                context:nil];
         
-        /*
-         * Disable all of the subtitle things for now
+
         if (subSetting.backgroundType == SQSubSettingBackgroundBlur) {
             self.widthSubtitleConstraint.constant  = rectBack.size.width + 140;
             self.heightSubtitleConstraint.constant = rectBack.size.height + 34;
@@ -1480,10 +1475,6 @@ static NSString *const kText = @"kText";
             self.heightSubtitleViewConstraint.constant = rectBack.size.height + 34;
             self.backSubtitleView.hidden = NO;
         }
-        */
-        self.widthSubtitleViewConstraint.constant  = rectBack.size.width + 140;
-        self.heightSubtitleViewConstraint.constant = rectBack.size.height + 34;
-        self.backSubtitleView.hidden = NO;
        
         self.heightSubtitleTextConstraint.constant = rectBack.size.height + 34;
         [self.view layoutIfNeeded];
@@ -1524,7 +1515,7 @@ static NSString *const kText = @"kText";
     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
     */
-    self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:nil];//[subSetting attributes]];
+    self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 
 

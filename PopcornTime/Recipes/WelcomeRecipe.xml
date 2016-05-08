@@ -20,13 +20,13 @@
         <shelf>
             <section>
                 <lockup actionID="showMovies">
-                    <img class="round" src="http://cdn.playbuzz.com/cdn/f36db57d-9a9c-4c35-8bb9-2e3735942331/43e78b5a-5521-44e7-b4fd-fba5ce42ee92.jpg" width="480" height="270"></img>
+                    <img class="round" src="{{MOVIES_BACKGROUND}}" width="480" height="270"></img>
                     <overlay>
                         <title>Movies</title>
                     </overlay>
                 </lockup>
                 <lockup actionID="showTVShows">
-                    <img class="round" src="http://unspoiledpodcasts.com/wp-content/uploads/2014/09/Breaking-Bad.jpg" width="480" height="270"></img>
+                    <img class="round" src="{{TVSHOWS_BACKGROUND}}" width="480" height="270"></img>
                     <overlay>
                         <title>TV Shows</title>
                     </overlay>

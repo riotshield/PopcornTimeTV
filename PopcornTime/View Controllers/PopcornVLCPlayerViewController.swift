@@ -15,5 +15,5 @@ class PopcornVLCPlayerViewController: VLCPlayerViewController {
        PTTorrentStreamer.sharedStreamer().cancelStreaming()
        Kitchen.appController.navigationController.popViewControllerAnimated(true)
     }
-    
+
 }

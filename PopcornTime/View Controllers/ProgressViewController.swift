@@ -67,7 +67,7 @@ class ProgressViewController: UIViewController {
             PTTorrentStreamer.sharedStreamer().cancelStreaming()
         }
     }
-    
+
     func playVLCVideo(url: NSURL) {
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
         let playerViewController = SYVLCPlayerViewController(URL: url, andHash: "")

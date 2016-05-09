@@ -13,6 +13,9 @@
 		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
+		00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28B61CE0CB3A00D29EA8 /* Genre.swift */; };
+		00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */; };
+		00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */; };
 		280910321C99DFDA00C8EC1C /* Popular.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910311C99DFDA00C8EC1C /* Popular.swift */; };
 		280910341C99E0E000C8EC1C /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280910331C99E0E000C8EC1C /* Search.swift */; };
 		280910381C99E6CA00C8EC1C /* Loading.xml in Resources */ = {isa = PBXBuildFile; fileRef = 280910371C99E6CA00C8EC1C /* Loading.xml */; };
@@ -83,6 +86,9 @@
 		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
+		00FD28B61CE0CB3A00D29EA8 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
+		00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GenreRecipe.xml; sourceTree = "<group>"; };
+		00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreRecipe.swift; sourceTree = "<group>"; };
 		280910311C99DFDA00C8EC1C /* Popular.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popular.swift; sourceTree = "<group>"; };
 		280910331C99E0E000C8EC1C /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		280910371C99E6CA00C8EC1C /* Loading.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = Loading.xml; sourceTree = "<group>"; };
@@ -162,6 +168,15 @@
 			path = TopShelf;
 			sourceTree = "<group>";
 		};
+		00FD28B81CE0CB4200D29EA8 /* Genre */ = {
+			isa = PBXGroup;
+			children = (
+				00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */,
+				00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */,
+			);
+			name = Genre;
+			sourceTree = "<group>";
+		};
 		280910301C99DFA200C8EC1C /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +184,7 @@
 				923860561CA0E40500A21F3B /* Latest.swift */,
 				280910311C99DFDA00C8EC1C /* Popular.swift */,
 				280910331C99E0E000C8EC1C /* Search.swift */,
+				00FD28B61CE0CB3A00D29EA8 /* Genre.swift */,
 			);
 			name = Tabs;
 			sourceTree = "<group>";
@@ -272,6 +288,7 @@
 				E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */,
 				E6B5F7901CB08FDE000F0644 /* SeasonProductRecipe.xml */,
 				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
+				925F8DDE1CA9E44C007100EB /* MovieProductRecipe.xml */,
 				E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */,
 				E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */,
 			);
@@ -292,7 +309,6 @@
 			children = (
 				925F8DD71CA9E44C007100EB /* DescriptionRecipe.swift */,
 				925F8DD81CA9E44C007100EB /* DescriptionRecipe.xml */,
-				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
 			);
 			name = Alert;
 			sourceTree = "<group>";
@@ -301,7 +317,6 @@
 			isa = PBXGroup;
 			children = (
 				925F8DDD1CA9E44C007100EB /* MovieWatchlistRecipe.swift */,
-				925F8DDE1CA9E44C007100EB /* MovieProductRecipe.xml */,
 				925F8DE11CA9E44C007100EB /* ShowWatchlistRecipe.swift */,
 			);
 			name = WatchList;
@@ -311,6 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				925F8DDF1CA9E44C007100EB /* YIFYSearchRecipe.swift */,
+				925F8DDC1CA9E44C007100EB /* SearchRecipe.xml */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -333,6 +349,7 @@
 				924214021CB19DCA0055FA15 /* Search */,
 				924214011CB19DC20055FA15 /* WatchList */,
 				924214001CB19DB90055FA15 /* Alert */,
+				00FD28B81CE0CB4200D29EA8 /* Genre */,
 			);
 			path = Recipes;
 			sourceTree = "<group>";
@@ -467,6 +484,7 @@
 				92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */,
 				E6B5F7911CB08FDE000F0644 /* SeasonProductRecipe.xml in Resources */,
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,
+				00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */,
 				925F8DE71CA9E44C007100EB /* DescriptionRecipe.xml in Resources */,
 				E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */,
 				926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */,
@@ -655,6 +673,7 @@
 				925F8DF01CA9E44C007100EB /* ShowWatchlistRecipe.swift in Sources */,
 				92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */,
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
+				00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */,
 				92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */,
 				280910341C99E0E000C8EC1C /* Search.swift in Sources */,
 				925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */,
@@ -670,6 +689,7 @@
 				9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */,
 				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
+				00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */,
 				926A48781CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

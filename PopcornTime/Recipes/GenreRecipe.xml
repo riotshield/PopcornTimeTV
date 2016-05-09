@@ -1,0 +1,19 @@
+<head>
+    <style>
+    </style>
+</head>
+<catalogTemplate>
+    <banner>
+        <title id="title"></title>
+    </banner>
+    <list>
+        <section>
+            <header>
+                <title>Genres</title>
+            </header>
+            
+            {{LIST_ITEMS}}
+                
+        </section>
+    </list>
+</catalogTemplate>

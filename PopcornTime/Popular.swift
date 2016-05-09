@@ -16,9 +16,19 @@ enum FetchType {
 
 struct Popular: TabItem {
 
-    let title = "Popular"
+    var title = "Popular"
 
-    var fetchType: FetchType! = .Movies
+    var fetchType: FetchType! = .Movies {
+        didSet {
+            if let _ = self.fetchType {
+                switch self.fetchType! {
+                case .Movies: title = "Popular"
+                case .Shows: title = "Recently Updated"
+                    
+                }
+            }
+        }
+    }
 
     func handler() {
         switch self.fetchType! {
@@ -31,10 +41,20 @@ struct Popular: TabItem {
             }
 
         case .Shows:
-            NetworkManager.sharedManager().fetchShowsForPage(1) { shows, error in
-                if let shows = shows {
-                    let recipe = CatalogRecipe(title: "Popular TV Shows", shows: shows)
-                    Kitchen.serve(recipe: recipe)
+            let manager = NetworkManager.sharedManager()
+            manager.fetchShowPageNumbers { pageNumbers, error in
+                if let pageNumbers = pageNumbers {
+                    manager.fetchLatestEZTVShows(pageNumbers) { shows, error in
+                        if let shows = shows {
+                            let recipe = CatalogRecipe(title: "Latest TV Shows", shows: shows.sort({ show1, show2 -> Bool in
+                                if let date1 = show1.lastUpdated, let date2 = show2.lastUpdated {
+                                    return date1 < date2
+                                }
+                                return true
+                            }))
+                            Kitchen.serve(recipe: recipe)
+                        }
+                    }
                 }
             }
         }

@@ -27,6 +27,7 @@
 		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
+		922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
 		925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */; };
 		925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 925F8DD61CA9E44C007100EB /* CatalogRecipe.xml */; };
@@ -104,6 +105,7 @@
 		9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYVLCPlayerViewController.m; sourceTree = "<group>"; };
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
 		9211E3F11CDC0ADD00BEEB9D /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
+		922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+Equatable.swift"; path = "Extensions/NSDate+Equatable.swift"; sourceTree = "<group>"; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
 		925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatalogRecipe.swift; sourceTree = "<group>"; };
 		925F8DD61CA9E44C007100EB /* CatalogRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = CatalogRecipe.xml; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				28EB626B1CA3364300985F78 /* String+Cleaned.swift */,
 				00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */,
 				00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */,
+				922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -687,6 +690,7 @@
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */,
+				922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */,
 				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
 				00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */,

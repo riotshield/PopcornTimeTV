@@ -10,10 +10,10 @@ import TVMLKitchen
 import PopcornKit
 
 public struct GenreRecipe: RecipeType {
-    
+
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.Tab
-    
+
     let genres = [
         "Action",
         "Adventure",
@@ -46,7 +46,7 @@ public struct GenreRecipe: RecipeType {
         xml += "</document>"
         return xml
     }
-    
+
     public var listItems: String {
         let mapped: [String] = genres.map {
             let string = "<listItemLockup sectionID=\"\($0)\">" +
@@ -58,7 +58,7 @@ public struct GenreRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     public var template: String {
         var xml = ""
         if let file = NSBundle.mainBundle().URLForResource("GenreRecipe", withExtension: "xml") {
@@ -71,7 +71,7 @@ public struct GenreRecipe: RecipeType {
         }
         return xml
     }
-    
+
     public func highlightSection(text: String, callback: (String -> Void)) {
         var data = ""
         let semaphore = dispatch_semaphore_create(0)
@@ -87,6 +87,5 @@ public struct GenreRecipe: RecipeType {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         return callback(data)
     }
-    
-}
 
+}

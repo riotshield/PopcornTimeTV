@@ -11,21 +11,20 @@ import PopcornKit
 
 
 struct Genre: TabItem {
-    
-    let title = "Genre"    
-    
+
+    let title = "Genre"
+
     func handler() {
         let recipe = GenreRecipe()
         Kitchen.appController.evaluateInJavaScriptContext({jsContext in
-            let highlightSection: @convention(block) (String, JSValue) -> () =
-                {(text, callback) in
+            let highlightSection: @convention(block) (String, JSValue) -> () = {(text, callback) in
                     recipe.highlightSection(text) { string in
                         if callback.isObject {
                             callback.callWithArguments([string])
                         }
                     }
             }
-            
+
             jsContext.setObject(unsafeBitCast(highlightSection, AnyObject.self), forKeyedSubscript: "highlightSection")
             let event = "var doc = makeDocument(`\(recipe.xmlString)`);" +
                         "var highlightSectionEvent = function(event) {" +

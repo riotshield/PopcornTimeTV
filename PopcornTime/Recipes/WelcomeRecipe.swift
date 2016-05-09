@@ -79,11 +79,11 @@ public struct WelcomeRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     public var randomMovieFanart: String {
         return movies[Int(arc4random_uniform(UInt32(movies.count)))].backgroundImage
     }
-    
+
     public var randomTVShowFanart: String {
         return shows[Int(arc4random_uniform(UInt32(shows.count)))].fanartImage
     }
@@ -105,7 +105,7 @@ public struct WelcomeRecipe: RecipeType {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIES_BACKGROUND}}", withString: randomMovieFanart)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TVSHOWS_BACKGROUND}}", withString: randomTVShowFanart)
-                
+
                 if popularMovies.characters.count > 10 {
                     shelfs += self.buildShelf("Popular Movies", content: popularMovies)
                 }

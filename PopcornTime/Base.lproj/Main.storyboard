@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
@@ -44,13 +44,37 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g11-Mq-lFz">
+                                                        <rect key="frame" x="1294" y="661" width="73" height="35"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="73" id="FPN-JM-gZp"/>
+                                                            <constraint firstAttribute="height" constant="35" id="xJU-Vr-hRf"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stats" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RJh-Zd-YZk">
+                                                        <rect key="frame" x="634" y="714" width="652" height="35"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="35" id="3NC-A6-Ttl"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                 </subviews>
                                                 <constraints>
+                                                    <constraint firstItem="g11-Mq-lFz" firstAttribute="centerY" secondItem="pju-8G-WT4" secondAttribute="centerY" id="6yR-2i-Eur"/>
                                                     <constraint firstItem="pju-8G-WT4" firstAttribute="leading" secondItem="EWR-g2-rod" secondAttribute="leading" id="aXn-rJ-Gh5"/>
                                                     <constraint firstItem="EWR-g2-rod" firstAttribute="centerX" secondItem="ELU-CO-sww" secondAttribute="centerX" id="bKs-9N-y7o"/>
                                                     <constraint firstAttribute="bottom" secondItem="pju-8G-WT4" secondAttribute="bottom" constant="396" id="beK-f6-6eV"/>
+                                                    <constraint firstItem="RJh-Zd-YZk" firstAttribute="leading" secondItem="pju-8G-WT4" secondAttribute="leading" id="dKK-M0-olV"/>
                                                     <constraint firstItem="EWR-g2-rod" firstAttribute="trailing" secondItem="pju-8G-WT4" secondAttribute="trailing" id="mxm-D6-hOg"/>
                                                     <constraint firstItem="pju-8G-WT4" firstAttribute="top" secondItem="EWR-g2-rod" secondAttribute="bottom" constant="29" id="nGi-So-EWP"/>
+                                                    <constraint firstItem="g11-Mq-lFz" firstAttribute="leading" secondItem="pju-8G-WT4" secondAttribute="trailing" constant="8" symbolic="YES" id="oAQ-Mn-sbK"/>
+                                                    <constraint firstItem="RJh-Zd-YZk" firstAttribute="top" secondItem="pju-8G-WT4" secondAttribute="bottom" constant="30" id="vzn-BU-fIJ"/>
+                                                    <constraint firstItem="RJh-Zd-YZk" firstAttribute="trailing" secondItem="pju-8G-WT4" secondAttribute="trailing" id="yiy-Mb-clq"/>
                                                 </constraints>
                                             </view>
                                             <vibrancyEffect>
@@ -88,7 +112,9 @@
                         <outlet property="backgroundImageView" destination="Kc8-Xa-V3r" id="tH0-Fy-mVt"/>
                         <outlet property="imageView" destination="rcu-M2-wbi" id="XIB-sL-rPI"/>
                         <outlet property="nameLabel" destination="EWR-g2-rod" id="5ds-LD-lHm"/>
+                        <outlet property="percentLabel" destination="g11-Mq-lFz" id="Tcd-km-Anp"/>
                         <outlet property="progressView" destination="pju-8G-WT4" id="exH-sO-PCQ"/>
+                        <outlet property="statsLabel" destination="RJh-Zd-YZk" id="eOl-Ia-L5B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Hl-kr-0Yh" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -42,6 +42,14 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             let tabBar = KitchenTabBar(items: [popular, latest, genre, watchlist, search])
             Kitchen.serve(recipe: tabBar)
 
+        case "showGlobalWatchlist":
+            let watchlist = WatchlistManager.sharedManager()
+            watchlist.fetchWatchListItems(forType: .Movie) { watchListMovies in
+                watchlist.fetchWatchListItems(forType: .Show) { watchListShows in
+                    Kitchen.serve(recipe: WatchlistRecipe(title: "Watchlist", watchListMovies: watchListMovies, watchListShows: watchListShows))
+                }
+            }
+            
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
 
@@ -55,6 +63,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
         case "streamTorrent": streamTorrent(pieces)
+
         default: break
         }
 
@@ -281,10 +290,14 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
 
     static func addWatchlist(pieces: [String]) {
+        // ["addWatchlist", "tt1632701", "Suits", "show", "https://walter.trakt.us/images/shows/000/037/522/posters/original/0e6117705c.jpg", "https://walter.trakt.us/images/shows/000/037/522/fanarts/original/6ecdb75c1c.jpg", "247808", "suits"]
+        // ["addWatchlist", "5093", "Risen", "movie", "http://62.210.81.37/assets/images/movies/risen_2016/large-cover.jpg", "http://62.210.81.37/assets/images/movies/risen_2016/background.jpg"]
+//        print(pieces)
         let name = pieces[2]
         let id = pieces[1]
         let type = pieces[3]
         let cover = pieces[4]
+        let fanart = pieces[5]
         var imdb = ""
         if pieces.indices.contains(6) {
             imdb = pieces[6]
@@ -297,9 +310,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         if pieces.indices.contains(8) {
             slugged = pieces[8]
         }
+        
         WatchlistManager.sharedManager().itemExistsInWatchList(itemId: id, forType: ItemType(rawValue: type)!, completion: { exists in
             if exists {
-                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { removed in
+                WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, fanartImage: fanart, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { removed in
                     if removed {
                         Kitchen.serve(recipe: AlertRecipe(title: "Removed", description: "\(name) was removed from your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {
@@ -307,7 +321,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     }
                 })
             } else {
-                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: id, coverImage: cover, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { added in
+                WatchlistManager.sharedManager().addItemToWatchList(WatchItem(name: name, id: id, coverImage: cover, fanartImage: fanart, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { added in
                     if added {
                         Kitchen.serve(recipe: AlertRecipe(title: "Added", description: "\(name) was added your watchlist.", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
                     } else {

@@ -17,6 +17,7 @@ public struct WatchItem {
     var name: String!
     var id: String!
     var coverImage: String!
+    var fanartImage: String!
     var imdbId: String!
     var tvdbId: String!
     var type: ItemType!
@@ -24,10 +25,11 @@ public struct WatchItem {
 
     var dictionaryRepresentation = [String : AnyObject]()
 
-    init(name: String, id: String, coverImage: String, type: String, imdbId: String, tvdbId: String, slugged: String) {
+    init(name: String, id: String, coverImage: String, fanartImage: String, type: String, imdbId: String, tvdbId: String, slugged: String) {
         self.name = name
         self.id = id
         self.coverImage = coverImage
+        self.fanartImage = fanartImage
         self.type = ItemType(rawValue: type)
         self.imdbId = imdbId
         self.tvdbId = tvdbId
@@ -37,6 +39,7 @@ public struct WatchItem {
             "name": self.name,
             "id": self.id,
             "coverImage": self.coverImage,
+            "fanartImage": self.fanartImage,
             "type": self.type.rawValue,
             "imdbId": self.imdbId,
             "tvdbId": self.tvdbId,
@@ -55,6 +58,10 @@ public struct WatchItem {
 
         if let value = dictionary["coverImage"] as? String {
             self.coverImage = value
+        }
+
+        if let value = dictionary["fanartImage"] as? String {
+            self.fanartImage = value
         }
 
         if let value = dictionary["type"] as? String {
@@ -163,6 +170,7 @@ public class WatchlistManager {
     func readJSONFile(completion: ((json: [[String : AnyObject]]?) -> Void)?) {
         if let json = NSUserDefaults.standardUserDefaults().objectForKey("Watchlist") as? [[String : AnyObject]] {
             completion?(json: json)
+            print(json)
         } else {
             completion?(json: nil)
         }

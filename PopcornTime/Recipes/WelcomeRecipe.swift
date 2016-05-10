@@ -87,6 +87,27 @@ public struct WelcomeRecipe: RecipeType {
     public var randomTVShowFanart: String {
         return shows[Int(arc4random_uniform(UInt32(shows.count)))].fanartImage
     }
+    
+    public var randomWatchlistArt: String {
+        if watchListShows.count > 0 {
+            if let image = watchListShows[Int(arc4random_uniform(UInt32(watchListShows.count)))].fanartImage {
+                return image
+            } else {
+                return watchListShows[Int(arc4random_uniform(UInt32(watchListShows.count)))].coverImage
+            }
+        }
+        
+        if watchListMovies.count > 0 {
+            if let image = watchListMovies[Int(arc4random_uniform(UInt32(watchListMovies.count)))].fanartImage {
+                return image
+            } else {
+                return watchListMovies[Int(arc4random_uniform(UInt32(watchListMovies.count)))].coverImage
+            }
+        }
+        
+        return "" // return a default watchlist icon
+        
+    }
 
     func buildShelf(title: String, content: String) -> String {
         var shelf = "<shelf><header><title>"
@@ -105,6 +126,7 @@ public struct WelcomeRecipe: RecipeType {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIES_BACKGROUND}}", withString: randomMovieFanart)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TVSHOWS_BACKGROUND}}", withString: randomTVShowFanart)
+                xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_BACKGROUND}}", withString: randomWatchlistArt)
 
                 if popularMovies.characters.count > 10 {
                     shelfs += self.buildShelf("Popular Movies", content: popularMovies)

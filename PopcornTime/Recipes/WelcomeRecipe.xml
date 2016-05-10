@@ -31,8 +31,8 @@
                         <title>TV Shows</title>
                     </overlay>
                 </lockup>
-                <lockup actionID="#">
-                    <img class="round" src="#" width="480" height="270"></img>
+                <lockup actionID="showGlobalWatchlist">
+                    <img class="round" src="{{WATCHLIST_BACKGROUND}}" width="480" height="270"></img>
                     <overlay>
                         <title>Watchlist</title>
                     </overlay>

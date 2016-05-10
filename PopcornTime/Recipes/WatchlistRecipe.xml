@@ -1,0 +1,24 @@
+<head>
+    <style>
+        .hover {
+            tv-text-highlight-style: marquee-and-show-on-highlight;
+        }
+    </style>
+</head>
+
+<stackTemplate>
+    
+    <background>
+        <img src="http://i.cubeupload.com/DYdaxx.png"></img>
+    </background>
+    
+    <collectionList>
+        <banner>
+            <title>{{TITLE}}</title>
+        </banner>
+        
+        {{SHELFS}}
+        
+    </collectionList>
+    
+</stackTemplate>

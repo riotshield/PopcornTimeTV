@@ -526,6 +526,8 @@ static NSString *const kText = @"kText";
 
 - (void) openTopMenu
 {
+    /*
+     * Disable this for now
     [self hideSwipeMessage];
     
     self.subsButton.enabled      = NO;
@@ -545,11 +547,13 @@ static NSString *const kText = @"kText";
         _middleButton.hidden = NO;
         [self setNeedsFocusUpdate];
     }];
+     */
 }
 
 
 - (void) closeTopMenu
 {
+    /*
     self.topTopMenuSpace.constant = -232.0;
     
     _panGestureRecognizer.enabled = YES;
@@ -564,7 +568,7 @@ static NSString *const kText = @"kText";
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
         [self showSwipeMessage];
     }];
-    
+    */
 }
 
 

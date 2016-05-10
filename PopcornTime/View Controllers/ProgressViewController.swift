@@ -62,6 +62,8 @@ class ProgressViewController: UIViewController {
                 if self.progressView.progress > 0.0 {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
+                
+                print("\(status.bufferingProgress*100)%, \(status.totalProgreess*100)%, \(speedString), Seeds: \(status.seeds), Peers: \(status.peers)")
             }, readyToPlay: { url in
                 self.playVLCVideo(url, hash: "")
             }) { error in

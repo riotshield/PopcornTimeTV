@@ -45,7 +45,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g11-Mq-lFz">
-                                                        <rect key="frame" x="1294" y="661" width="73" height="35"/>
+                                                        <rect key="frame" x="1294" y="660" width="73" height="35"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="73" id="FPN-JM-gZp"/>
                                                             <constraint firstAttribute="height" constant="35" id="xJU-Vr-hRf"/>
@@ -63,9 +63,18 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rcu-M2-wbi">
+                                                        <rect key="frame" x="708" y="79" width="504" height="504"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="504" id="Bhn-iM-XbA"/>
+                                                        </constraints>
+                                                    </imageView>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="g11-Mq-lFz" firstAttribute="centerY" secondItem="pju-8G-WT4" secondAttribute="centerY" id="6yR-2i-Eur"/>
+                                                    <constraint firstItem="g11-Mq-lFz" firstAttribute="centerY" secondItem="pju-8G-WT4" secondAttribute="centerY" constant="-1.5" id="6yR-2i-Eur"/>
+                                                    <constraint firstItem="rcu-M2-wbi" firstAttribute="top" secondItem="ELU-CO-sww" secondAttribute="top" constant="79" id="AaV-Sv-sOk"/>
+                                                    <constraint firstItem="rcu-M2-wbi" firstAttribute="centerX" secondItem="EWR-g2-rod" secondAttribute="centerX" id="Hc7-2Y-QTN"/>
+                                                    <constraint firstItem="EWR-g2-rod" firstAttribute="top" secondItem="rcu-M2-wbi" secondAttribute="bottom" constant="27" id="aNv-av-KHn"/>
                                                     <constraint firstItem="pju-8G-WT4" firstAttribute="leading" secondItem="EWR-g2-rod" secondAttribute="leading" id="aXn-rJ-Gh5"/>
                                                     <constraint firstItem="EWR-g2-rod" firstAttribute="centerX" secondItem="ELU-CO-sww" secondAttribute="centerX" id="bKs-9N-y7o"/>
                                                     <constraint firstAttribute="bottom" secondItem="pju-8G-WT4" secondAttribute="bottom" constant="396" id="beK-f6-6eV"/>
@@ -91,21 +100,12 @@
                                 </view>
                                 <blurEffect style="dark"/>
                             </visualEffectView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rcu-M2-wbi">
-                                <rect key="frame" x="780" y="223" width="360" height="360"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="360" id="Bhn-iM-XbA"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="t1K-2N-WYF" firstAttribute="leading" secondItem="mYD-Xa-w1D" secondAttribute="leading" id="BXd-H3-bJp"/>
-                            <constraint firstItem="rcu-M2-wbi" firstAttribute="centerX" secondItem="t1K-2N-WYF" secondAttribute="centerX" id="Bzg-Ad-S85"/>
                             <constraint firstItem="t1K-2N-WYF" firstAttribute="bottom" secondItem="Zwh-FH-fPr" secondAttribute="top" id="GYc-ML-1Lw"/>
                             <constraint firstItem="t1K-2N-WYF" firstAttribute="top" secondItem="JDI-yQ-NxC" secondAttribute="bottom" id="Xq9-0S-9h5"/>
                             <constraint firstAttribute="trailing" secondItem="t1K-2N-WYF" secondAttribute="trailing" id="eC9-bh-HaO"/>
-                            <constraint firstItem="rcu-M2-wbi" firstAttribute="top" secondItem="JDI-yQ-NxC" secondAttribute="bottom" constant="223" id="pli-cn-Ls4"/>
-                            <constraint firstItem="Zwh-FH-fPr" firstAttribute="top" secondItem="rcu-M2-wbi" secondAttribute="bottom" constant="497" id="xv0-pj-PFe"/>
                         </constraints>
                     </view>
                     <connections>

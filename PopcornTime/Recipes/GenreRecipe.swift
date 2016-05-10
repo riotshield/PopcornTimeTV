@@ -78,37 +78,32 @@ public struct GenreRecipe: RecipeType {
     }
 
     public func highlightSection(text: String, callback: (String -> Void)) {
-        var data = ""
-        let semaphore = dispatch_semaphore_create(0)
         switch self.fetchType! {
             case .Movies:
-                NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: text, sortBy: "download_count", orderBy: "desc") { movies, error in
-                    if let movies = movies {
-                        let mapped: [String] = movies.map { movie in
-                            movie.lockUp
-                        }
-                        data = mapped.joinWithSeparator("\n")
-                        dispatch_semaphore_signal(semaphore)
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: text, sortBy: "download_count", orderBy: "desc") { movies, error in
+                if let movies = movies {
+                    let mapped: [String] = movies.map { movie in
+                        movie.lockUp
                     }
+                    callback(mapped.joinWithSeparator("\n"))
                 }
+            }
             case .Shows:
-                let manager = NetworkManager.sharedManager()
-                manager.fetchShowPageNumbers { pageNumbers, error in
-                    if let pageNumbers = pageNumbers {
-                        manager.fetchShows(pageNumbers, searchTerm: nil, genre: text, sort: "trending", order: "1") { shows, error in
-                            if let shows = shows {
-                                let mapped: [String] = shows.map { show in
-                                    show.lockUp
-                                }
-                                data = mapped.joinWithSeparator("\n")
-                                dispatch_semaphore_signal(semaphore)
+            let manager = NetworkManager.sharedManager()
+            manager.fetchShowPageNumbers { pageNumbers, error in
+                if let pageNumbers = pageNumbers {
+                    manager.fetchShows(pageNumbers, searchTerm: nil, genre: text, sort: "trending", order: "1") { shows, error in
+                        if let shows = shows {
+                            let mapped: [String] = shows.map { show in
+                                show.lockUp
                             }
+                            callback(mapped.joinWithSeparator("\n"))
                         }
                     }
                 }
+            }
+            
         }
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-        return callback(data)
     }
 
 }

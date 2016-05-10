@@ -26,9 +26,9 @@ struct Latest: TabItem {
         case .Shows:
             let manager = NetworkManager.sharedManager()
             manager.fetchShowPageNumbers { pageNumbers, error in
-                if let pageNumbers = pageNumbers {
+                if let _ = pageNumbers {
                     // this is temporary limit until solve pagination
-                    manager.fetchShows([2], sort: "updated") { shows, error in
+                    manager.fetchShows([1, 2, 3, 4, 5, 6, 6, 8, 9, 10], sort: "updated") { shows, error in
                         if let shows = shows {
                             let recipe = CatalogRecipe(title: "Recently Updated", shows: shows.sort({ show1, show2 -> Bool in
                                 if let date1 = show1.lastUpdated, let date2 = show2.lastUpdated {

@@ -39,7 +39,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             var watchlist = Watchlist()
             watchlist.fetchType = .Shows
 
-            let tabBar = KitchenTabBar(items: [latest, popular, genre, watchlist, search])
+            let tabBar = KitchenTabBar(items: [popular, latest, genre, watchlist, search])
             Kitchen.serve(recipe: tabBar)
 
         case "showMovie": showMovie(pieces)

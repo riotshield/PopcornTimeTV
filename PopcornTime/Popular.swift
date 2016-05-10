@@ -23,8 +23,8 @@ struct Popular: TabItem {
             if let _ = self.fetchType {
                 switch self.fetchType! {
                 case .Movies: title = "Popular"
-                case .Shows: title = "Recently Updated"
-                    
+                case .Shows: title = "Popular"
+
                 }
             }
         }
@@ -44,9 +44,10 @@ struct Popular: TabItem {
             let manager = NetworkManager.sharedManager()
             manager.fetchShowPageNumbers { pageNumbers, error in
                 if let pageNumbers = pageNumbers {
-                    manager.fetchLatestEZTVShows(pageNumbers) { shows, error in
+                    // this is temporary limit until solve pagination
+                    manager.fetchShows([2], sort: "trending") { shows, error in
                         if let shows = shows {
-                            let recipe = CatalogRecipe(title: "Latest TV Shows", shows: shows.sort({ show1, show2 -> Bool in
+                            let recipe = CatalogRecipe(title: "Popular", shows: shows.sort({ show1, show2 -> Bool in
                                 if let date1 = show1.lastUpdated, let date2 = show2.lastUpdated {
                                     return date1 < date2
                                 }

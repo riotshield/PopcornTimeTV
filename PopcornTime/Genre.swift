@@ -13,9 +13,10 @@ import PopcornKit
 struct Genre: TabItem {
 
     let title = "Genre"
+    var fetchType: FetchType! = .Movies
 
     func handler() {
-        let recipe = GenreRecipe()
+        let recipe = GenreRecipe.init(fetchType: fetchType)
         Kitchen.appController.evaluateInJavaScriptContext({jsContext in
             let highlightSection: @convention(block) (String, JSValue) -> () = {(text, callback) in
                     recipe.highlightSection(text) { string in
@@ -26,28 +27,17 @@ struct Genre: TabItem {
             }
 
             jsContext.setObject(unsafeBitCast(highlightSection, AnyObject.self), forKeyedSubscript: "highlightSection")
-            let event = "var doc = makeDocument(`\(recipe.xmlString)`);" +
-                        "var highlightSectionEvent = function(event) {" +
-                        "   var ele = event.target, " +
-                        "             sectionID = ele.getAttribute('sectionID'); " +
-                        "   if(sectionID){ " +
-                        "       var container = doc.getElementById(sectionID);" +
-                        "       var titleTag = doc.getElementById('title');" +
-                        "       highlightSection(sectionID, function(data) { " +
-                        "           container.innerHTML = data;" +
-                        "           titleTag.innerHTML = sectionID;" +
-                        "       }); " +
-                        "       return; " +
-                        "    } " +
-                        "};"
-            let js = "var listItemLockupElements = doc.getElementsByTagName(\"listItemLockup\");" +
-                     "for (var i = 0; i < listItemLockupElements.length; i++) { " +
-                     "  listItemLockupElements.item(i).addEventListener(\"highlight\", highlightSectionEvent.bind(this));" +
-                     "}"
 
+            if let file = NSBundle.mainBundle().URLForResource("Genre", withExtension: "js") {
+                do {
+                    var js = try String(contentsOfURL: file)
+                    js = js.stringByReplacingOccurrencesOfString("{{RECIPE}}", withString: recipe.xmlString)
+                    jsContext.evaluateScript(js)
+                } catch {
+                    print("Could not open Catalog template")
+                }
+            }
 
-            jsContext.evaluateScript(event + js)
-            jsContext.evaluateScript("menuBarItemPresenter(doc);")
             }, completion: nil)
    }
 }

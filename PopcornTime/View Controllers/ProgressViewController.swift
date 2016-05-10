@@ -20,7 +20,7 @@ class ProgressViewController: UIViewController {
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var percentLabel: UILabel!
     @IBOutlet weak var statsLabel: UILabel!
-    
+
     var magnet: String!
     var imageAddress: String!
     var backgroundImageAddress: String!
@@ -38,7 +38,7 @@ class ProgressViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if let _ = magnet, let _ = movieName, let _ = imageAddress, let _ = backgroundImageAddress {
             statsLabel.text = ""
             percentLabel.text = "0%"
@@ -52,17 +52,17 @@ class ProgressViewController: UIViewController {
 
             PTTorrentStreamer.sharedStreamer().startStreamingFromFileOrMagnetLink(magnet, progress: { status in
                 self.downloading = true
-                
+
                 self.percentLabel.text = "\(Int(status.bufferingProgress * 100))%"
-                
+
                 let speedString = NSByteCountFormatter.stringFromByteCount(Int64(status.downloadSpeed), countStyle: .Binary)
                 self.statsLabel.text = "Speed: \(speedString)/s  Seeds: \(status.seeds)  Peers: \(status.peers)"
-                
+
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress > 0.0 {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
-                
+
                 print("\(status.bufferingProgress*100)%, \(status.totalProgreess*100)%, \(speedString), Seeds: \(status.seeds), Peers: \(status.peers)")
             }, readyToPlay: { url in
                 self.playVLCVideo(url, hash: "")

@@ -1,13 +1,13 @@
 PODS:
-  - Alamofire (3.3.1)
-  - Kingfisher (2.4.0)
+  - Alamofire (3.4.0)
+  - Kingfisher (2.4.1)
   - ObjectMapper (1.2.0)
   - PopcornKit (1.0.1):
     - Alamofire
     - ObjectMapper
     - PopcornTorrent
     - SWXMLHash
-  - PopcornTorrent (1.0.9)
+  - PopcornTorrent (1.0.10)
   - SWXMLHash (2.3.1)
   - TVMLKitchen (0.7.0)
   - TVVLCKit (3.0.0)
@@ -30,18 +30,18 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PopcornKit:
-    :commit: d5b66b336d7e5c0ddbabb192d670483670723f09
+    :commit: edbf3210e64cf3847bf863aa2a5b4fcbada975a0
     :git: https://github.com/PopcornTimeTV/PopcornKit.git
   TVMLKitchen:
     :commit: 54a5eb276707ca8cb058d0d5d56e0c34100be7be
     :git: https://github.com/toshi0383/TVMLKitchen.git
 
 SPEC CHECKSUMS:
-  Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
-  Kingfisher: 9171a424ee7f8031f518f649bb850d1eab541247
+  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   ObjectMapper: b1e9c7c8a9f6400b72690c80072c131504caa66f
   PopcornKit: f9af2e24c56050182a11dc01b8d735dd958049ad
-  PopcornTorrent: b4e0343ffa33581761e35a15e02cea90c9c3828c
+  PopcornTorrent: 198243ac7014e28226380627a5b46ddb09b33b9c
   SWXMLHash: 795c66e74f4cc9473ad6465c6653c5a6f59f417e
   TVMLKitchen: 834352219692b149c7aa29ad2f51c7bcfceec003
   TVVLCKit: cde338d491178ad1fe74c633b006bf92ca653fa2
@@ -49,4 +49,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e4eea744716a62a78df58108e7aafa61e84e7203
 
-COCOAPODS: 1.0.0.rc.2
+COCOAPODS: 1.0.0.rc.1

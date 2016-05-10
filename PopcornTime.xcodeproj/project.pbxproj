@@ -13,6 +13,7 @@
 		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
+		00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */ = {isa = PBXBuildFile; fileRef = 00C28EA51CE1DB2E00E4D8BF /* Genre.js */; };
 		00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28B61CE0CB3A00D29EA8 /* Genre.swift */; };
 		00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */; };
 		00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */; };
@@ -87,6 +88,7 @@
 		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
+		00C28EA51CE1DB2E00E4D8BF /* Genre.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Genre.js; sourceTree = "<group>"; };
 		00FD28B61CE0CB3A00D29EA8 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GenreRecipe.xml; sourceTree = "<group>"; };
 		00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreRecipe.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			children = (
 				00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */,
 				00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */,
+				00C28EA51CE1DB2E00E4D8BF /* Genre.js */,
 			);
 			name = Genre;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 			files = (
 				9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */,
 				280910381C99E6CA00C8EC1C /* Loading.xml in Resources */,
+				00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */,
 				92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */,
 				E6B5F7911CB08FDE000F0644 /* SeasonProductRecipe.xml in Resources */,
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,

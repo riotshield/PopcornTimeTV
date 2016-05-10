@@ -24,8 +24,14 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         switch pieces.first! { // swiftlint:disable:this force_cast
         case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Genre(), Watchlist(), Search()]))
         case "showTVShows":
+            var latest = Latest()
+            latest.fetchType = .Shows
+
             var popular = Popular()
             popular.fetchType = .Shows
+
+            var genre = Genre()
+            genre.fetchType = .Shows
 
             var search = Search()
             search.fetchType = .Shows
@@ -33,7 +39,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             var watchlist = Watchlist()
             watchlist.fetchType = .Shows
 
-            let tabBar = KitchenTabBar(items: [popular, search, watchlist])
+            let tabBar = KitchenTabBar(items: [latest, popular, genre, search, watchlist])
             Kitchen.serve(recipe: tabBar)
 
         case "showMovie": showMovie(pieces)

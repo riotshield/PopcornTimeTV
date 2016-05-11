@@ -8,14 +8,7 @@ A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
 
 ##Version
-- 0.5.0 - Added VLC support for HD goodness! You can watch watch your favourite shows in 720 and 1080p. A new welcome screen was also implemented and a handful of bugs were fixed.
-- 0.4.3 - Fix an issue with streaming torrents. PopcornTorrent is now bumped to v1.0.9
-- 0.4.2 - Fix a bunch of crashes and implement the new layout for TV Shows. (Note: TV Shows can only play 480p as VLC support isn't added yet.)
-- 0.4.1 - Added TV Show Search, fix adding/removing items to the watchlist, video quality picker (Note: TV Shows can only play 480p as VLC support isn't added yet.)
-- 0.4.0 - Re-release 0.3.0 with the project fix and update checker.
-- 0.3.0 - Add TV Show Support, minor UI tweak and bug fixes.
-- 0.2.0 - Fixes issues with build and minor UI tweaks.
-- 0.1.0 - Initial Commit *(rewrite)*
+Release notes for every version can be found here https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Release-Notes
 
 ##Setup
 
@@ -31,9 +24,10 @@ Setting up PopcornTime is quite easy.
 cd ~/Desktop
 git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
 cd ~/Desktop/PopcornTimeTV
-git checkout 0.5.0
-pod install
+git checkout 0.6.0
 ```
+If you are installing PopcornTIme for the first time run 
+`pod install` otherwise if you are updating, run `pod update`
 
 If issues persist when installing TVVLC, remove the Pods folder and Podfile.lock and run this command in terminal `rm -rf ~/.cocoapods/repos/popcorntimetv`
 

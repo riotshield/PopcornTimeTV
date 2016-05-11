@@ -808,12 +808,12 @@ static NSString *const kText = @"kText";
             if (_videoDidOpened) {
 //            if (_videoDidOpened && _hash.length > 0) {
                 
-                float ratio = [self currentTimeAsPercentage];
-                if (ratio > 0.95) {
-                    ratio = 1.0;
-                }
+//                float ratio = [self currentTimeAsPercentage];
+//                if (ratio > 0.95) {
+//                    ratio = 1.0;
+//                }
                 
-                NSArray *viewControllers = [[self.rootViewController navigationController]viewControllers];
+                NSArray *viewControllers = [self.navigationController viewControllers];
                 
                 for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
                     

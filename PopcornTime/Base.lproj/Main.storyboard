@@ -63,18 +63,9 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rcu-M2-wbi">
-                                                        <rect key="frame" x="708" y="79" width="504" height="504"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="504" id="Bhn-iM-XbA"/>
-                                                        </constraints>
-                                                    </imageView>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="g11-Mq-lFz" firstAttribute="centerY" secondItem="pju-8G-WT4" secondAttribute="centerY" constant="-1.5" id="6yR-2i-Eur"/>
-                                                    <constraint firstItem="rcu-M2-wbi" firstAttribute="top" secondItem="ELU-CO-sww" secondAttribute="top" constant="79" id="AaV-Sv-sOk"/>
-                                                    <constraint firstItem="rcu-M2-wbi" firstAttribute="centerX" secondItem="EWR-g2-rod" secondAttribute="centerX" id="Hc7-2Y-QTN"/>
-                                                    <constraint firstItem="EWR-g2-rod" firstAttribute="top" secondItem="rcu-M2-wbi" secondAttribute="bottom" constant="27" id="aNv-av-KHn"/>
                                                     <constraint firstItem="pju-8G-WT4" firstAttribute="leading" secondItem="EWR-g2-rod" secondAttribute="leading" id="aXn-rJ-Gh5"/>
                                                     <constraint firstItem="EWR-g2-rod" firstAttribute="centerX" secondItem="ELU-CO-sww" secondAttribute="centerX" id="bKs-9N-y7o"/>
                                                     <constraint firstAttribute="bottom" secondItem="pju-8G-WT4" secondAttribute="bottom" constant="396" id="beK-f6-6eV"/>
@@ -90,9 +81,18 @@
                                                 <blurEffect style="dark"/>
                                             </vibrancyEffect>
                                         </visualEffectView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rcu-M2-wbi">
+                                            <rect key="frame" x="708" y="67" width="504" height="504"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="504" id="Pae-45-82T"/>
+                                                <constraint firstAttribute="width" constant="504" id="WoY-64-6nu"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="BSw-xx-5be" secondAttribute="trailing" id="Ba0-Hh-wpO"/>
+                                        <constraint firstItem="rcu-M2-wbi" firstAttribute="centerX" secondItem="BSw-xx-5be" secondAttribute="centerX" id="mRi-fq-rPv"/>
+                                        <constraint firstItem="rcu-M2-wbi" firstAttribute="top" secondItem="ehf-xU-IqE" secondAttribute="top" constant="67" id="noB-A6-Vxb"/>
                                         <constraint firstAttribute="bottom" secondItem="BSw-xx-5be" secondAttribute="bottom" id="xEo-wb-s2e"/>
                                         <constraint firstItem="BSw-xx-5be" firstAttribute="top" secondItem="ehf-xU-IqE" secondAttribute="top" id="xYS-gU-KFQ"/>
                                         <constraint firstItem="BSw-xx-5be" firstAttribute="leading" secondItem="ehf-xU-IqE" secondAttribute="leading" id="yIb-fH-cnY"/>

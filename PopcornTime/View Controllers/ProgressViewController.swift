@@ -49,21 +49,21 @@ class ProgressViewController: UIViewController {
             if downloading {
                 return
             }
-
+            
             PTTorrentStreamer.sharedStreamer().startStreamingFromFileOrMagnetLink(magnet, progress: { status in
                 self.downloading = true
 
                 self.percentLabel.text = "\(Int(status.bufferingProgress * 100))%"
 
                 let speedString = NSByteCountFormatter.stringFromByteCount(Int64(status.downloadSpeed), countStyle: .Binary)
-                self.statsLabel.text = "Speed: \(speedString)/s  Seeds: \(status.seeds)  Peers: \(status.peers)"
+                self.statsLabel.text = "Speed: \(speedString)/s  Seeds: \(status.seeds)  Peers: \(status.peers)  Overall Progress: \(Int(status.totalProgreess*100))%"
 
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress > 0.0 {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
 
-                print("\(status.bufferingProgress*100)%, \(status.totalProgreess*100)%, \(speedString), Seeds: \(status.seeds), Peers: \(status.peers)")
+                print("\(Int(status.bufferingProgress*100))%, \(Int(status.totalProgreess*100))%, \(speedString), Seeds: \(status.seeds), Peers: \(status.peers)")
             }, readyToPlay: { url in
                 self.playVLCVideo(url, hash: "")
             }) { error in
@@ -84,41 +84,6 @@ class ProgressViewController: UIViewController {
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
         let playerViewController = SYVLCPlayerViewController(URL: url, andHash: hash)
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
-        self.streaming = true
-    }
-
-    func playNativeVideo(url: NSURL) {
-        let mediaItem = AVPlayerItem(URL: url)
-
-        let titleMetadataItem = AVMutableMetadataItem()
-        titleMetadataItem.locale = NSLocale.currentLocale()
-        titleMetadataItem.key = AVMetadataCommonKeyTitle
-        titleMetadataItem.keySpace = AVMetadataKeySpaceCommon
-        titleMetadataItem.value = self.movieName
-        mediaItem.externalMetadata.append(titleMetadataItem)
-
-        let descriptionMetadataItem = AVMutableMetadataItem()
-        descriptionMetadataItem.locale = NSLocale.currentLocale()
-        descriptionMetadataItem.key = AVMetadataCommonKeyDescription
-        descriptionMetadataItem.keySpace = AVMetadataKeySpaceCommon
-        descriptionMetadataItem.value = self.shortDescription
-        mediaItem.externalMetadata.append(descriptionMetadataItem)
-
-        if let image = self.imageView.image {
-            let artworkMetadataItem = AVMutableMetadataItem()
-            artworkMetadataItem.locale = NSLocale.currentLocale()
-            artworkMetadataItem.key = AVMetadataCommonKeyArtwork
-            artworkMetadataItem.keySpace = AVMetadataKeySpaceCommon
-            artworkMetadataItem.value = UIImagePNGRepresentation(image)
-
-            mediaItem.externalMetadata.append(artworkMetadataItem)
-        }
-
-        Kitchen.appController.navigationController.popViewControllerAnimated(false)
-        let playerController = PlayerViewController()
-        playerController.player = AVPlayer(playerItem: mediaItem)
-        playerController.player?.play()
-        Kitchen.appController.navigationController.pushViewController(playerController, animated: true)
         self.streaming = true
     }
 

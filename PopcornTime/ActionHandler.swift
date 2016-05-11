@@ -108,6 +108,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
 
     static func showSeasonWithNumber(pieces: [String], seasonNumber: Int) {
+        print(pieces)
         var presentedDetails = false
         let showId = pieces[1]
         let imdbSlug = pieces[2]
@@ -247,6 +248,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
             torrents.append(torrentDict)
         }
+        
+        torrents.sortInPlace({ $0["quality"] > $1["quality"] })
 
         var buttons = [AlertButton]()
         for torrent in torrents {

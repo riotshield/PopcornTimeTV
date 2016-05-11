@@ -170,7 +170,6 @@ public class WatchlistManager {
     func readJSONFile(completion: ((json: [[String : AnyObject]]?) -> Void)?) {
         if let json = NSUserDefaults.standardUserDefaults().objectForKey("Watchlist") as? [[String : AnyObject]] {
             completion?(json: json)
-            print(json)
         } else {
             completion?(json: nil)
         }

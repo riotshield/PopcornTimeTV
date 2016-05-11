@@ -37,7 +37,7 @@ PopcornTime.xcworkspace
 
 ##Screenshots
 
-![Screenshots](http://i.imgur.com/VvRRFCi.jpg)
+![Screenshots](http://i.cubeupload.com/usCzhQ.png)
 
 ##Want to help?
 

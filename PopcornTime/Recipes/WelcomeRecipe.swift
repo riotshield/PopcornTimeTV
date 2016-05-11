@@ -105,7 +105,7 @@ public struct WelcomeRecipe: RecipeType {
             }
         }
         
-        return "" // return a default watchlist icon
+        return "http://i.cubeupload.com/dgwEXZ.png"
         
     }
 

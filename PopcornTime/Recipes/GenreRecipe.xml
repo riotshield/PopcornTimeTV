@@ -3,6 +3,9 @@
     </style>
 </head>
 <catalogTemplate>
+    <background>
+        <img src="http://i.cubeupload.com/DYdaxx.png"></img>
+    </background>
     <banner>
         <title id="title"></title>
     </banner>

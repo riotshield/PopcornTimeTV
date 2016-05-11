@@ -59,20 +59,17 @@ class EZTVSearchRecipe: SearchRecipe {
     }
 
     override func filterSearchText(text: String, callback: (String -> Void)) {
-        let manager = NetworkManager.sharedManager()
-        manager.fetchShowPageNumbers { pageNumbers, error in
-            if let pageNumbers = pageNumbers {
-                manager.fetchShows(pageNumbers, searchTerm: text, genre: nil, sort: "trending") { shows, error in
-                    if let shows = shows {
-                        let mapped: [String] = shows.map { show in
-                            return show.lockUp
-                        }
-                        if let recipe = self.recipe {
-                            var xml = recipe
-                            xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: "Found \(shows.count) \(shows.count == 1 ? "show" : "shows") for \"\(text.cleaned)\"")
-                            xml = xml.stringByReplacingOccurrencesOfString("{{RESULTS}}", withString: mapped.joinWithSeparator("\n"))
-                            callback(xml)
-                        }
+        if let pageNumbers = NSUserDefaults.standardUserDefaults().objectForKey("EZTVPageCount") as? [Int] {
+            NetworkManager.sharedManager().fetchShows(pageNumbers, searchTerm: text, genre: nil, sort: "trending") { shows, error in
+                if let shows = shows {
+                    let mapped: [String] = shows.map { show in
+                        return show.lockUp
+                    }
+                    if let recipe = self.recipe {
+                        var xml = recipe
+                        xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: "Found \(shows.count) \(shows.count == 1 ? "show" : "shows") for \"\(text.cleaned)\"")
+                        xml = xml.stringByReplacingOccurrencesOfString("{{RESULTS}}", withString: mapped.joinWithSeparator("\n"))
+                        callback(xml)
                     }
                 }
             }

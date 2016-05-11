@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // Save the amount of TV Show pages
                     manager.fetchShowPageNumbers({ (pageNumbers, error) in
                         if let pageNumbers = pageNumbers {
-                            NSUserDefaults.standardUserDefaults().setInteger(pageNumbers.count, forKey: "EZTVPageCount")
+                            NSUserDefaults.standardUserDefaults().setObject(pageNumbers, forKey: "EZTVPageCount")
                         }
                     })
 

@@ -28,6 +28,7 @@
 		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
+		921572391CE422C000A26088 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921572381CE422C000A26088 /* AudioManager.swift */; };
 		922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
 		925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */; };
@@ -109,6 +110,7 @@
 		9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYVLCPlayerViewController.m; sourceTree = "<group>"; };
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
 		9211E3F11CDC0ADD00BEEB9D /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
+		921572381CE422C000A26088 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+Equatable.swift"; path = "Extensions/NSDate+Equatable.swift"; sourceTree = "<group>"; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
 		925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatalogRecipe.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				925F8DF41CA9E464007100EB /* WatchlistManager.swift */,
+				921572381CE422C000A26088 /* AudioManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -696,6 +699,7 @@
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
+				921572391CE422C000A26088 /* AudioManager.swift in Sources */,
 				92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */,
 				925F8DF11CA9E44C007100EB /* WelcomeRecipe.swift in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,

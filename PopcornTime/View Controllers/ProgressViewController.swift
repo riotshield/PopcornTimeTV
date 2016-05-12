@@ -81,6 +81,8 @@ class ProgressViewController: UIViewController {
     }
 
     func playVLCVideo(url: NSURL, hash: String) {
+        AudioManager.sharedManager().stopTheme()
+        
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
         let playerViewController = SYVLCPlayerViewController(URL: url, andHash: hash)
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)

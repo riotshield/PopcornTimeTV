@@ -74,7 +74,7 @@ public struct SeasonProductRecipe: RecipeType {
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.DefaultWithLoadingIndicator
-
+    
     public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode], seasonInfo: SeasonInfo, existsInWatchlist: Bool) {
         self.show = show
         self.showInfo = showInfo
@@ -82,6 +82,8 @@ public struct SeasonProductRecipe: RecipeType {
         self.detailedEpisodes = detailedEpisodes
         self.seasonInfo = seasonInfo
         self.existsInWatchList = existsInWatchlist
+
+        AudioManager.sharedManager().playTheme(show.tvdbId)
     }
 
     public var xmlString: String {
@@ -246,8 +248,6 @@ public struct SeasonProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{CAST}}", withString: castString)
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{SEASONS_BUTTON}}", withString: seasonsButton)
-
-                xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: themeSong)
             } catch {
                 print("Could not open Catalog template")
             }

@@ -154,8 +154,6 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIE_ID}}", withString: String(movie.id))
                 xml = xml.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "movie")
 
-                xml = xml.stringByReplacingOccurrencesOfString("{{THEME_SONG}}", withString: "")
-
                 xml = xml.stringByReplacingOccurrencesOfString("{{TORRENTS}}", withString: torrents.cleaned)
             } catch {
                 print("Could not open Catalog template")

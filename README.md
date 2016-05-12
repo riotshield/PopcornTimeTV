@@ -24,7 +24,7 @@ Setting up PopcornTime is quite easy.
 cd ~/Desktop
 git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
 cd ~/Desktop/PopcornTimeTV
-git checkout 0.6.0
+git checkout 0.6.1
 ```
 If you are installing PopcornTIme for the first time run 
 `pod install` otherwise if you are updating, run `pod update`

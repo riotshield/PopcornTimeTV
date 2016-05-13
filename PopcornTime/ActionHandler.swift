@@ -128,42 +128,46 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
                 let seasonInfo = SeasonInfo(last:seasons.last!, first: seasons.first!, current: (seasonNumber == -1 ? seasons.last! : seasonNumber))
 
-                manager.fetchTraktSeasonEpisodesInfoForIMDB(imdbSlug, season: seasonInfo.current) { response, error in
-                    if let response = response {
-                        var episodes = [Episode]()
-                        for episode in show.episodes {
-                            if seasonInfo.current == episode.season {
-                                episodes.append(episode)
-                            }
-                        }
-                        episodes.sortInPlace({ $0.episode < $1.episode })
-
-                        var detailedEpisodes = [DetailedEpisode]()
-                        for (_, item) in response.enumerate() {
-                            var episode = DetailedEpisode()
-                            for ep in episodes {
-                                if ep.episode == item["number"] as? Int {
-                                    episode.episode = ep
-                                    if let title = item["title"] as? String {
-                                        episode.episodeTitle = title
+                manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
+                    if let xml = response {
+                        let seriesInfo = xml["Data"]["Series"]
+                        
+                        let slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        
+                        manager.fetchTraktSeasonEpisodesInfoForIMDB(slug, season: seasonInfo.current) { response, error in
+                            if let response = response {
+                                var episodes = [Episode]()
+                                for episode in show.episodes {
+                                    if seasonInfo.current == episode.season {
+                                        episodes.append(episode)
                                     }
-                                    if let images = item["images"] as? [String : AnyObject] {
-                                        if let screenshots = images["screenshot"] as? [String : String] {
-                                            episode.fullScreenshot = screenshots["full"]
-                                            episode.mediumScreenshot = screenshots["medium"]
-                                            episode.smallScreenshot = screenshots["thumb"]
+                                }
+                                episodes.sortInPlace({ $0.episode < $1.episode })
+                                
+                                var detailedEpisodes = [DetailedEpisode]()
+                                for (_, item) in response.enumerate() {
+                                    var episode = DetailedEpisode()
+                                    for ep in episodes {
+                                        if ep.episode == item["number"] as? Int {
+                                            episode.episode = ep
+                                            if let title = item["title"] as? String {
+                                                episode.episodeTitle = title
+                                            }
+                                            if let images = item["images"] as? [String : AnyObject] {
+                                                if let screenshots = images["screenshot"] as? [String : String] {
+                                                    episode.fullScreenshot = screenshots["full"]
+                                                    episode.mediumScreenshot = screenshots["medium"]
+                                                    episode.smallScreenshot = screenshots["thumb"]
+                                                }
+                                            }
+                                            detailedEpisodes.append(episode)
                                         }
                                     }
-                                    detailedEpisodes.append(episode)
                                 }
-                            }
-                        }
-
-                        manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
-                            if let response = response {
+                                
                                 if !presentedDetails {
                                     WatchlistManager.sharedManager().itemExistsInWatchList(itemId: String(show.id), forType: .Show, completion: { exists in
-                                        let recipe = SeasonProductRecipe(show: show, showInfo: ShowInfo(xml: response), episodes: episodes,
+                                        let recipe = SeasonProductRecipe(show: show, showInfo: ShowInfo(xml: xml), episodes: episodes,
                                             detailedEpisodes: detailedEpisodes, seasonInfo: seasonInfo, existsInWatchlist: exists)
                                         Kitchen.serve(recipe: recipe)
                                         presentedDetails = true

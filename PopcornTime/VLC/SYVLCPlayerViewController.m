@@ -1349,70 +1349,68 @@ static NSString *const kText = @"kText";
 - (void) createAudioSubsDatasource
 {
     
-    [[SubtitleManager sharedManager] fetchSubtitlesForIMDB:_hash completion:^(NSArray *array) {
-        _subsTracks = [NSMutableArray array];
-        [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
-        [_subsTracks addObjectsFromArray:_cahcedSubtitles];
-        
-        // Subtitles Internal
-        _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
-        NSArray *subsTrackNames = nil;
-        @try {
-            subsTrackNames = [_mediaplayer videoSubTitlesNames];
+    _subsTracks = [NSMutableArray array];
+    [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
+    [_subsTracks addObjectsFromArray:_cahcedSubtitles];
+    
+    // Subtitles Internal
+    _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
+    NSArray *subsTrackNames = nil;
+    @try {
+        subsTrackNames = [_mediaplayer videoSubTitlesNames];
+    }
+    
+    @catch (NSException *exception) {
+        NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
+        for (id item in _subsTrackIndexes) {
+            NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
+            [subsTrackNamesMut addObject:subsName];
         }
-        
-        @catch (NSException *exception) {
-            NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
-            for (id item in _subsTrackIndexes) {
-                NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
-                [subsTrackNamesMut addObject:subsName];
-            }
-            subsTrackNames = [subsTrackNamesMut copy];
+        subsTrackNames = [subsTrackNamesMut copy];
+    }
+    
+    if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
+        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
+            [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
+    }
+    
+    // Audio
+    _audioTracks = [NSMutableArray array];
+    NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
+    NSArray *audioTrackNames = nil;
+    @try {
+        audioTrackNames = [_mediaplayer audioTrackNames];
+    }
+    
+    @catch (NSException *exception) {
+        NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
+        for (id item in audioTrackIndexes) {
+            NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
+            [audioTrackNamesMut addObject:audioName];
         }
-        
-        if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
-            for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
-                [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
-        }
-        
-        // Audio
-        _audioTracks = [NSMutableArray array];
-        NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
-        NSArray *audioTrackNames = nil;
-        @try {
-            audioTrackNames = [_mediaplayer audioTrackNames];
-        }
-        
-        @catch (NSException *exception) {
-            NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
-            for (id item in audioTrackIndexes) {
-                NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
-                [audioTrackNamesMut addObject:audioName];
-            }
-            audioTrackNames = [audioTrackNamesMut copy];
-        }
-        
-        if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
-            for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
-                [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
-        }
-        else {
-            [_audioTracks addObject:@{@"name" : @"Disabled"}];
-        }
-        
-        _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
-        _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
-        
-        self.subTabBarCollectionView.dataSource = self;
-        self.subTabBarCollectionView.delegate   = self;
-        [self.subTabBarCollectionView reloadData];
-        
-        self.audioTabBarCollectionView.dataSource = self;
-        self.audioTabBarCollectionView.delegate   = self;
-        [self.audioTabBarCollectionView reloadData];
-        
-        [self restoreSub];
-    }];
+        audioTrackNames = [audioTrackNamesMut copy];
+    }
+    
+    if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
+        for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
+            [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
+    }
+    else {
+        [_audioTracks addObject:@{@"name" : @"Disabled"}];
+    }
+    
+    _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
+    _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    self.subTabBarCollectionView.dataSource = self;
+    self.subTabBarCollectionView.delegate   = self;
+    [self.subTabBarCollectionView reloadData];
+    
+    self.audioTabBarCollectionView.dataSource = self;
+    self.audioTabBarCollectionView.delegate   = self;
+    [self.audioTabBarCollectionView reloadData];
+    
+    [self restoreSub];
     
     /*
     [[SQClientController shareClient]subtitlesListForHash:_hash

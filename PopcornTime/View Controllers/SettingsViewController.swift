@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        self.tableView.contentInset = UIEdgeInsetsMake(150, 0, 0, 0)
+        self.tableView.contentInset = UIEdgeInsetsMake(150, 0, 0, 0)
         self.settingsIcon.alpha = 0.25
     }
 

@@ -52,6 +52,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
+            
+        case "showSettings": showSettings(pieces)
 
         case "showSeason": showSeason(pieces)
         case "showSeasons": showSeasons(pieces)
@@ -79,6 +81,15 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
 
     // MARK: Actions
+    
+    static func showSettings(pieces: [String]) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let viewController = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController {            
+            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
+            })
+        }
+    }
 
     static func showMovie(pieces: [String]) {
         NetworkManager.sharedManager().showDetailsForMovie(movieId: Int(pieces.last!)!, withImages: false, withCast: true) { movie, error in

@@ -37,7 +37,7 @@
                         <title>Watchlist</title>
                     </overlay>
                 </lockup>
-                <lockup actionID="#">
+                <lockup actionID="showSettings">
                     <img class="round" src="http://i.cubeupload.com/ZaJQcD.png" width="480" height="270"></img>
                     <overlay>
                         <title>Settings</title>

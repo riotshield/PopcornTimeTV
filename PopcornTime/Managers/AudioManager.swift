@@ -46,7 +46,7 @@ class AudioManager : NSObject, AVAudioPlayerDelegate {
                     try AVAudioSession.sharedInstance().setActive(true)
                     
                     self.player = try AVAudioPlayer(data: data)
-                    self.player.volume = 0.7
+                    self.player.volume = NSUserDefaults.standardUserDefaults().floatForKey("TVShowVolume") ?? 0.75
                     self.player.delegate = self
                     self.player.prepareToPlay()
                     self.player.play()

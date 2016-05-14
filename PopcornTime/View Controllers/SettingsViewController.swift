@@ -72,6 +72,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 1:
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Clear All Cache"
+                cell.detailTextLabel?.text = ""
                 cell.accessoryType = .None
             }
             
@@ -92,22 +93,27 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 alertController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
                 alertController.addAction(UIAlertAction(title: "Off", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.0, forKey: "TVShowVolume")
+                    tableView.reloadData()
                 }))
                 
                 alertController.addAction(UIAlertAction(title: "25%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.25, forKey: "TVShowVolume")
+                    tableView.reloadData()
                 }))
                 
                 alertController.addAction(UIAlertAction(title: "50%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.5, forKey: "TVShowVolume")
+                    tableView.reloadData()
                 }))
                 
                 alertController.addAction(UIAlertAction(title: "75%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.75, forKey: "TVShowVolume")
+                    tableView.reloadData()
                 }))
                 
                 alertController.addAction(UIAlertAction(title: "100%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(1.0, forKey: "TVShowVolume")
+                    tableView.reloadData()
                 }))
                 
                 self.presentViewController(alertController, animated: true, completion: nil)

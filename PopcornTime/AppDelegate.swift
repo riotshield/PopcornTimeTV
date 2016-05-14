@@ -52,10 +52,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        
+        SubtitleManager.sharedManager().cleanSubs()
 
         return true
     }
-
 
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
         if url.host == nil {

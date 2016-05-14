@@ -182,7 +182,7 @@ public struct SeasonProductRecipe: RecipeType {
 
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
-            var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)»\(torrents($0.episode).cleaned)\">" + "\n"
+            var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)\">" + "\n"
             string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
             string += "<title>\($0.episode.episode). \($0.episodeTitle.cleaned)</title>" + "\n"
             string += "<overlay class=\"overlayPosition\">" + "\n"

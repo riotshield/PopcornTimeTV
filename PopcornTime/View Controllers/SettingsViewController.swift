@@ -17,7 +17,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         super.viewDidLoad()
 
         self.tableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0)
-        self.settingsIcon.alpha = 0.25
+        self.settingsIcon.alpha = 1
     }
 
     override func didReceiveMemoryWarning() {
@@ -144,12 +144,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
-                self.settingsIcon.image = UIImage(named: "TV Shows")
+                self.settingsIcon.image = UIImage(named: "settings.png")
             }
             
         case 1:
             if indexPath.row == 0 {
-                self.settingsIcon.image = UIImage(named: "Cache")
+                self.settingsIcon.image = UIImage(named: "settings.png")
             }
             
         default: self.settingsIcon.image = nil

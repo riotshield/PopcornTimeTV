@@ -71,7 +71,7 @@ class ProgressViewController: UIViewController {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
                 }
 
-//                print("\(Int(status.bufferingProgress*100))%, \(Int(status.totalProgreess*100))%, \(speedString)/s, Seeds: \(status.seeds), Peers: \(status.peers)")
+                print("\(Int(status.bufferingProgress*100))%, \(Int(status.totalProgreess*100))%, \(speedString)/s, Seeds: \(status.seeds), Peers: \(status.peers)")
             }, readyToPlay: { url in
                 self.playVLCVideo(url, imdbID: self.imdbId)
             }) { error in

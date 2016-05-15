@@ -6,4 +6,5 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SYVLCPlayerViewController.h"
 
+#import "SQSubSetting.h"
 #import "ZipKit.h"

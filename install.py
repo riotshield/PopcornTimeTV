@@ -35,7 +35,7 @@ podsInstalled = raw_input("Do you have cocoapods installed? (Enter Yes or No): "
 lower = podsInstalled.lower()
 if "yes" in lower:
     # Cocoapods already installed
-    break
+    pass
 else:
     print "\n# Installing cocoapod gem..."
     os.system("sudo gem install cocoapods")

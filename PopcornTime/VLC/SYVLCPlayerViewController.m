@@ -12,7 +12,7 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
 #import <PopcornTorrent/PopcornTorrent.h>
-#import "PopcornTime-Swift.h"
+//#import "PopcornTime-Swift.h"
 #import "SRTParser.h"
 
 static NSString *const kIndex = @"kIndex";

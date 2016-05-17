@@ -24,10 +24,12 @@ Setting up PopcornTime is quite easy.
 cd ~/Desktop
 git clone https://github.com/PopcornTimeTV/PopcornTimeTV.git
 cd ~/Desktop/PopcornTimeTV
-git checkout 0.6.2
+python install.py
 ```
-If you are installing PopcornTIme for the first time run 
-`pod install` otherwise if you are updating, run `pod update`
+Follow the instructions in the install sript to update your copy of PopcornTime. For all future updates, just run `python install.py` and it will walk you through the rest.
+
+If you are installing PopcornTime for the first time run and are having issues try running
+`pod install` otherwise if you are updating, run `pod update`.
 
 If issues persist when installing TVVLC, remove the Pods folder and Podfile.lock and run this command in terminal `rm -rf ~/.cocoapods/repos/popcorntimetv`
 

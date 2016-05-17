@@ -1,8 +1,6 @@
 #PopcornTime TV
 [![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
 
-[![Slack Status](https://popcorntimetv.herokuapp.com/badge.svg)](http://popcorntimetv.herokuapp.com)
-
 An Apple TV 4 application to torrent movies and tv shows for streaming.
 A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
@@ -27,6 +25,8 @@ cd ~/Desktop/PopcornTimeTV
 python install.py
 ```
 Follow the instructions in the install sript to update your copy of PopcornTime. For all future updates, just run `python install.py` and it will walk you through the rest.
+
+If the new install script is failing, revert to the old way and run `git checkout 0.6.3` and `pod update`
 
 If you are installing PopcornTime for the first time run and are having issues try running
 `pod install` otherwise if you are updating, run `pod update`.

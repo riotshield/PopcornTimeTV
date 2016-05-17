@@ -193,7 +193,6 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     static func showSeasons(pieces: [String]) {
         let showId = pieces[1]
-        let imdbSlug = pieces[2]
 
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
@@ -208,35 +207,41 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 let seasonsArray = Array(existingSeasons).sort()
 
                 var seasons = [Season]()
-                manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
-                    if let response = response {
-                        for seasonNumber in seasonsArray {
-                            var season = Season()
-                            season.seasonNumber = seasonNumber
-                            for (_, item) in response.enumerate() {
-                                if item["number"] as? Int == seasonNumber {
-                                    let seasonInfo = item
-                                    if let images = seasonInfo["images"] as? [String : AnyObject] {
-                                        if let posters = images["poster"] as? [String : String] {
-                                            season.seasonLargeCoverImage = posters["full"]
-                                            season.seasonMediumCoverImage = posters["medium"]
-                                            season.seasonSmallCoverImage = posters["thumb"]
+                
+                manager.searchTVDBSeries(show.tvdbId) { response, error in
+                    if let xml = response {
+                        let seriesInfo = xml["Data"]["Series"]
+                        
+                        let slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        manager.fetchTraktSeasonInfoForIMDB(slug) { response, error in
+                            if let response = response {
+                                for seasonNumber in seasonsArray {
+                                    var season = Season()
+                                    season.seasonNumber = seasonNumber
+                                    for (_, item) in response.enumerate() {
+                                        if item["number"] as? Int == seasonNumber {
+                                            let seasonInfo = item
+                                            if let images = seasonInfo["images"] as? [String : AnyObject] {
+                                                if let posters = images["poster"] as? [String : String] {
+                                                    season.seasonLargeCoverImage = posters["full"]
+                                                    season.seasonMediumCoverImage = posters["medium"]
+                                                    season.seasonSmallCoverImage = posters["thumb"]
+                                                }
+                                            }
+                                            seasons.append(season)
+                                            break
                                         }
                                     }
-                                    seasons.append(season)
-                                    break
                                 }
+                                
+                                let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
+                                Kitchen.serve(recipe: recipe)
                             }
                         }
-
-                        let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
-                        Kitchen.serve(recipe: recipe)
                     }
                 }
             }
         }
-
-
     }
 
     static func playMovie(pieces: [String]) {

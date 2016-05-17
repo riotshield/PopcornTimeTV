@@ -227,8 +227,13 @@ public struct SeasonProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{RUNTIME}}", withString: runtime)
                 xml = xml.stringByReplacingOccurrencesOfString("{{GENRES}}", withString: genresString)
-                xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: show.synopsis.cleaned)
-                xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: show.synopsis.cleaned)
+                if let sys = show.synopsis {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: sys.cleaned)
+                    xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: sys.cleaned)
+                } else {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: "")
+                    xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: "")
+                }
                 xml = xml.stringByReplacingOccurrencesOfString("{{IMAGE}}", withString: show.posterImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{FANART_IMAGE}}", withString: show.fanartImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")

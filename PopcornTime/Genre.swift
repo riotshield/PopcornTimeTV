@@ -34,7 +34,7 @@ struct Genre: TabItem {
                     js = js.stringByReplacingOccurrencesOfString("{{RECIPE}}", withString: recipe.xmlString)
                     jsContext.evaluateScript(js)
                 } catch {
-                    print("Could not open Catalog template")
+                    print("Could not open Genre.js")
                 }
             }
 

@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     watchlist.fetchWatchListItems(forType: .Movie) { watchListMovies in
                                         watchlist.fetchWatchListItems(forType: .Show) { watchListShows in
                                             Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", movies: movies, shows: shows, watchListMovies: watchListMovies, watchListShows: watchListShows))
-                                            
+
                                             if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
                                                 self.handleURL(url)
                                             }
@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
+
         SubtitleManager.sharedManager().cleanSubs()
 
         return true
@@ -71,13 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-    
+
     func handleURL(url: NSURL) {
         let urlString = url.absoluteString
         let queryArray = urlString.componentsSeparatedByString("/")
-        
+
         let action = queryArray[2..<queryArray.endIndex].joinWithSeparator("»")
-        
+
         ActionHandler.primary(action)
     }
 

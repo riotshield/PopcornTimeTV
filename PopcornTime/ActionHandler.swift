@@ -126,7 +126,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             if(movies == nil && shows == nil) {
                 // To Do: Go back to the movie overview instead of main home view
                 Kitchen.navigationController.popToRootViewControllerAnimated(false)
-                let recipe = AlertRecipe(title: "Sorry, "+String(UTF8String: pieces.last!)!+" has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+                let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
                 
                 Kitchen.serve(recipe: recipe)
             }else{

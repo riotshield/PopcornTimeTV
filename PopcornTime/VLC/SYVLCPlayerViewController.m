@@ -12,7 +12,7 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
 #import <PopcornTorrent/PopcornTorrent.h>
-#import "PopcornTime-Swift.h"
+//#import "PopcornTime-Swift.h"
 #import "SRTParser.h"
 
 static NSString *const kIndex = @"kIndex";
@@ -1287,6 +1287,16 @@ static NSString *const kText = @"kText";
         NSString *file = lastSelected[@"path"];
         
         NSString *string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:NULL];
+        // If UTF-8 Encoding fails, try ISO Latin1
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:file encoding:NSISOLatin1StringEncoding error:NULL];
+        }
+        // If that fails try one other format, GBK_95
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:file encoding:kCFStringEncodingGBK_95 error:NULL];
+        }
+        // If it's still nil, well we tried everything we could. No subtitles for you!
+        
         
         NSError *error;
         SRTParser *parser = [[SRTParser alloc] init];

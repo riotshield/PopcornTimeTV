@@ -12,7 +12,7 @@ import PopcornKit
 public struct CatalogRecipe: RecipeType {
 
     public let theme = DefaultTheme()
-    public var presentationType = PresentationType.Tab
+    public let presentationType = PresentationType.Tab
 
     let title: String
     let movies: [Movie]!
@@ -32,29 +32,18 @@ public struct CatalogRecipe: RecipeType {
         return xml
     }
 
-    public var creditsString: String {
-            var mapped = [[String]]()
-        
-            if(movies != nil) {
-                mapped += movies.map {
-                    [$0.lockUp, String($0.year)]
-                }
+    public var movieString: String {
+        if let movies = self.movies {
+            let mapped: [String] = movies.map {
+                $0.lockUp
             }
-            if(shows != nil) {
-                mapped += shows.map {
-                    [$0.lockUp, String($0.year)]
-                }
+            return mapped.joinWithSeparator("")
+        } else {
+            let mapped: [String] = shows.map {
+                $0.lockUp
             }
-        
-            mapped.sortInPlace {
-                return $0[1] > $1[1]
-            }
-        
-            let mappedItems: [String] = mapped.map {
-                $0[0]
-            }
-        
-            return mappedItems.joinWithSeparator("")
+            return mapped.joinWithSeparator("")
+        }
     }
 
     public var template: String {
@@ -63,7 +52,7 @@ public struct CatalogRecipe: RecipeType {
             do {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: title)
-                xml = xml.stringByReplacingOccurrencesOfString("{{POSTERS}}", withString: creditsString)
+                xml = xml.stringByReplacingOccurrencesOfString("{{POSTERS}}", withString: movieString)
             } catch {
                 print("Could not open Catalog template")
             }

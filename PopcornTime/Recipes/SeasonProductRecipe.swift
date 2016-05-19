@@ -35,7 +35,6 @@ public struct ShowInfo {
     public var contentRating: String!
 
     public var cast: [String]!
-    
     public var genres: [String]!
 
     public var network: String!
@@ -75,7 +74,7 @@ public struct SeasonProductRecipe: RecipeType {
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.DefaultWithLoadingIndicator
-    
+
     public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode], seasonInfo: SeasonInfo, existsInWatchlist: Bool) {
         self.show = show
         self.showInfo = showInfo
@@ -121,25 +120,22 @@ public struct SeasonProductRecipe: RecipeType {
         let (_, minutes, _) = self.secondsToHoursMinutesSeconds(showInfo.runtime * 60)
         return "\(minutes)m"
     }
-    
+
     var castString: String {
-        
         let mapped: [String] = showInfo.cast.map {
-            
             let name = $0.componentsSeparatedByString(" ")
-            var string = "<monogramLockup actionID=\"showActor»\($0)\">" + "\n"
-            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\" src=\"\"/>"
+            var string = "<monogramLockup>" + "\n"
+            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\"/>"
             string += "<title>\($0.cleaned)</title>" + "\n"
             string += "<subtitle>Actor</subtitle>" + "\n"
             string += "</monogramLockup>" + "\n"
             return string
         }
-        
         return mapped.joinWithSeparator("\n")
     }
 
     var watchlistButton: String {
-        var string = "<buttonLockup actionID=\"addWatchlist»\(show.id)»\(show.title)»show»\(show.posterImage)»\(show.fanartImage)»\(show.imdbId)»\(show.tvdbId)»\(show.title.slugged)\">\n"
+        var string = "<buttonLockup actionID=\"addWatchlist»\(show.id)»\(show.title.cleaned)»show»\(show.posterImage)»\(show.fanartImage)»\(show.imdbId)»\(show.tvdbId)»\(show.title.slugged)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
         string += "<title>Watchlist</title>\n"
         string += "</buttonLockup>"
@@ -186,23 +182,35 @@ public struct SeasonProductRecipe: RecipeType {
 
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
-            var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)\">" + "\n"
+            var screenshot = ""
+            var title = ""
+            var overview = ""
+            if let s = $0.fullScreenshot {
+                screenshot = s
+            }
+            if let t = $0.episodeTitle {
+                title = t.cleaned
+            }
+            if let o = $0.episode.overview {
+                overview = o.cleaned
+            }
+            var string = "<lockup actionID=\"playMovie»\(screenshot)»\(show.fanartImage)»\(title)»\(overview)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)\">" + "\n"
             string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
-            string += "<title>\($0.episode.episode). \($0.episodeTitle.cleaned)</title>" + "\n"
+            string += "<title>\($0.episode.episode). \(title)</title>" + "\n"
             string += "<overlay class=\"overlayPosition\">" + "\n"
             string += "<badge src=\"resource://button-play\" class=\"whiteButton overlayPosition\"/>" + "\n"
             string += "</overlay>" + "\n"
             string += "<relatedContent>" + "\n"
             string += "<infoTable>" + "\n"
             string +=   "<header>" + "\n"
-            string +=       "<title>\($0.episodeTitle.cleaned)</title>" + "\n"
+            string +=       "<title>\(title)</title>" + "\n"
             string +=       "<description>Episode \($0.episode.episode)</description>" + "\n"
             string +=   "</header>" + "\n"
             string +=   "<info>" + "\n"
             string +=       "<header>" + "\n"
             string +=           "<title>Description</title>" + "\n"
             string +=       "</header>" + "\n"
-            string +=       "<description allowsZooming=\"true\" moreLabel=\"more\" actionID=\"showDescription»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)\">\($0.episode.overview.cleaned)</description>" + "\n"
+            string +=       "<description allowsZooming=\"true\" moreLabel=\"more\" actionID=\"showDescription»\(title)»\(overview)\">\(overview)</description>" + "\n"
             string +=   "</info>" + "\n"
             string += "</infoTable>" + "\n"
             string += "</relatedContent>" + "\n"
@@ -231,8 +239,13 @@ public struct SeasonProductRecipe: RecipeType {
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{RUNTIME}}", withString: runtime)
                 xml = xml.stringByReplacingOccurrencesOfString("{{GENRES}}", withString: genresString)
-                xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: show.synopsis.cleaned)
-                xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: show.synopsis.cleaned)
+                if let sys = show.synopsis {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: sys.cleaned)
+                    xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: sys.cleaned)
+                } else {
+                    xml = xml.stringByReplacingOccurrencesOfString("{{DESCRIPTION}}", withString: "")
+                    xml = xml.stringByReplacingOccurrencesOfString("{{SHORT_DESCRIPTION}}", withString: "")
+                }
                 xml = xml.stringByReplacingOccurrencesOfString("{{IMAGE}}", withString: show.posterImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{FANART_IMAGE}}", withString: show.fanartImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: "")

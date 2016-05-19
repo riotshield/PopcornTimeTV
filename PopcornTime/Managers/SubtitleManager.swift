@@ -53,7 +53,7 @@ import Alamofire
 
         Alamofire.request(.GET, endpoint)
         .responseJSON { response in
-            var subtitleArray = [AnyObject]()
+            var subtitleArray = [[String : String]]()
             if let response = response.result.value as? [String : AnyObject] {
                 if let subs = response["subs"] as? [String : AnyObject] {
                     if let subtitles = subs[imdbID] as? [String : AnyObject] {
@@ -75,7 +75,8 @@ import Alamofire
                         }
 
                         dispatch_group_notify(group, dispatch_get_main_queue(), {
-                            completion?(subtitleArray)
+                            let subtitles = subtitleArray.sort({ $0["name"] < $1["name"] })
+                            completion?(subtitles)
                         })
                     }
                 }

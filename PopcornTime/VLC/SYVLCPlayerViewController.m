@@ -12,6 +12,8 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
 #import <PopcornTorrent/PopcornTorrent.h>
+//#import "PopcornTime-Swift.h"
+#import "SRTParser.h"
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -23,6 +25,7 @@ static NSString *const kText = @"kText";
     VLCMediaPlayer *_mediaplayer;
     NSURL *_url;
     NSString *_hash;
+    NSArray *_cahcedSubtitles;
     
     BOOL _didParsed;
     NSMutableArray *_audioTracks;
@@ -32,6 +35,7 @@ static NSString *const kText = @"kText";
     NSUInteger _tryAccount;
     NSArray *_subsTrackIndexes;
     NSDictionary *_currentSubParsed;
+    NSArray *_currentSelectedSub;
     
     NSTimer *_subtitleTimer;
     float _sizeFloat;
@@ -66,7 +70,7 @@ static NSString *const kText = @"kText";
 #define kAlphaFocusedBackground 0.5
 #define kAlphaNotFocusedBackground 0.15
 
-- (id) initWithURL:(NSURL *) url andHash:(NSString *) hash
+- (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles
 {
     self = [super init];
     
@@ -78,6 +82,7 @@ static NSString *const kText = @"kText";
         _url = url;
         _videoDidOpened = NO;
         _hash = hash;
+        _cahcedSubtitles = cahcedSubtitles;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
         _canPanning  = NO;
@@ -182,6 +187,8 @@ static NSString *const kText = @"kText";
     [self.view layoutIfNeeded];
     
     [self updateLoadingRatio];
+    
+    [self createAudioSubsDatasource];
 
 }
 
@@ -526,8 +533,6 @@ static NSString *const kText = @"kText";
 
 - (void) openTopMenu
 {
-    /*
-     * Disable this for now
     [self hideSwipeMessage];
     
     self.subsButton.enabled      = NO;
@@ -547,13 +552,11 @@ static NSString *const kText = @"kText";
         _middleButton.hidden = NO;
         [self setNeedsFocusUpdate];
     }];
-     */
 }
 
 
 - (void) closeTopMenu
 {
-    /*
     self.topTopMenuSpace.constant = -232.0;
     
     _panGestureRecognizer.enabled = YES;
@@ -568,7 +571,6 @@ static NSString *const kText = @"kText";
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
         [self showSwipeMessage];
     }];
-    */
 }
 
 
@@ -1281,6 +1283,29 @@ static NSString *const kText = @"kText";
     }
     else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
+        
+        NSString *file = lastSelected[@"path"];
+        
+        NSString *string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:NULL];
+        // If UTF-8 Encoding fails, try ISO Latin1
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:file encoding:NSISOLatin1StringEncoding error:NULL];
+        }
+        // If that fails try one other format, GBK_95
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:file encoding:kCFStringEncodingGBK_95 error:NULL];
+        }
+        // If it's still nil, well we tried everything we could. No subtitles for you!
+        
+        
+        NSError *error;
+        SRTParser *parser = [[SRTParser alloc] init];
+        _currentSelectedSub = [parser parseString:string error:&error];
+
+        
+//        _currentSubParsed = [self parseSubtitle:file];
+        
+        
         /*
         [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
                                                   forHash:_hash
@@ -1296,7 +1321,6 @@ static NSString *const kText = @"kText";
     }
     
 }
-
 
 - (void) newAudioSelected
 {
@@ -1334,77 +1358,80 @@ static NSString *const kText = @"kText";
 
 - (void) createAudioSubsDatasource
 {
+    
+    _subsTracks = [NSMutableArray array];
+    [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
+    [_subsTracks addObjectsFromArray:_cahcedSubtitles];
+    
+    // Subtitles Internal
+    _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
+    NSArray *subsTrackNames = nil;
+    @try {
+        subsTrackNames = [_mediaplayer videoSubTitlesNames];
+    }
+    
+    @catch (NSException *exception) {
+        NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
+        for (id item in _subsTrackIndexes) {
+            NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
+            [subsTrackNamesMut addObject:subsName];
+        }
+        subsTrackNames = [subsTrackNamesMut copy];
+    }
+    
+    if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
+        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
+            [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
+    }
+    
+    // Audio
+    _audioTracks = [NSMutableArray array];
+    NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
+    NSArray *audioTrackNames = nil;
+    @try {
+        audioTrackNames = [_mediaplayer audioTrackNames];
+    }
+    
+    @catch (NSException *exception) {
+        NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
+        for (id item in audioTrackIndexes) {
+            NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
+            [audioTrackNamesMut addObject:audioName];
+        }
+        audioTrackNames = [audioTrackNamesMut copy];
+    }
+    
+    if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
+        for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
+            [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
+    }
+    else {
+        [_audioTracks addObject:@{@"name" : @"Disabled"}];
+    }
+    
+    _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
+    _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    self.subTabBarCollectionView.dataSource = self;
+    self.subTabBarCollectionView.delegate   = self;
+    [self.subTabBarCollectionView reloadData];
+    
+    self.audioTabBarCollectionView.dataSource = self;
+    self.audioTabBarCollectionView.delegate   = self;
+    [self.audioTabBarCollectionView reloadData];
+    
+    [self restoreSub];
+    
     /*
     [[SQClientController shareClient]subtitlesListForHash:_hash
                                                 withBlock:^(NSData *data, NSError *error) {
-                                                    
+     
                                                     SBJsonParser *parser = [[SBJsonParser alloc]init];
                                                     id object = [parser objectWithData:data];
-                                                    
+     
                                                     if (!error && [object isKindOfClass:[NSArray class]]) {
-                                                        _subsTracks = [NSMutableArray array];
-                                                        [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
-                                                        [_subsTracks addObjectsFromArray:object];
-                                                        
-                                                        // Subtitles Internal
-                                                        _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
-                                                        NSArray *subsTrackNames = nil;
-                                                        @try {
-                                                            subsTrackNames = [_mediaplayer videoSubTitlesNames];
-                                                        }
-                                                        
-                                                        @catch (NSException *exception) {
-                                                            NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
-                                                            for (id item in _subsTrackIndexes) {
-                                                                NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
-                                                                [subsTrackNamesMut addObject:subsName];
-                                                            }
-                                                            subsTrackNames = [subsTrackNamesMut copy];
-                                                        }
-                                                        
-                                                        if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
-                                                            for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
-                                                                [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
-                                                        }
-                                                        
-                                                        // Audio
-                                                        _audioTracks = [NSMutableArray array];
-                                                        NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
-                                                        NSArray *audioTrackNames = nil;
-                                                        @try {
-                                                            audioTrackNames = [_mediaplayer audioTrackNames];
-                                                        }
-                                                        
-                                                        @catch (NSException *exception) {
-                                                            NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
-                                                            for (id item in audioTrackIndexes) {
-                                                                NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
-                                                                [audioTrackNamesMut addObject:audioName];
-                                                            }
-                                                            audioTrackNames = [audioTrackNamesMut copy];
-                                                        }
-                                                        
-                                                        if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
-                                                            for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
-                                                                [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
-                                                        }
-                                                        else {
-                                                            [_audioTracks addObject:@{@"name" : @"Disabled"}];
-                                                        }
-                                                        
-                                                        _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
-                                                        _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
-                                                        
-                                                        self.subTabBarCollectionView.dataSource = self;
-                                                        self.subTabBarCollectionView.delegate   = self;
-                                                        [self.subTabBarCollectionView reloadData];
-                                                        
-                                                        self.audioTabBarCollectionView.dataSource = self;
-                                                        self.audioTabBarCollectionView.delegate   = self;
-                                                        [self.audioTabBarCollectionView reloadData];
-
-                                                        [self restoreSub];
-                                                        
+     
+     
                                                     }
                                                     else {
                                                         _tryAccount++;
@@ -1451,15 +1478,14 @@ static NSString *const kText = @"kText";
     float currentSeconds = [self currentTimeSeconds] - _offsetFloat;
     
     // Search for timeInterval
-    NSPredicate *initialPredicate = [NSPredicate predicateWithFormat:@"(%@ >= %K) AND (%@ <= %K)", @(currentSeconds), kStart, @(currentSeconds), kEnd];
-    NSArray *objectsFound = [[_currentSubParsed allValues] filteredArrayUsingPredicate:initialPredicate];
-    NSDictionary *lastFounded = (NSDictionary *)[objectsFound lastObject];
+    NSPredicate *initialPredicate = [NSPredicate predicateWithFormat:@"(%@ >= SELF.startTime) AND (%@ <= SELF.endTime)", @(currentSeconds), @(currentSeconds)];
+    NSArray *objectsFound = [_currentSelectedSub filteredArrayUsingPredicate:initialPredicate];
+    SRTSubtitle *lastFounded = (SRTSubtitle *)[objectsFound lastObject];
     
     if (lastFounded) {
-        NSString *string = [lastFounded objectForKey:kText];
-        [self updateSubtitle:string];
+        [self updateSubtitle:lastFounded.content];
         
-        CGRect rectBack = [string boundingRectWithSize:CGSizeMake(1920, 1080)
+        CGRect rectBack = [lastFounded.content boundingRectWithSize:CGSizeMake(1920, 1080)
                                                options:NSStringDrawingUsesLineFragmentOrigin
                                             attributes:[subSetting attributes]
                                                context:nil];

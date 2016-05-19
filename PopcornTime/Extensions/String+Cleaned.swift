@@ -21,6 +21,9 @@ extension String {
         s = s.stringByReplacingOccurrencesOfString(":", withString: "")
         s = s.stringByReplacingOccurrencesOfString("&-", withString: "")
         s = s.stringByReplacingOccurrencesOfString("'", withString: "-")
+        s = s.stringByReplacingOccurrencesOfString("(", withString: "")
+        s = s.stringByReplacingOccurrencesOfString(")", withString: "")
+        s = s.stringByReplacingOccurrencesOfString("!", withString: "")
         return s.lowercaseString
     }
 

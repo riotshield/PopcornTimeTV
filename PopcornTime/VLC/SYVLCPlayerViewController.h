@@ -69,6 +69,6 @@
 @property (nonatomic, weak)   UIViewController <SYVLCPlayerViewControllerDelegate> *rootViewController;
 @property (nonatomic, weak) id <SQTabMenuCollectionViewCellDelegate> delegate;
 
-- (id) initWithURL:(NSURL *) url andHash:(NSString *) hash;
+- (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles;
 
 @end

@@ -7,18 +7,13 @@
 </head>
 
 <stackTemplate>
-    
     <background>
         <img src="http://i.cubeupload.com/DYdaxx.png"></img>
     </background>
-    
+    <banner>
+        <title>{{TITLE}}</title>
+    </banner>
     <collectionList>
-        <banner>
-            <title>{{TITLE}}</title>
-        </banner>
-        
         {{SHELFS}}
-        
     </collectionList>
-    
 </stackTemplate>

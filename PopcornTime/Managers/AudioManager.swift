@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import AVFoundation
 
-class AudioManager : NSObject, VLCMediaPlayerDelegate {
+class AudioManager : NSObject, AVAudioPlayerDelegate {
     
-    var player: VLCMediaPlayer!
+    var player: AVAudioPlayer!
     var currentPlayingThemeId: Int!
     
     class func sharedManager() -> AudioManager {
@@ -23,9 +24,6 @@ class AudioManager : NSObject, VLCMediaPlayerDelegate {
     
     override init() {
         super.init()
-        
-        self.player = VLCMediaPlayer()
-        self.player.delegate = self
     }
     
     func playTheme(id: Int) {
@@ -35,28 +33,38 @@ class AudioManager : NSObject, VLCMediaPlayerDelegate {
             }
         }
         
-        if self.player.playing {
-            self.player.stop()
+        if let _ = self.player {
+            if self.player.playing {
+                self.player.stop()
+            }
         }
         
-        self.currentPlayingThemeId = id
-        self.player.media = VLCMedia(URL: NSURL(string: "http://tvthemes.plexapp.com/\(id).mp3")!)
-        self.player.play()
+        NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: "http://tvthemes.plexapp.com/\(id).mp3")!) { (data, response, error) in
+            do {
+                if let data = data {
+                    try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                    try AVAudioSession.sharedInstance().setActive(true)
+                    
+                    self.player = try AVAudioPlayer(data: data)
+                    self.player.volume = NSUserDefaults.standardUserDefaults().floatForKey("TVShowVolume") ?? 0.75
+                    self.player.delegate = self
+                    self.player.prepareToPlay()
+                    self.player.play()
+                }
+            } catch let error {
+                print(error)
+            }
+        }.resume()
     }
     
     func stopTheme() {
-        self.player.stop()
+        if let _ = self.player {
+            self.player.stop()
+        }
     }
     
-    @objc func mediaPlayerStateChanged(aNotification: NSNotification!) {
-        if let player = aNotification.object as? VLCMediaPlayer {
-            switch player.state {
-            case .Playing: break
-            case .Buffering: break
-            case .Stopped: self.currentPlayingThemeId = nil
-            default: break
-            }
-        }
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        self.currentPlayingThemeId = nil
     }
     
 }

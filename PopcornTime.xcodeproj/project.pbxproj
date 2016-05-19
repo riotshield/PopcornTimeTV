@@ -27,9 +27,12 @@
 		28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
 		4D6953C8BDE957ED2E9EFD94 /* Pods_PopcornTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */; };
 		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
+		9205508D1CE6F71E00B8623F /* SRTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9205508A1CE6F71E00B8623F /* SRTParser.m */; };
+		9205508E1CE6F71E00B8623F /* SRTSubtitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9205508C1CE6F71E00B8623F /* SRTSubtitle.m */; };
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
 		921572391CE422C000A26088 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921572381CE422C000A26088 /* AudioManager.swift */; };
+		921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921E44F31CE78F930012FEAD /* SettingsViewController.swift */; };
 		922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
 		925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */; };
@@ -52,6 +55,25 @@
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
 		92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B301C9CA5BC0086D362 /* ProgressViewController.swift */; };
 		92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B331C9CAB360086D362 /* PlayerViewController.swift */; };
+		92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49331CE6591A00D666A8 /* SubtitleManager.swift */; };
+		92CF49361CE666EC00D666A8 /* String+PathComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49351CE666EC00D666A8 /* String+PathComponents.swift */; };
+		92CF49F81CE6692100D666A8 /* NSData+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49D31CE6692100D666A8 /* NSData+ZKAdditions.m */; };
+		92CF49F91CE6692100D666A8 /* NSDate+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49D51CE6692100D666A8 /* NSDate+ZKAdditions.m */; };
+		92CF49FA1CE6692100D666A8 /* NSDictionary+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49D71CE6692100D666A8 /* NSDictionary+ZKAdditions.m */; };
+		92CF49FB1CE6692100D666A8 /* NSFileHandle+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49D91CE6692100D666A8 /* NSFileHandle+ZKAdditions.m */; };
+		92CF49FC1CE6692100D666A8 /* NSFileManager+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49DB1CE6692100D666A8 /* NSFileManager+ZKAdditions.m */; };
+		92CF49FD1CE6692100D666A8 /* NSString+ZKAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49DD1CE6692100D666A8 /* NSString+ZKAdditions.m */; };
+		92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49E21CE6692100D666A8 /* ZKArchive.m */; };
+		92CF4A001CE6692100D666A8 /* ZKCDHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49E41CE6692100D666A8 /* ZKCDHeader.m */; };
+		92CF4A011CE6692100D666A8 /* ZKCDTrailer.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49E61CE6692100D666A8 /* ZKCDTrailer.m */; };
+		92CF4A021CE6692100D666A8 /* ZKCDTrailer64.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49E81CE6692100D666A8 /* ZKCDTrailer64.m */; };
+		92CF4A031CE6692100D666A8 /* ZKCDTrailer64Locator.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49EA1CE6692100D666A8 /* ZKCDTrailer64Locator.m */; };
+		92CF4A041CE6692100D666A8 /* ZKDataArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49EC1CE6692100D666A8 /* ZKDataArchive.m */; };
+		92CF4A051CE6692100D666A8 /* ZKDefs.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49EE1CE6692100D666A8 /* ZKDefs.m */; };
+		92CF4A061CE6692100D666A8 /* ZKFileArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49F01CE6692100D666A8 /* ZKFileArchive.m */; };
+		92CF4A071CE6692100D666A8 /* ZKLFHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49F21CE6692100D666A8 /* ZKLFHeader.m */; };
+		92CF4A081CE6692100D666A8 /* ZKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49F41CE6692100D666A8 /* ZKLog.m */; };
+		92CF4A0A1CE6692900D666A8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CF4A091CE6692900D666A8 /* libz.tbd */; };
 		92D0A7DA1CE28EE900B3279B /* WatchlistRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92D0A7D91CE28EE900B3279B /* WatchlistRecipe.xml */; };
 		92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */; };
 		92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */; };
@@ -83,6 +105,16 @@
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		92CF49871CE668A100D666A8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -108,11 +140,16 @@
 		28EB626B1CA3364300985F78 /* String+Cleaned.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Cleaned.swift"; path = "Extensions/String+Cleaned.swift"; sourceTree = "<group>"; };
 		599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.release.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.release.xcconfig"; sourceTree = "<group>"; };
 		5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TopShelf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		920550891CE6F71E00B8623F /* SRTParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTParser.h; sourceTree = "<group>"; };
+		9205508A1CE6F71E00B8623F /* SRTParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTParser.m; sourceTree = "<group>"; };
+		9205508B1CE6F71E00B8623F /* SRTSubtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTSubtitle.h; sourceTree = "<group>"; };
+		9205508C1CE6F71E00B8623F /* SRTSubtitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTSubtitle.m; sourceTree = "<group>"; };
 		9211E3EC1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYVLCPlayerViewController.h; sourceTree = "<group>"; };
 		9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYVLCPlayerViewController.m; sourceTree = "<group>"; };
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
 		9211E3F11CDC0ADD00BEEB9D /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
 		921572381CE422C000A26088 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		921E44F31CE78F930012FEAD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = "View Controllers/SettingsViewController.swift"; sourceTree = "<group>"; };
 		922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+Equatable.swift"; path = "Extensions/NSDate+Equatable.swift"; sourceTree = "<group>"; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
 		925F8DD51CA9E44C007100EB /* CatalogRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatalogRecipe.swift; sourceTree = "<group>"; };
@@ -137,6 +174,42 @@
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		92925B301C9CA5BC0086D362 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProgressViewController.swift; path = "View Controllers/ProgressViewController.swift"; sourceTree = "<group>"; };
 		92925B331C9CAB360086D362 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = "View Controllers/PlayerViewController.swift"; sourceTree = "<group>"; };
+		92CF49331CE6591A00D666A8 /* SubtitleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleManager.swift; sourceTree = "<group>"; };
+		92CF49351CE666EC00D666A8 /* String+PathComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+PathComponents.swift"; path = "Extensions/String+PathComponents.swift"; sourceTree = "<group>"; };
+		92CF49D21CE6692100D666A8 /* NSData+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49D31CE6692100D666A8 /* NSData+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49D41CE6692100D666A8 /* NSDate+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49D51CE6692100D666A8 /* NSDate+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49D61CE6692100D666A8 /* NSDictionary+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49D71CE6692100D666A8 /* NSDictionary+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49D81CE6692100D666A8 /* NSFileHandle+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49D91CE6692100D666A8 /* NSFileHandle+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49DA1CE6692100D666A8 /* NSFileManager+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49DB1CE6692100D666A8 /* NSFileManager+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49DC1CE6692100D666A8 /* NSString+ZKAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+ZKAdditions.h"; sourceTree = "<group>"; };
+		92CF49DD1CE6692100D666A8 /* NSString+ZKAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+ZKAdditions.m"; sourceTree = "<group>"; };
+		92CF49E01CE6692100D666A8 /* ZipKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipKit.h; sourceTree = "<group>"; };
+		92CF49E11CE6692100D666A8 /* ZKArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKArchive.h; sourceTree = "<group>"; };
+		92CF49E21CE6692100D666A8 /* ZKArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKArchive.m; sourceTree = "<group>"; };
+		92CF49E31CE6692100D666A8 /* ZKCDHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKCDHeader.h; sourceTree = "<group>"; };
+		92CF49E41CE6692100D666A8 /* ZKCDHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKCDHeader.m; sourceTree = "<group>"; };
+		92CF49E51CE6692100D666A8 /* ZKCDTrailer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKCDTrailer.h; sourceTree = "<group>"; };
+		92CF49E61CE6692100D666A8 /* ZKCDTrailer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKCDTrailer.m; sourceTree = "<group>"; };
+		92CF49E71CE6692100D666A8 /* ZKCDTrailer64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKCDTrailer64.h; sourceTree = "<group>"; };
+		92CF49E81CE6692100D666A8 /* ZKCDTrailer64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKCDTrailer64.m; sourceTree = "<group>"; };
+		92CF49E91CE6692100D666A8 /* ZKCDTrailer64Locator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKCDTrailer64Locator.h; sourceTree = "<group>"; };
+		92CF49EA1CE6692100D666A8 /* ZKCDTrailer64Locator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKCDTrailer64Locator.m; sourceTree = "<group>"; };
+		92CF49EB1CE6692100D666A8 /* ZKDataArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKDataArchive.h; sourceTree = "<group>"; };
+		92CF49EC1CE6692100D666A8 /* ZKDataArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKDataArchive.m; sourceTree = "<group>"; };
+		92CF49ED1CE6692100D666A8 /* ZKDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKDefs.h; sourceTree = "<group>"; };
+		92CF49EE1CE6692100D666A8 /* ZKDefs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKDefs.m; sourceTree = "<group>"; };
+		92CF49EF1CE6692100D666A8 /* ZKFileArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKFileArchive.h; sourceTree = "<group>"; };
+		92CF49F01CE6692100D666A8 /* ZKFileArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKFileArchive.m; sourceTree = "<group>"; };
+		92CF49F11CE6692100D666A8 /* ZKLFHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKLFHeader.h; sourceTree = "<group>"; };
+		92CF49F21CE6692100D666A8 /* ZKLFHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKLFHeader.m; sourceTree = "<group>"; };
+		92CF49F31CE6692100D666A8 /* ZKLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZKLog.h; sourceTree = "<group>"; };
+		92CF49F41CE6692100D666A8 /* ZKLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZKLog.m; sourceTree = "<group>"; };
+		92CF4A091CE6692900D666A8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		92D0A7D91CE28EE900B3279B /* WatchlistRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WatchlistRecipe.xml; sourceTree = "<group>"; };
 		92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistRecipe.swift; sourceTree = "<group>"; };
 		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
@@ -164,6 +237,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92CF4A0A1CE6692900D666A8 /* libz.tbd in Frameworks */,
 				4D6953C8BDE957ED2E9EFD94 /* Pods_PopcornTime.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -242,6 +316,8 @@
 				280910301C99DFA200C8EC1C /* Tabs */,
 				925F8DD41CA9E44C007100EB /* Recipes */,
 				925F8DF31CA9E464007100EB /* Managers */,
+				920550871CE6F71E00B8623F /* Objective-C */,
+				92CF49371CE6689200D666A8 /* External Classes */,
 				287B85491C988AD600EEF5C8 /* Supporting FIles */,
 			);
 			path = PopcornTime;
@@ -266,6 +342,7 @@
 				00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */,
 				00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */,
 				922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */,
+				92CF49351CE666EC00D666A8 /* String+PathComponents.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -279,6 +356,25 @@
 				599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		920550871CE6F71E00B8623F /* Objective-C */ = {
+			isa = PBXGroup;
+			children = (
+				920550881CE6F71E00B8623F /* SRTParser */,
+			);
+			path = "Objective-C";
+			sourceTree = "<group>";
+		};
+		920550881CE6F71E00B8623F /* SRTParser */ = {
+			isa = PBXGroup;
+			children = (
+				920550891CE6F71E00B8623F /* SRTParser.h */,
+				9205508A1CE6F71E00B8623F /* SRTParser.m */,
+				9205508B1CE6F71E00B8623F /* SRTSubtitle.h */,
+				9205508C1CE6F71E00B8623F /* SRTSubtitle.m */,
+			);
+			path = SRTParser;
 			sourceTree = "<group>";
 		};
 		9211E3EB1CDC0A8C00BEEB9D /* VLC */ = {
@@ -376,6 +472,7 @@
 			children = (
 				925F8DF41CA9E464007100EB /* WatchlistManager.swift */,
 				921572381CE422C000A26088 /* AudioManager.swift */,
+				92CF49331CE6591A00D666A8 /* SubtitleManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -385,13 +482,64 @@
 			children = (
 				92925B301C9CA5BC0086D362 /* ProgressViewController.swift */,
 				92925B331C9CAB360086D362 /* PlayerViewController.swift */,
+				921E44F31CE78F930012FEAD /* SettingsViewController.swift */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		92CF49371CE6689200D666A8 /* External Classes */ = {
+			isa = PBXGroup;
+			children = (
+				92CF49CB1CE6692100D666A8 /* ZipKit */,
+			);
+			path = "External Classes";
+			sourceTree = "<group>";
+		};
+		92CF49CB1CE6692100D666A8 /* ZipKit */ = {
+			isa = PBXGroup;
+			children = (
+				92CF49D21CE6692100D666A8 /* NSData+ZKAdditions.h */,
+				92CF49D31CE6692100D666A8 /* NSData+ZKAdditions.m */,
+				92CF49D41CE6692100D666A8 /* NSDate+ZKAdditions.h */,
+				92CF49D51CE6692100D666A8 /* NSDate+ZKAdditions.m */,
+				92CF49D61CE6692100D666A8 /* NSDictionary+ZKAdditions.h */,
+				92CF49D71CE6692100D666A8 /* NSDictionary+ZKAdditions.m */,
+				92CF49D81CE6692100D666A8 /* NSFileHandle+ZKAdditions.h */,
+				92CF49D91CE6692100D666A8 /* NSFileHandle+ZKAdditions.m */,
+				92CF49DA1CE6692100D666A8 /* NSFileManager+ZKAdditions.h */,
+				92CF49DB1CE6692100D666A8 /* NSFileManager+ZKAdditions.m */,
+				92CF49DC1CE6692100D666A8 /* NSString+ZKAdditions.h */,
+				92CF49DD1CE6692100D666A8 /* NSString+ZKAdditions.m */,
+				92CF49E01CE6692100D666A8 /* ZipKit.h */,
+				92CF49E11CE6692100D666A8 /* ZKArchive.h */,
+				92CF49E21CE6692100D666A8 /* ZKArchive.m */,
+				92CF49E31CE6692100D666A8 /* ZKCDHeader.h */,
+				92CF49E41CE6692100D666A8 /* ZKCDHeader.m */,
+				92CF49E51CE6692100D666A8 /* ZKCDTrailer.h */,
+				92CF49E61CE6692100D666A8 /* ZKCDTrailer.m */,
+				92CF49E71CE6692100D666A8 /* ZKCDTrailer64.h */,
+				92CF49E81CE6692100D666A8 /* ZKCDTrailer64.m */,
+				92CF49E91CE6692100D666A8 /* ZKCDTrailer64Locator.h */,
+				92CF49EA1CE6692100D666A8 /* ZKCDTrailer64Locator.m */,
+				92CF49EB1CE6692100D666A8 /* ZKDataArchive.h */,
+				92CF49EC1CE6692100D666A8 /* ZKDataArchive.m */,
+				92CF49ED1CE6692100D666A8 /* ZKDefs.h */,
+				92CF49EE1CE6692100D666A8 /* ZKDefs.m */,
+				92CF49EF1CE6692100D666A8 /* ZKFileArchive.h */,
+				92CF49F01CE6692100D666A8 /* ZKFileArchive.m */,
+				92CF49F11CE6692100D666A8 /* ZKLFHeader.h */,
+				92CF49F21CE6692100D666A8 /* ZKLFHeader.m */,
+				92CF49F31CE6692100D666A8 /* ZKLog.h */,
+				92CF49F41CE6692100D666A8 /* ZKLog.m */,
+			);
+			name = ZipKit;
+			path = ZipKit/ZipKit;
 			sourceTree = "<group>";
 		};
 		F1EDDAB5F2E1772C41C22B7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				92CF4A091CE6692900D666A8 /* libz.tbd */,
 				C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */,
 				002682111CD0B76200F51D31 /* TVServices.framework */,
 				5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */,
@@ -437,6 +585,7 @@
 				5F0A8FD16E3C29A44C805B14 /* Embed Pods Frameworks */,
 				38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */,
 				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
+				92CF49871CE668A100D666A8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -685,30 +834,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92CF4A031CE6692100D666A8 /* ZKCDTrailer64Locator.m in Sources */,
+				92CF49FD1CE6692100D666A8 /* NSString+ZKAdditions.m in Sources */,
 				280910321C99DFDA00C8EC1C /* Popular.swift in Sources */,
+				92CF49FC1CE6692100D666A8 /* NSFileManager+ZKAdditions.m in Sources */,
 				287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */,
+				92CF49F81CE6692100D666A8 /* NSData+ZKAdditions.m in Sources */,
 				00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */,
 				E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */,
 				925F8DEC1CA9E44C007100EB /* MovieWatchlistRecipe.swift in Sources */,
+				9205508E1CE6F71E00B8623F /* SRTSubtitle.m in Sources */,
+				92CF49FA1CE6692100D666A8 /* NSDictionary+ZKAdditions.m in Sources */,
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
 				925F8DF01CA9E44C007100EB /* ShowWatchlistRecipe.swift in Sources */,
+				92CF49F91CE6692100D666A8 /* NSDate+ZKAdditions.m in Sources */,
 				92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */,
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
+				92CF4A071CE6692100D666A8 /* ZKLFHeader.m in Sources */,
 				00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */,
 				92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */,
+				92CF49361CE666EC00D666A8 /* String+PathComponents.swift in Sources */,
+				92CF4A041CE6692100D666A8 /* ZKDataArchive.m in Sources */,
+				92CF4A011CE6692100D666A8 /* ZKCDTrailer.m in Sources */,
+				92CF4A051CE6692100D666A8 /* ZKDefs.m in Sources */,
+				9205508D1CE6F71E00B8623F /* SRTParser.m in Sources */,
 				280910341C99E0E000C8EC1C /* Search.swift in Sources */,
+				92CF49FB1CE6692100D666A8 /* NSFileHandle+ZKAdditions.m in Sources */,
 				925F8DF51CA9E464007100EB /* WatchlistManager.swift in Sources */,
 				E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */,
 				926A48771CDFAB7000D02962 /* SQSubSetting.m in Sources */,
+				921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
 				921572391CE422C000A26088 /* AudioManager.swift in Sources */,
 				92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */,
+				92CF4A001CE6692100D666A8 /* ZKCDHeader.m in Sources */,
+				92CF4A061CE6692100D666A8 /* ZKFileArchive.m in Sources */,
 				925F8DF11CA9E44C007100EB /* WelcomeRecipe.swift in Sources */,
+				92CF4A021CE6692100D666A8 /* ZKCDTrailer64.m in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
+				92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
+				92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */,
 				92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */,
+				92CF4A081CE6692100D666A8 /* ZKLog.m in Sources */,
 				9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */,
 				922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */,
 				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
@@ -859,6 +1029,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -881,6 +1052,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

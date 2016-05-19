@@ -165,7 +165,23 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                     WatchlistManager.sharedManager().itemExistsInWatchList(itemId: String(show.id), forType: .Show, completion: { exists in
                                         let recipe = SeasonProductRecipe(show: show, showInfo: ShowInfo(xml: response), episodes: episodes,
                                             detailedEpisodes: detailedEpisodes, seasonInfo: seasonInfo, existsInWatchlist: exists)
-                                        Kitchen.serve(recipe: recipe)
+                                        
+                                        Kitchen.appController.evaluateInJavaScriptContext({jsContext in
+                                            let disableThemeSong: @convention(block) String -> Void = { message in
+                                                AudioManager.sharedManager().stopTheme()
+                                            }
+                                            jsContext.setObject(unsafeBitCast(disableThemeSong, AnyObject.self),
+                                                forKeyedSubscript: "disableThemeSong")
+                                            if let file = NSBundle.mainBundle().URLForResource("SeasonProductRecipe", withExtension: "js") {
+                                                do {
+                                                    var js = try String(contentsOfURL: file)
+                                                    js = js.stringByReplacingOccurrencesOfString("{{RECIPE}}", withString: recipe.xmlString)
+                                                    jsContext.evaluateScript(js)
+                                                } catch {
+                                                    print("Could not open SeasonProductRecipe.js")
+                                                }
+                                            }
+                                        }, completion: nil)
                                         presentedDetails = true
                                     })
                                 }

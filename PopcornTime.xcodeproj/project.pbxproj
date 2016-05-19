@@ -11,6 +11,7 @@
 		002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002682141CD0B76200F51D31 /* ServiceProvider.swift */; };
 		002682191CD0B76200F51D31 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 002682101CD0B76200F51D31 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
+		002A55A41CEDF2FA00252C3F /* SeasonProductRecipe.js in Resources */ = {isa = PBXBuildFile; fileRef = 002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */; };
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
 		00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */ = {isa = PBXBuildFile; fileRef = 00C28EA51CE1DB2E00E4D8BF /* Genre.js */; };
@@ -89,6 +90,7 @@
 		002682111CD0B76200F51D31 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
 		002682141CD0B76200F51D31 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SeasonProductRecipe.js; sourceTree = "<group>"; };
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
 		00C28EA51CE1DB2E00E4D8BF /* Genre.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Genre.js; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */,
+				002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */,
 				E6B5F7901CB08FDE000F0644 /* SeasonProductRecipe.xml */,
 				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
 				925F8DDE1CA9E44C007100EB /* MovieProductRecipe.xml */,
@@ -507,6 +510,7 @@
 				926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */,
 				925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */,
 				925F8DEB1CA9E44C007100EB /* SearchRecipe.xml in Resources */,
+				002A55A41CEDF2FA00252C3F /* SeasonProductRecipe.js in Resources */,
 				925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */,
 				925F8DED1CA9E44C007100EB /* MovieProductRecipe.xml in Resources */,
 			);

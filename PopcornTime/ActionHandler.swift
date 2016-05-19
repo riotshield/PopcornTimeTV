@@ -49,10 +49,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     Kitchen.serve(recipe: WatchlistRecipe(title: "Watchlist", watchListMovies: watchListMovies, watchListShows: watchListShows))
                 }
             }
-
+            
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
-
+            
         case "showSettings": showSettings(pieces)
 
         case "showSeason": showSeason(pieces)
@@ -65,7 +65,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
         case "streamTorrent": streamTorrent(pieces)
-
+            
+        case "showActor": showCredits(pieces, isActor: true)
+        case "showDirector": showCredits(pieces, isActor: false)
+            
         default: break
         }
 
@@ -77,14 +80,14 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
      - parameter id: The actionID of the element pressed
      */
     static func play(id: String) {
-
+        
     }
 
     // MARK: Actions
-
+    
     static func showSettings(pieces: [String]) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController {
+        if let viewController = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController {            
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
@@ -108,6 +111,32 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             }
         }
+    }
+    
+    static func showCredits(pieces: [String], isActor: Bool = true) {
+        Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Show LoadingView
+        
+        NetworkManager.sharedManager().getCreditsForPerson(actorName: String(UTF8String: pieces.last!)!, isActor: isActor) { movies, shows, error in
+            
+            if error != nil {
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                return
+            }
+            
+            if(movies == nil && shows == nil) {
+                // To Do: Go back to the movie overview instead of main home view
+                Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                let recipe = AlertRecipe(title: "Sorry, "+String(UTF8String: pieces.last!)!+" has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+                
+                Kitchen.serve(recipe: recipe)
+            }else{
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                var recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
+                recipe.presentationType = .Default
+                Kitchen.serve(recipe: recipe)
+            }
+        }
+        
     }
 
     static func showShow(pieces: [String]) {
@@ -141,9 +170,9 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                     if let xml = response {
                         let seriesInfo = xml["Data"]["Series"]
-
+                        
                         let slug = seriesInfo["SeriesName"].element!.text!.slugged
-
+                        
                         manager.fetchTraktSeasonEpisodesInfoForIMDB(slug, season: seasonInfo.current) { response, error in
                             if let response = response {
                                 var episodes = [Episode]()
@@ -153,7 +182,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                     }
                                 }
                                 episodes.sortInPlace({ $0.episode < $1.episode })
-
+                                
                                 var detailedEpisodes = [DetailedEpisode]()
                                 for (_, item) in response.enumerate() {
                                     var episode = DetailedEpisode()
@@ -174,7 +203,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                         }
                                     }
                                 }
-
+                                
                                 if !presentedDetails {
                                     WatchlistManager.sharedManager().itemExistsInWatchList(itemId: String(show.id), forType: .Show, completion: { exists in
                                         let recipe = SeasonProductRecipe(show: show, showInfo: ShowInfo(xml: xml), episodes: episodes,
@@ -209,6 +238,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     static func showSeasons(pieces: [String]) {
         let showId = pieces[1]
+        let imdbSlug = pieces[2]
 
         let manager = NetworkManager.sharedManager()
         manager.fetchShowDetails(showId) { show, error in
@@ -223,41 +253,35 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 let seasonsArray = Array(existingSeasons).sort()
 
                 var seasons = [Season]()
-
-                manager.searchTVDBSeries(show.tvdbId) { response, error in
-                    if let xml = response {
-                        let seriesInfo = xml["Data"]["Series"]
-
-                        let slug = seriesInfo["SeriesName"].element!.text!.slugged
-                        manager.fetchTraktSeasonInfoForIMDB(slug) { response, error in
-                            if let response = response {
-                                for seasonNumber in seasonsArray {
-                                    var season = Season()
-                                    season.seasonNumber = seasonNumber
-                                    for (_, item) in response.enumerate() {
-                                        if item["number"] as? Int == seasonNumber {
-                                            let seasonInfo = item
-                                            if let images = seasonInfo["images"] as? [String : AnyObject] {
-                                                if let posters = images["poster"] as? [String : String] {
-                                                    season.seasonLargeCoverImage = posters["full"]
-                                                    season.seasonMediumCoverImage = posters["medium"]
-                                                    season.seasonSmallCoverImage = posters["thumb"]
-                                                }
-                                            }
-                                            seasons.append(season)
-                                            break
+                manager.fetchTraktSeasonInfoForIMDB(imdbSlug) { response, error in
+                    if let response = response {
+                        for seasonNumber in seasonsArray {
+                            var season = Season()
+                            season.seasonNumber = seasonNumber
+                            for (_, item) in response.enumerate() {
+                                if item["number"] as? Int == seasonNumber {
+                                    let seasonInfo = item
+                                    if let images = seasonInfo["images"] as? [String : AnyObject] {
+                                        if let posters = images["poster"] as? [String : String] {
+                                            season.seasonLargeCoverImage = posters["full"]
+                                            season.seasonMediumCoverImage = posters["medium"]
+                                            season.seasonSmallCoverImage = posters["thumb"]
                                         }
                                     }
+                                    seasons.append(season)
+                                    break
                                 }
-
-                                let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
-                                Kitchen.serve(recipe: recipe)
                             }
                         }
+
+                        let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
+                        Kitchen.serve(recipe: recipe)
                     }
                 }
             }
         }
+
+
     }
 
     static func playMovie(pieces: [String]) {
@@ -284,7 +308,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
             torrents.append(torrentDict)
         }
-
+        
         torrents.sortInPlace({ $0["quality"] > $1["quality"] })
 
         var buttons = [AlertButton]()
@@ -350,7 +374,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         if pieces.indices.contains(8) {
             slugged = pieces[8]
         }
-
+        
         WatchlistManager.sharedManager().itemExistsInWatchList(itemId: id, forType: ItemType(rawValue: type)!, completion: { exists in
             if exists {
                 WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, fanartImage: fanart, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { removed in

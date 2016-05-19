@@ -54,10 +54,11 @@
     <!-- Cast -->
     <shelf>
         <header>
-            <title>Cast and Crew</title>
+            <title>Cast</title>
         </header>
         <section>
             {{CAST}}
         </section>
     </shelf>
+    <shelf></shelf>
 </productBundleTemplate>

@@ -87,7 +87,7 @@ public struct WelcomeRecipe: RecipeType {
     public var randomTVShowFanart: String {
         return shows[Int(arc4random_uniform(UInt32(shows.count)))].fanartImage
     }
-
+    
     public var randomWatchlistArt: String {
         if watchListShows.count > 0 {
             if let image = watchListShows[Int(arc4random_uniform(UInt32(watchListShows.count)))].fanartImage {
@@ -96,7 +96,7 @@ public struct WelcomeRecipe: RecipeType {
                 return watchListShows[Int(arc4random_uniform(UInt32(watchListShows.count)))].coverImage
             }
         }
-
+        
         if watchListMovies.count > 0 {
             if let image = watchListMovies[Int(arc4random_uniform(UInt32(watchListMovies.count)))].fanartImage {
                 return image
@@ -104,9 +104,9 @@ public struct WelcomeRecipe: RecipeType {
                 return watchListMovies[Int(arc4random_uniform(UInt32(watchListMovies.count)))].coverImage
             }
         }
-
+        
         return "http://i.cubeupload.com/dgwEXZ.png"
-
+        
     }
 
     func buildShelf(title: String, content: String) -> String {

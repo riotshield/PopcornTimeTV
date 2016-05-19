@@ -49,10 +49,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     Kitchen.serve(recipe: WatchlistRecipe(title: "Watchlist", watchListMovies: watchListMovies, watchListShows: watchListShows))
                 }
             }
-            
+
         case "showMovie": showMovie(pieces)
         case "showShow": showShow(pieces)
-            
+
         case "showSettings": showSettings(pieces)
 
         case "showSeason": showSeason(pieces)
@@ -81,10 +81,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
 
     // MARK: Actions
-    
+
     static func showSettings(pieces: [String]) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController {            
+        if let viewController = storyboard.instantiateViewControllerWithIdentifier("SettingsViewController") as? SettingsViewController {
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
@@ -141,9 +141,9 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 manager.searchTVDBSeries(Int(tvdbId)!) { response, error in
                     if let xml = response {
                         let seriesInfo = xml["Data"]["Series"]
-                        
+
                         let slug = seriesInfo["SeriesName"].element!.text!.slugged
-                        
+
                         manager.fetchTraktSeasonEpisodesInfoForIMDB(slug, season: seasonInfo.current) { response, error in
                             if let response = response {
                                 var episodes = [Episode]()
@@ -153,7 +153,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                     }
                                 }
                                 episodes.sortInPlace({ $0.episode < $1.episode })
-                                
+
                                 var detailedEpisodes = [DetailedEpisode]()
                                 for (_, item) in response.enumerate() {
                                     var episode = DetailedEpisode()
@@ -174,12 +174,12 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                         }
                                     }
                                 }
-                                
+
                                 if !presentedDetails {
                                     WatchlistManager.sharedManager().itemExistsInWatchList(itemId: String(show.id), forType: .Show, completion: { exists in
                                         let recipe = SeasonProductRecipe(show: show, showInfo: ShowInfo(xml: xml), episodes: episodes,
                                             detailedEpisodes: detailedEpisodes, seasonInfo: seasonInfo, existsInWatchlist: exists)
-                                        
+
                                         Kitchen.appController.evaluateInJavaScriptContext({jsContext in
                                             let disableThemeSong: @convention(block) String -> Void = { message in
                                                 AudioManager.sharedManager().stopTheme()
@@ -223,11 +223,11 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 let seasonsArray = Array(existingSeasons).sort()
 
                 var seasons = [Season]()
-                
+
                 manager.searchTVDBSeries(show.tvdbId) { response, error in
                     if let xml = response {
                         let seriesInfo = xml["Data"]["Series"]
-                        
+
                         let slug = seriesInfo["SeriesName"].element!.text!.slugged
                         manager.fetchTraktSeasonInfoForIMDB(slug) { response, error in
                             if let response = response {
@@ -249,7 +249,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                                         }
                                     }
                                 }
-                                
+
                                 let recipe = SeasonPickerRecipe(show: show, seasons: seasons)
                                 Kitchen.serve(recipe: recipe)
                             }
@@ -284,7 +284,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
             torrents.append(torrentDict)
         }
-        
+
         torrents.sortInPlace({ $0["quality"] > $1["quality"] })
 
         var buttons = [AlertButton]()
@@ -350,7 +350,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         if pieces.indices.contains(8) {
             slugged = pieces[8]
         }
-        
+
         WatchlistManager.sharedManager().itemExistsInWatchList(itemId: id, forType: ItemType(rawValue: type)!, completion: { exists in
             if exists {
                 WatchlistManager.sharedManager().removeItemFromWatchList(WatchItem(name: name, id: id, coverImage: cover, fanartImage: fanart, type: type, imdbId: imdb, tvdbId: tvdb, slugged: slugged), completion: { removed in

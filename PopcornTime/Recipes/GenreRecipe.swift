@@ -106,9 +106,9 @@ public struct GenreRecipe: RecipeType {
                     }
                 }
             }
-            
+
         }
-        
+
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         callback(data)
     }

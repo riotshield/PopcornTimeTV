@@ -27,7 +27,7 @@ class ProgressViewController: UIViewController {
     var backgroundImageAddress: String!
     var movieName: String!
     var shortDescription: String!
-    
+
     var cachedSubtitles: [AnyObject]!
 
     var downloading = false
@@ -41,12 +41,12 @@ class ProgressViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         print(imdbId)
         SubtitleManager.sharedManager().fetchSubtitlesForIMDB(imdbId) { subs in
             self.cachedSubtitles = subs
         }
-        
+
         if let _ = magnet, let _ = movieName, let _ = imageAddress, let _ = backgroundImageAddress {
             statsLabel.text = ""
             percentLabel.text = "0%"
@@ -57,7 +57,7 @@ class ProgressViewController: UIViewController {
             if downloading {
                 return
             }
-            
+
             PTTorrentStreamer.sharedStreamer().startStreamingFromFileOrMagnetLink(magnet, progress: { status in
                 self.downloading = true
 
@@ -91,7 +91,7 @@ class ProgressViewController: UIViewController {
 
     func playVLCVideo(url: NSURL, imdbID: String) {
         AudioManager.sharedManager().stopTheme()
-        
+
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
         let playerViewController = SYVLCPlayerViewController(URL: url, imdbID: imdbID, subtitles: cachedSubtitles)
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)

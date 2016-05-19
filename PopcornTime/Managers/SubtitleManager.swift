@@ -10,47 +10,47 @@ import Foundation
 import Alamofire
 
 @objc class SubtitleManager: NSObject, ZipKitDelegate {
-    
+
     typealias CompletionBlock = ((name: String?, path: String?) -> Void)?
-    
+
     var completion: CompletionBlock
-    
+
     class func sharedManager() -> SubtitleManager {
         struct Struct {
             static let Instance = SubtitleManager()
         }
-        
+
         return Struct.Instance
     }
-    
+
     override init() {
         super.init()
-        
+
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
             let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles")
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
             } catch {
-                
+
             }
         }
     }
-    
+
     @objc func fetchSubtitlesForIMDB(imdbID: String, completion: (([AnyObject]?) -> Void)?) {
         // Check if a sub exists
         if self.subtitlesExist(imdbID) {
-            
+
         }
-        
+
         // Clean up everything
         self.cleanSubs()
-        
-        
+
+
         let endpoint = "http://api.yifysubtitles.com/subs/\(imdbID)"
-        
+
         let group = dispatch_group_create()
-        
+
         Alamofire.request(.GET, endpoint)
         .responseJSON { response in
             var subtitleArray = [AnyObject]()
@@ -73,8 +73,8 @@ import Alamofire
                                 }
                             }
                         }
-                        
-                        dispatch_group_notify(group, dispatch_get_main_queue(), { 
+
+                        dispatch_group_notify(group, dispatch_get_main_queue(), {
                             completion?(subtitleArray)
                         })
                     }
@@ -84,10 +84,10 @@ import Alamofire
             }
         }
     }
-    
+
     func downloadSubtitle(imdbId: String, name: String, url: String, completion: CompletionBlock) {
         self.completion = completion
-        
+
         Alamofire.request(.GET, url)
         .responseData { response in
             if let data = response.data {
@@ -103,7 +103,7 @@ import Alamofire
             }
         }
     }
-    
+
     func saveAndExpandSub(imdbId: String, name: String, path: String, data: NSData) {
         let fileManager = NSFileManager.defaultManager()
         do {
@@ -129,7 +129,7 @@ import Alamofire
             self.completion?(name: nil, path: nil)
         }
     }
-    
+
     func cleanSubs() {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
@@ -140,16 +140,16 @@ import Alamofire
                     try NSFileManager.defaultManager().removeItemAtPath(path.stringByAppendingPathComponent(item))
                 }
             } catch {
-                
+
             }
         }
     }
-    
+
     func subtitlesExist(imdbId: String) -> Bool {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
             let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(imdbId)
-            
+
             var isDir: ObjCBool = false
             NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir)
             if isDir {
@@ -160,5 +160,5 @@ import Alamofire
         }
         return false
     }
-    
+
 }

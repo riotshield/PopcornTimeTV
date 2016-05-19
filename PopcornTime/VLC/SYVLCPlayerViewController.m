@@ -1569,6 +1569,17 @@ static NSString *const kText = @"kText";
     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
     */
+    
+    // <b></b>
+    // <i></i>
+    // <u></u>
+    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 

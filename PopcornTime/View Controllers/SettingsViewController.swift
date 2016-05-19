@@ -38,6 +38,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if section == 1 {
             return 1
         }
+        if section == 2 {
+            return 2
+        }
         return 0
     }
 
@@ -45,6 +48,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         switch section {
         case 0: return "TV Shows"
         case 1: return "Other"
+        case 2: return "Player"
 
         default: return nil
         }
@@ -73,6 +77,41 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Clear All Cache"
                 cell.detailTextLabel?.text = ""
+                cell.accessoryType = .None
+            }
+
+        case 2:
+            let settings = SQSubSetting.loadFromDisk()
+            if indexPath.row == 0 {
+                cell.textLabel?.text = "Font Size"
+                if settings.sizeFloat == 20.0 {
+                    cell.detailTextLabel?.text = "Small"
+                } else if settings.sizeFloat == 25.0 {
+                    cell.detailTextLabel?.text = "Medium"
+                } else if settings.sizeFloat == 30.0 {
+                        cell.detailTextLabel?.text = "Medium Large"
+                } else if settings.sizeFloat == 45.0 {
+                    cell.detailTextLabel?.text = "Large"
+                }
+                cell.accessoryType = .None
+            }
+            /*
+             if indexPath.row == 1 {
+                 cell.textLabel?.text = "Font Name"
+                 cell.detailTextLabel?.text = settings.fontName
+                 cell.accessoryType = .None
+             }
+             */
+            if indexPath.row == 1 {
+                cell.textLabel?.text = "Subtitle Background"
+                if let backgroundType = settings.backgroundType {
+                    switch backgroundType {
+                    case .Blur: cell.detailTextLabel?.text = "Blur"
+                    case .Black: cell.detailTextLabel?.text = "Black"
+                    case .White: cell.detailTextLabel?.text = "White"
+                    case .None: cell.detailTextLabel?.text = "None"
+                    }
+                }
                 cell.accessoryType = .None
             }
 
@@ -130,6 +169,62 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }))
 
                 self.presentViewController(alertController, animated: true, completion: nil)
+            }
+
+        case 2:
+            if let settings = SQSubSetting.loadFromDisk() as? SQSubSetting {
+                if indexPath.row == 0 {
+                    let alertController = UIAlertController(title: "Subtitle Font Size", message: "Choose a font size for subtitles.", preferredStyle: .Alert)
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+                    alertController.addAction(UIAlertAction(title: "Small (20pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 20.0
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "Medium (25pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 25.0
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "Medium Large (30pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 30.0
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "Large (45pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 45.0
+                        settings.writeToDisk()
+                    }))
+
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
+
+                if indexPath.row == 1 {
+                    let alertController = UIAlertController(title: "Subtitle Background", message: "Choose a background for the subtitles.", preferredStyle: .Alert)
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
+                    alertController.addAction(UIAlertAction(title: "Blur", style: .Default, handler: { action in
+                        settings.backgroundType = .Blur
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "Black", style: .Default, handler: { action in
+                        settings.backgroundType = .Black
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "White", style: .Default, handler: { action in
+                        settings.backgroundType = .White
+                        settings.writeToDisk()
+                    }))
+
+                    alertController.addAction(UIAlertAction(title: "None", style: .Default, handler: { action in
+                        settings.backgroundType = .None
+                        settings.writeToDisk()
+
+                    }))
+
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                }
             }
 
         default: break

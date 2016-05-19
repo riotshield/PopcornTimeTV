@@ -65,7 +65,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "showDescription": Kitchen.serve(recipe: DescriptionRecipe(title: pieces[1], description: pieces.last!))
 
         case "streamTorrent": streamTorrent(pieces)
-
+            
+        case "showActor": showCredits(pieces, isActor: true)
+        case "showDirector": showCredits(pieces, isActor: false)
+            
         default: break
         }
 
@@ -77,7 +80,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
      - parameter id: The actionID of the element pressed
      */
     static func play(id: String) {
-
+        
     }
 
     // MARK: Actions
@@ -108,6 +111,32 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             }
         }
+    }
+    
+    static func showCredits(pieces: [String], isActor: Bool = true) {
+        Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Show LoadingView
+        
+        NetworkManager.sharedManager().getCreditsForPerson(actorName: String(UTF8String: pieces.last!)!, isActor: isActor) { movies, shows, error in
+            
+            if error != nil {
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                return
+            }
+            
+            if(movies == nil && shows == nil) {
+                // To Do: Go back to the movie overview instead of main home view
+                Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                let recipe = AlertRecipe(title: "Sorry, "+String(UTF8String: pieces.last!)!+" has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+                
+                Kitchen.serve(recipe: recipe)
+            }else{
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                var recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
+                recipe.presentationType = .Default
+                Kitchen.serve(recipe: recipe)
+            }
+        }
+        
     }
 
     static func showShow(pieces: [String]) {

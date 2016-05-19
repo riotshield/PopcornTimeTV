@@ -35,6 +35,7 @@ public struct ShowInfo {
     public var contentRating: String!
 
     public var cast: [String]!
+    
     public var genres: [String]!
 
     public var network: String!
@@ -120,17 +121,20 @@ public struct SeasonProductRecipe: RecipeType {
         let (_, minutes, _) = self.secondsToHoursMinutesSeconds(showInfo.runtime * 60)
         return "\(minutes)m"
     }
-
+    
     var castString: String {
+        
         let mapped: [String] = showInfo.cast.map {
+            
             let name = $0.componentsSeparatedByString(" ")
-            var string = "<monogramLockup>" + "\n"
-            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\"/>"
+            var string = "<monogramLockup actionID=\"showActor»\($0)\">" + "\n"
+            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\" src=\"\"/>"
             string += "<title>\($0.cleaned)</title>" + "\n"
             string += "<subtitle>Actor</subtitle>" + "\n"
             string += "</monogramLockup>" + "\n"
             return string
         }
+        
         return mapped.joinWithSeparator("\n")
     }
 

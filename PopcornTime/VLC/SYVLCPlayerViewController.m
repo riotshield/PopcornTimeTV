@@ -1313,35 +1313,52 @@ static NSString *const kText = @"kText";
 
 - (NSString *)readSubtitleAtPath:(NSString *)path
 {
-    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
-    // If UTF-8 Encoding fails, try ISO Latin1
+    NSError *error = nil;
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+    // If UTF-8 Encoding fails, try ISO Latin1 & 2
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+    }
+    
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
+    }
+    
+    if (!string) {
+        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
+        string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
     }
     
     // If that fails try one other format, GBK_95
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
     }
     
     // Give Big5 a try
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
     }
     
     // Hong Kong varient
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
     }
     
     // Taiwan varient
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
     }
     
     if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:NULL];
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
     }
+    
+    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
     
     return string;
 }

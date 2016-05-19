@@ -1286,18 +1286,7 @@ static NSString *const kText = @"kText";
         
         NSString *file = lastSelected[@"path"];
         
-        NSString *string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:NULL];
-        // If UTF-8 Encoding fails, try ISO Latin1
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:file encoding:NSISOLatin1StringEncoding error:NULL];
-        }
-        // If that fails try one other format, GBK_95
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:file encoding:kCFStringEncodingGBK_95 error:NULL];
-        }
-        // If it's still nil, well we tried everything we could. No subtitles for you!
-        
-        
+        NSString *string = [self readSubtitleAtPath:file];
         NSError *error;
         SRTParser *parser = [[SRTParser alloc] init];
         _currentSelectedSub = [parser parseString:string error:&error];
@@ -1320,6 +1309,41 @@ static NSString *const kText = @"kText";
         */
     }
     
+}
+
+- (NSString *)readSubtitleAtPath:(NSString *)path
+{
+    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
+    // If UTF-8 Encoding fails, try ISO Latin1
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:NULL];
+    }
+    
+    // If that fails try one other format, GBK_95
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:NULL];
+    }
+    
+    // Give Big5 a try
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:NULL];
+    }
+    
+    // Hong Kong varient
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:NULL];
+    }
+    
+    // Taiwan varient
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:NULL];
+    }
+    
+    if (!string) {
+        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:NULL];
+    }
+    
+    return string;
 }
 
 - (void) newAudioSelected

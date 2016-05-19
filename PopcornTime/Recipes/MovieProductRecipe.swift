@@ -71,8 +71,8 @@ public struct MovieProductRecipe: RecipeType {
     var castString: String {
         let actors: [String] = movie.actors.map {
             var headshot = ""
-            if($0.mediumImage != "http://62.210.81.37/assets/images/actors/default_avatar.jpg") {
-                headshot = " src=\""+$0.mediumImage+"\""
+            if $0.mediumImage != "http://62.210.81.37/assets/images/actors/default_avatar.jpg" {
+                headshot = " src=\"\($0.mediumImage)\""
             }
             let name = $0.name.componentsSeparatedByString(" ")
             var string = "<monogramLockup actionID=\"showActor»\($0.name)\">" + "\n"
@@ -84,8 +84,8 @@ public struct MovieProductRecipe: RecipeType {
         }
         let directors: [String] = movie.directors.map {
             var headshot = ""
-            if($0.mediumImage != "http://62.210.81.37/assets/images/directors/default_avatar.jpg") {
-                headshot = " src=\""+$0.mediumImage+"\""
+            if $0.mediumImage != "http://62.210.81.37/assets/images/directors/default_avatar.jpg" {
+                headshot = " src=\"\($0.mediumImage)\""
             }
             let name = $0.name.componentsSeparatedByString(" ")
             var string = "<monogramLockup actionID=\"showDirector»\($0.name)\">" + "\n"

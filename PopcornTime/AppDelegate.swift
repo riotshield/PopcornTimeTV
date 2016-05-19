@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
+
         SubtitleManager.sharedManager().cleanSubs()
 
         return true

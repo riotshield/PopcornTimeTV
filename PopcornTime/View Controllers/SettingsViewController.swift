@@ -12,7 +12,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var settingsIcon: UIImageView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,13 +24,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     // MARK: Table View
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 3
     }
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
@@ -40,23 +40,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
         return 0
     }
-    
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0: return "TV Shows"
         case 1: return "Other"
-            
+
         default: return nil
         }
     }
-    
+
     func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return nil
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        
+
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
@@ -68,23 +68,23 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 cell.accessoryType = .None
             }
-            
+
         case 1:
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Clear All Cache"
                 cell.detailTextLabel?.text = ""
                 cell.accessoryType = .None
             }
-            
+
         default: break
         }
-        
+
         return cell
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
+
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
@@ -95,31 +95,31 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     NSUserDefaults.standardUserDefaults().setFloat(0.0, forKey: "TVShowVolume")
                     tableView.reloadData()
                 }))
-                
+
                 alertController.addAction(UIAlertAction(title: "25%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.25, forKey: "TVShowVolume")
                     tableView.reloadData()
                 }))
-                
+
                 alertController.addAction(UIAlertAction(title: "50%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.5, forKey: "TVShowVolume")
                     tableView.reloadData()
                 }))
-                
+
                 alertController.addAction(UIAlertAction(title: "75%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(0.75, forKey: "TVShowVolume")
                     tableView.reloadData()
                 }))
-                
+
                 alertController.addAction(UIAlertAction(title: "100%", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setFloat(1.0, forKey: "TVShowVolume")
                     tableView.reloadData()
                 }))
-                
+
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
-            
-            
+
+
         case 1:
             if indexPath.row == 0 {
                 // TV Shows Theme
@@ -128,30 +128,30 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 alertController.addAction(UIAlertAction(title: "Clear Cache", style: .Destructive, handler: { action in
                     self.clearCache()
                 }))
-                
+
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
-            
+
         default: break
         }
     }
-    
+
     func indexPathForPreferredFocusedViewInTableView(tableView: UITableView) -> NSIndexPath? {
         return NSIndexPath(forRow: 0, inSection: 0)
     }
-    
+
     func tableView(tableView: UITableView, canFocusRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         switch indexPath.section {
         case 0:
             if indexPath.row == 0 {
 //                self.settingsIcon.image = UIImage(named: "settings_tvshows.png")
             }
-            
+
         case 1:
             if indexPath.row == 0 {
 //                self.settingsIcon.image = UIImage(named: "settings_cache.png")
             }
-            
+
         default: self.settingsIcon.image = nil
         }
         return true
@@ -166,15 +166,15 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     try NSFileManager.defaultManager().removeItemAtPath(cachcesDirectory.stringByAppendingPathComponent(item))
                 }
             } catch {
-                
+
             }
         }
     }
-    
+
     // MARK: Navigation
-    
+
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+
     }
 
 }

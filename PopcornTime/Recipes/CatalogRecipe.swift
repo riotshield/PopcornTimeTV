@@ -34,26 +34,26 @@ public struct CatalogRecipe: RecipeType {
 
     public var creditsString: String {
             var mapped = [[String]]()
-        
-            if(movies != nil) {
+
+            if movies != nil {
                 mapped += movies.map {
                     [$0.lockUp, String($0.year)]
                 }
             }
-            if(shows != nil) {
+            if shows != nil {
                 mapped += shows.map {
                     [$0.lockUp, String($0.year)]
                 }
             }
-        
+
             mapped.sortInPlace {
                 return $0[1] > $1[1]
             }
-        
+
             let mappedItems: [String] = mapped.map {
                 $0[0]
             }
-        
+
             return mappedItems.joinWithSeparator("")
     }
 

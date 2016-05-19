@@ -35,7 +35,7 @@ public struct ShowInfo {
     public var contentRating: String!
 
     public var cast: [String]!
-    
+
     public var genres: [String]!
 
     public var network: String!
@@ -75,7 +75,7 @@ public struct SeasonProductRecipe: RecipeType {
 
     public let theme = DefaultTheme()
     public let presentationType = PresentationType.DefaultWithLoadingIndicator
-    
+
     public init(show: Show, showInfo: ShowInfo, episodes: [Episode], detailedEpisodes: [DetailedEpisode], seasonInfo: SeasonInfo, existsInWatchlist: Bool) {
         self.show = show
         self.showInfo = showInfo
@@ -121,11 +121,11 @@ public struct SeasonProductRecipe: RecipeType {
         let (_, minutes, _) = self.secondsToHoursMinutesSeconds(showInfo.runtime * 60)
         return "\(minutes)m"
     }
-    
+
     var castString: String {
-        
+
         let mapped: [String] = showInfo.cast.map {
-            
+
             let name = $0.componentsSeparatedByString(" ")
             var string = "<monogramLockup actionID=\"showActor»\($0)\">" + "\n"
             string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\" src=\"\"/>"
@@ -134,7 +134,7 @@ public struct SeasonProductRecipe: RecipeType {
             string += "</monogramLockup>" + "\n"
             return string
         }
-        
+
         return mapped.joinWithSeparator("\n")
     }
 

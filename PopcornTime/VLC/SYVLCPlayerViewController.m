@@ -1286,7 +1286,7 @@ static NSString *const kText = @"kText";
         
         NSString *file = lastSelected[@"path"];
         
-        NSString *string = [self readSubtitleAtPath:file];
+        NSString *string = [self readSubtitleAtPath:file forSubtitleName: lastSelected[@"name"]];
         NSError *error;
         SRTParser *parser = [[SRTParser alloc] init];
         _currentSelectedSub = [parser parseString:string error:&error];
@@ -1311,14 +1311,29 @@ static NSString *const kText = @"kText";
     
 }
 
-- (NSString *)readSubtitleAtPath:(NSString *)path
+- (NSString *)readSubtitleAtPath:(NSString *)path forSubtitleName:(NSString*)name
 {
     NSError *error = nil;
     NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
     // If UTF-8 Encoding fails, try ISO Latin1 & 2
     if (!string) {
         string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+#pragma This is necessary here because the string is parsed from the nsstring method but not correctly so the check !string is not satisfied
+            //If language selected is Greek or Polish execute a read of the subtitles using CoreText with custom encoding to show special characters correctly
+            NSData* dataFile = [NSData dataWithContentsOfFile:path];
+            if([name isEqualToString:@"Greek"]){
+                CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, dataFile.bytes, dataFile.length, kCFStringEncodingISOLatinGreek, YES);
+                string = (__bridge NSString *)cfstring;
+                CFRelease(cfstring);
+            }
+            if([name isEqualToString:@"Polish"]){
+                NSData* dataFile = [NSData dataWithContentsOfFile:path];
+                CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, dataFile.bytes, dataFile.length, kCFStringEncodingISOLatin2, YES);
+                string = (__bridge NSString *)cfstring;
+                CFRelease(cfstring);
+            }
     }
+    
     
     if (!string) {
         string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];

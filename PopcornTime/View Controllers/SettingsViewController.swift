@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.contentInset = UIEdgeInsetsMake(100, 0, 0, 0)
+        self.tableView.contentInset = UIEdgeInsetsMake(100, -50, 0, 0)
         self.settingsIcon.image = UIImage(named: "settings.png")
     }
 
@@ -247,7 +247,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 //                self.settingsIcon.image = UIImage(named: "settings_cache.png")
             }
 
-        default: self.settingsIcon.image = nil
+        default: self.settingsIcon.image = UIImage(named: "settings.png")
         }
         return true
     }

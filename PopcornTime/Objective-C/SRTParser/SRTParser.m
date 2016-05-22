@@ -21,6 +21,7 @@
     newString = [newString stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
     newString = [newString stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
     newString = [newString stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"{y:i}" withString:@""];
     
     NSMutableArray *subtitles = [[NSMutableArray alloc] init];
     

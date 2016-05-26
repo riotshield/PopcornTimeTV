@@ -287,9 +287,19 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func playMovie(pieces: [String]) {
         print(pieces.count)
         print(pieces)
-        ["playMovie", "http://62.210.81.37/assets/images/movies/deadpool_2016/large-cover.jpg", "http://62.210.81.37/assets/images/movies/deadpool_2016/background.jpg", "Deadpool", "A former Special Forces operative turned mercenary is subjected to a rogue experiment that leaves him with accelerated healing powers, adopting the alter ego Deadpool.", "tt1431045", "quality=720p&hash=A1D0C3B0FD52A29D2487027E6B50F27EAF4912C5•quality=1080p&hash=6268ABCCB049444BEE76813177AA46643A7ADA88"]
+//        ["playMovie", "screenshot", "fanart", "title", "description", "torrents", "5248007", "The Matrimonial Momentum", "1", "9"]
 
         let torrentsString = pieces[5]
+
+        // Only used for TV Shows
+        var episodeTitle: String!
+        var episodeNumber: String!
+        var episodeSeason: String!
+        if pieces.indices.count > 7 {
+            episodeTitle = pieces[7]
+            episodeNumber = pieces[8]
+            episodeSeason = pieces[9]
+        }
         if torrentsString == "" || torrentsString == "{{TORRENTS}}" {
             // NO torrents found
             Kitchen.serve(recipe: AlertRecipe(title: "No torrents found", description: "A torrent could not be found for \(pieces[3]).".cleaned, buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
@@ -313,7 +323,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         var buttons = [AlertButton]()
         for torrent in torrents {
-            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3].cleaned)»\(pieces[4].cleaned)»\(pieces[6])"))
+            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3].cleaned)»\(pieces[4].cleaned)»\(pieces[6])»\(episodeTitle)»\(episodeNumber)»\(episodeSeason)"))
         }
 
         Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[3])".cleaned, buttons: buttons, presentationType: .Modal))
@@ -332,6 +342,9 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             viewController.backgroundImageAddress = pieces[3]
             viewController.movieName = pieces[4]
             viewController.shortDescription = pieces[5]
+            viewController.episodeName = pieces[7]
+            viewController.episodeNumber = Int(pieces[8])
+            viewController.episodeSeason = Int(pieces[9])
 
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)

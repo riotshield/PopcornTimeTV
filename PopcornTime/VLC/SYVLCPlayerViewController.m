@@ -616,6 +616,13 @@ static NSString *const kText = @"kText";
 
 - (IBAction)panGesture:(id)sender
 {
+    if ([_mediaplayer isPlaying]) {
+        [self showOSD];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
+        [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
+        return;
+    }
+    
     //NSLog(@"panGesture");
     UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];

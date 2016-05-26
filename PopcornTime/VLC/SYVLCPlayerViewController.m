@@ -14,7 +14,6 @@
 #import <PopcornTorrent/PopcornTorrent.h>
 #import "PopcornTime-Swift.h"
 #import "SRTParser.h"
-#import "UniversalDetector.h"
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -291,19 +290,6 @@ static NSString *const kText = @"kText";
 
 
 #pragma mark - Gesture Low level
-/*
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
-{
-    NSLog(@"touchesBegan");
-    
-}
-
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touchesCancelled");
-}
-*/
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -343,28 +329,7 @@ static NSString *const kText = @"kText";
     //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
     _canPanning = YES;
 }
-/*
-- (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
-{
-    NSLog(@"touchesEstimatedPropertiesUpdated");
-}
 
-
-- (void) pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesBegan");
-}
-
-- (void) pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesChanged");
-}
-
-- (void) pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesCancelled");
-}
-*/
 - (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
@@ -1365,58 +1330,15 @@ static NSString *const kText = @"kText";
     
     NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
+    // Let the system figure out the encoding
     [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
-    return string;
-    
-    CFStringEncoding e = [UniversalDetector encodingWithData:data];
-    NSError *error = nil;
-    
-    if (e) {
-        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(e);
-        NSString *string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-        return string;
-    } else {
-        NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-        // If UTF-8 Encoding fails, try ISO Latin1 & 2
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
-        }
-        
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
-        }
-        
-        if (!string) {
-            NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
-            string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-        }
-        
-        // If that fails try one other format, GBK_95
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
-        }
-        
-        // Give Big5 a try
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-        }
-        
-        // Hong Kong varient
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
-        }
-        
-        // Taiwan varient
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
-        }
-        
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-        }
-        
+    if (string) {
         return string;
     }
+    
+    // Incase something has gone wrong, use UTF-8 to open the subtitles at the very least
+    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
 }
 
 - (void) newAudioSelected

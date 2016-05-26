@@ -1532,6 +1532,9 @@ static NSString *const kText = @"kText";
     SRTSubtitle *lastFounded = (SRTSubtitle *)[objectsFound lastObject];
     
     if (lastFounded) {
+        if ([lastFounded.content containsString:@"opensubtitles"]) {
+            return;
+        }
         [self updateSubtitle:lastFounded.content];
         
         CGRect rectBack = [lastFounded.content boundingRectWithSize:CGSizeMake(1920, 1080)

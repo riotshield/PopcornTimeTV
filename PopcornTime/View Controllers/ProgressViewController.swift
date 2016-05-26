@@ -22,11 +22,15 @@ class ProgressViewController: UIViewController {
     @IBOutlet weak var statsLabel: UILabel!
 
     var magnet: String!
-    var imdbId = ""
+    var imdbId: String!
     var imageAddress: String!
     var backgroundImageAddress: String!
     var movieName: String!
     var shortDescription: String!
+    
+    var episodeName: String!
+    var episodeSeason: Int!
+    var episodeNumber: Int!
 
     var cachedSubtitles: [AnyObject]!
 
@@ -43,8 +47,9 @@ class ProgressViewController: UIViewController {
         super.viewWillAppear(animated)
 
         print(imdbId)
-        SubtitleManager.sharedManager().fetchSubtitlesForIMDB(imdbId) { subs in
-            self.cachedSubtitles = subs
+        
+        SubtitleManager.sharedManager().search(self.episodeName, episodeSeason: self.episodeSeason, episodeNumber: self.episodeNumber, imdbId: self.imdbId) { subtitles in
+            self.cachedSubtitles = subtitles
         }
 
         if let _ = magnet, let _ = movieName, let _ = imageAddress, let _ = backgroundImageAddress {

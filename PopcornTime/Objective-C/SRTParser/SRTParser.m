@@ -58,10 +58,25 @@
         
         NSString *content = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         
+        content = [self stringByStrippingHTML:content];
+        content = [content stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+        
         return [[SRTSubtitle alloc] initWithIndex:index startTime:startTime endTime:endTime content:content];
     } else {
         return nil;
     }
+}
+
+- (NSString *)stringByStrippingHTML:(NSString *)string {
+    NSRange r;
+    while ((r = [string rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        string = [string stringByReplacingCharactersInRange:r withString:@""];
+    return string;
 }
 
 - (NSTimeInterval)timeIntervalFromSubRipTimeString:(NSString *)text {

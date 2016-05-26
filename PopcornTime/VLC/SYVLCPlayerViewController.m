@@ -12,8 +12,9 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
 #import <PopcornTorrent/PopcornTorrent.h>
-//#import "PopcornTime-Swift.h"
+#import "PopcornTime-Swift.h"
 #import "SRTParser.h"
+#import "UniversalDetector.h"
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -908,14 +909,14 @@ static NSString *const kText = @"kText";
 
 - (void) rememberAudioSub
 {
-    NSDictionary *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
     //NSDictionary *audioSelected = _audioTracks[_lastIndexPathAudio.row];
     //NSLog(@"audio : %@", audioSelected);
     
-    NSString *currentSubs = [subSelected[@"name"]lowercaseString];
+    NSString *currentSubs = [[subSelected language] lowercaseString];
     if (currentSubs) {
-        [[NSUserDefaults standardUserDefaults]setValue:currentSubs forKey:@"currentSubs"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
+        [[NSUserDefaults standardUserDefaults] setValue:currentSubs forKey:@"currentSubs"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -1165,18 +1166,21 @@ static NSString *const kText = @"kText";
 {
     static NSString *identifier = @"TabMenuCollectionViewCell";
     
-    NSDictionary *item = ([collectionView isEqual:self.subTabBarCollectionView]) ? [_subsTracks objectAtIndex:indexPath.row] : [_audioTracks objectAtIndex:indexPath.row];
-    
     SQTabMenuCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     cell.delegate = self;
-    cell.nameLabel.text = item[@"name"];
+    if ([collectionView isEqual:self.subTabBarCollectionView]) {
+        Subtitle *item = [_subsTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item.language;
+    } else {
+        NSDictionary *item = [_audioTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item[@"name"];
+    }
     
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         cell.collectionViewType = SQTabMenuCollectionViewTypeSubtitle;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
-    }
-    else {
+    } else {
         cell.collectionViewType = SQTabMenuCollectionViewTypeAudio;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
@@ -1192,8 +1196,7 @@ static NSString *const kText = @"kText";
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         [self newSubSelected];
         [self closeTopMenu];
-    }
-    else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
+    } else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
         [self newAudioSelected];
         [self closeTopMenu];
     }
@@ -1252,14 +1255,14 @@ static NSString *const kText = @"kText";
 
 - (void) restoreSub
 {
-    NSString *currentSubs = [[NSUserDefaults standardUserDefaults]valueForKey:@"currentSubs"];
+    NSString *currentSubs = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentSubs"];
     if (!currentSubs || [currentSubs isEqual:@"off"]) {
         return;
     }
     
-    for (NSDictionary *sub in _subsTracks) {
+    for (Subtitle *sub in _subsTracks) {
         
-        NSString *name = [sub[@"name"]lowercaseString];
+        NSString *name = [[sub language] lowercaseString];
         
         if ([name isEqual:currentSubs]) {
             NSUInteger row = [_subsTracks indexOfObject:sub];
@@ -1274,93 +1277,88 @@ static NSString *const kText = @"kText";
 
 - (void) newSubSelected
 {
-    NSDictionary *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
     
-    if ([[lastSelected allKeys]containsObject:@"index"]) {
-        [_mediaplayer setCurrentVideoSubTitleIndex:[lastSelected[@"index"]intValue]];
+    if (lastSelected.index) {
+        [_mediaplayer setCurrentVideoSubTitleIndex:lastSelected.index.intValue];
         self.subtitleTextView.hidden = YES;
         [self stopSubtitleParseTimer];
-    }
-    else {
+    } else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
         
-        NSString *file = lastSelected[@"path"];
-        
-        NSString *string = [self readSubtitleAtPath:file];
-        NSError *error;
-        SRTParser *parser = [[SRTParser alloc] init];
-        _currentSelectedSub = [parser parseString:string error:&error];
-
-        
-//        _currentSubParsed = [self parseSubtitle:file];
-        
-        
-        /*
-        [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
-                                                  forHash:_hash
-                                                withBlock:^(NSData *data, NSError *error) {
-                                                    if (data) {
-                                                        _currentSubParsed = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                                                    }
-                                                    else {
-                                                        _currentSubParsed = @{};
-                                                    }
-                                                }];
-        */
+        NSString *file = lastSelected.filePath;
+        if (file) {
+            NSString *string = [self readSubtitleAtPath:file withEncoding:lastSelected.encoding];
+            NSError *error;
+            SRTParser *parser = [[SRTParser alloc] init];
+            _currentSelectedSub = [parser parseString:string error:&error];
+        } else {
+            if (lastSelected.fileAddress) {
+                [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
+                    NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
+                    NSError *error;
+                    SRTParser *parser = [[SRTParser alloc] init];
+                    _currentSelectedSub = [parser parseString:string error:&error];
+                }];
+            }
+        }
     }
     
 }
 
-- (NSString *)readSubtitleAtPath:(NSString *)path
+- (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    CFStringEncoding e = [UniversalDetector encodingWithData:data];
+    
     NSError *error = nil;
-    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    // If UTF-8 Encoding fails, try ISO Latin1 & 2
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+    
+    if (e) {
+        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(e);
+        NSString *string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
+        return string;
+    } else {
+        NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
+        // If UTF-8 Encoding fails, try ISO Latin1 & 2
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+        }
+        
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
+        }
+        
+        if (!string) {
+            NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
+            string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
+        }
+        
+        // If that fails try one other format, GBK_95
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
+        }
+        
+        // Give Big5 a try
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
+        }
+        
+        // Hong Kong varient
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
+        }
+        
+        // Taiwan varient
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
+        }
+        
+        if (!string) {
+            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
+        }
+        
+        return string;
     }
-    
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
-    }
-    
-    if (!string) {
-        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
-        string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-    }
-    
-    // If that fails try one other format, GBK_95
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
-    }
-    
-    // Give Big5 a try
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-    }
-    
-    // Hong Kong varient
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
-    }
-    
-    // Taiwan varient
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
-    }
-    
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-    }
-    
-    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
-    
-    return string;
 }
 
 - (void) newAudioSelected
@@ -1401,7 +1399,7 @@ static NSString *const kText = @"kText";
 {
     
     _subsTracks = [NSMutableArray array];
-    [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
+    [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];
     [_subsTracks addObjectsFromArray:_cahcedSubtitles];
     
     // Subtitles Internal
@@ -1421,8 +1419,11 @@ static NSString *const kText = @"kText";
     }
     
     if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
-        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
-            [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
+        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++) {
+            Subtitle *item = [[Subtitle alloc] initWithLanguage:[subsTrackNames objectAtIndex:i] fileAddress:nil fileName:nil encoding:nil];
+            item.index = [NSNumber numberWithUnsignedInteger:i];
+            [_subsTracks addObject:item];
+        }
     }
     
     // Audio
@@ -1586,16 +1587,6 @@ static NSString *const kText = @"kText";
     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
     */
-    
-    // <b></b>
-    // <i></i>
-    // <u></u>
-    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
 
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }

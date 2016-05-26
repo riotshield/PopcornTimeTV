@@ -125,8 +125,8 @@ import AlamofireXMLRPC
                     params["imdbid"] = imdbId.stringByReplacingOccurrencesOfString("tt", withString: "")
                 } else {
                     params["query"] = episodeName
-                    params["season"] = String(episodeSeason)
-                    params["episode"] = String(episodeNumber)
+                    params["season"] = String(episodeSeason!)
+                    params["episode"] = String(episodeNumber!)
                 }
                 let array: XMLRPCArray = [params]
                 let limit: XMLRPCStructure = ["limit": "300"]

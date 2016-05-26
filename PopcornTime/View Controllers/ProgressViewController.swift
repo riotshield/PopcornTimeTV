@@ -46,7 +46,9 @@ class ProgressViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        print(imdbId)
+        if !self.imdbId.containsString("tt") {
+            self.imdbId = nil
+        }
         
         SubtitleManager.sharedManager().search(self.episodeName, episodeSeason: self.episodeSeason, episodeNumber: self.episodeNumber, imdbId: self.imdbId) { subtitles in
             self.cachedSubtitles = subtitles
@@ -71,6 +73,10 @@ class ProgressViewController: UIViewController {
                 let speedString = NSByteCountFormatter.stringFromByteCount(Int64(status.downloadSpeed), countStyle: .Binary)
                 self.statsLabel.text = "Speed: \(speedString)/s  Seeds: \(status.seeds)  Peers: \(status.peers)  Overall Progress: \(Int(status.totalProgreess*100))%"
 
+                if let subs = self.cachedSubtitles {
+                    self.statsLabel.text! += "  \(subs.count) " + (subs.count == 1 ? "Subtitle Found" : "Subtitles Found")
+                }
+                
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress > 0.0 {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."
@@ -78,7 +84,7 @@ class ProgressViewController: UIViewController {
 
 //                print("\(Int(status.bufferingProgress*100))%, \(Int(status.totalProgreess*100))%, \(speedString)/s, Seeds: \(status.seeds), Peers: \(status.peers)")
             }, readyToPlay: { url in
-                self.playVLCVideo(url, imdbID: self.imdbId)
+                self.playVLCVideo(url)
             }) { error in
                 print(error)
             }
@@ -94,11 +100,11 @@ class ProgressViewController: UIViewController {
         }
     }
 
-    func playVLCVideo(url: NSURL, imdbID: String) {
+    func playVLCVideo(url: NSURL) {
         AudioManager.sharedManager().stopTheme()
 
         Kitchen.appController.navigationController.popViewControllerAnimated(false)
-        let playerViewController = SYVLCPlayerViewController(URL: url, imdbID: imdbID, subtitles: cachedSubtitles)
+        let playerViewController = SYVLCPlayerViewController(URL: url, imdbID: "", subtitles: cachedSubtitles)
         Kitchen.appController.navigationController.pushViewController(playerViewController, animated: true)
         self.streaming = true
     }

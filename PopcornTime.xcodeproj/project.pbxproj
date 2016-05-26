@@ -32,6 +32,7 @@
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
 		921572391CE422C000A26088 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921572381CE422C000A26088 /* AudioManager.swift */; };
+		92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92190C791CF78AA60060BE73 /* FileHash.swift */; };
 		921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921E44F31CE78F930012FEAD /* SettingsViewController.swift */; };
 		922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
@@ -149,6 +150,7 @@
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
 		9211E3F11CDC0ADD00BEEB9D /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
 		921572381CE422C000A26088 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		92190C791CF78AA60060BE73 /* FileHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHash.swift; sourceTree = "<group>"; };
 		921E44F31CE78F930012FEAD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = "View Controllers/SettingsViewController.swift"; sourceTree = "<group>"; };
 		922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+Equatable.swift"; path = "Extensions/NSDate+Equatable.swift"; sourceTree = "<group>"; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				280910361C99E6B200C8EC1C /* Templates */,
 				280910301C99DFA200C8EC1C /* Tabs */,
 				925F8DD41CA9E44C007100EB /* Recipes */,
+				92190C781CF78AA60060BE73 /* Subtitles */,
 				925F8DF31CA9E464007100EB /* Managers */,
 				920550871CE6F71E00B8623F /* Objective-C */,
 				92CF49371CE6689200D666A8 /* External Classes */,
@@ -390,6 +393,14 @@
 				9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */,
 			);
 			path = VLC;
+			sourceTree = "<group>";
+		};
+		92190C781CF78AA60060BE73 /* Subtitles */ = {
+			isa = PBXGroup;
+			children = (
+				92190C791CF78AA60060BE73 /* FileHash.swift */,
+			);
+			path = Subtitles;
 			sourceTree = "<group>";
 		};
 		924213FE1CB19DAA0055FA15 /* Product */ = {
@@ -875,6 +886,7 @@
 				92CF4A021CE6692100D666A8 /* ZKCDTrailer64.m in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
 				92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */,
+				92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */,
 				92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */,

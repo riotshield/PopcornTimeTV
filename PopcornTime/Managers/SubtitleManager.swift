@@ -152,6 +152,47 @@ import AlamofireXMLRPC
             }
         }
     }
+    
+    func searchMovieHash(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
+        if let fh = fileHash(movieFile) {
+            self.login { success in
+                if success {
+                    var params: XMLRPCStructure = ["sublanguageid": "all"]
+                    params["moviehash"] = fh.hash
+                    params["moviesize"] = fh.size
+                    params["tag"] = fh.name
+                    let array: XMLRPCArray = [params]
+                    let limit: XMLRPCStructure = ["limit": "300"]
+                    AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).responseXMLRPC { response in
+                        guard response.result.isSuccess else {
+                            print("Error is \(response.result.error!)")
+                            return
+                        }
+                        if let response = response.result.value![0]["data"].array {
+                            var subtitles = [Subtitle]()
+                            for info in response {
+                                if !subtitles.contains({ subtitle in subtitle.language == info["LanguageName"].string! }) {
+                                    if let language = info["LanguageName"].string, let downloadLink = info["ZipDownloadLink"].string, let fileName = info["SubFileName"].string, let encoding = info["SubEncoding"].string {
+                                        subtitles.append(Subtitle(language: language, fileAddress: downloadLink, fileName: fileName, encoding: encoding))
+                                    }
+                                }
+                            }
+                            subtitles.sortInPlace({ $0.language < $1.language })
+                            completion(subtitles: subtitles)
+                        } else {
+                            completion(subtitles: nil)
+                        }
+                    }
+                } else {
+                    completion(subtitles: nil)
+                }
+            }
+        } else {
+            print("....")
+            completion(subtitles: nil)
+        }
+        
+    }
 
     func cleanSubs() {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)

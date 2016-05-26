@@ -1315,7 +1315,59 @@ static NSString *const kText = @"kText";
 
 - (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
+    /*
+    Arabic CP1256
+    Brazilian CP1252
+    Bulgarian CP1251
+    Burmese UTF-8
+    Catalan Unknown
+    Chinese (simplified) GB18030
+    Chinese (traditional) UTF-8
+    Chinese bilingual UTF-8
+    Croatian UTF-8
+    Czech CP1250
+    Danish CP1252
+    Dutch CP1252
+    English UTF-8
+    Estonian CP1257
+    Finnish CP1252|ISO-8859-
+    French CP1252
+    German UTF-8
+    Greek CP1253
+    Hebrew CP1255
+    Hungarian CP1250
+    Indonesian UTF-8
+    Italian CP1252
+    Japanese CP932
+    Korean CP949
+    Macedonian CP1251
+    Malay UTF-8
+    Norwegian UTF-8
+    Persian CP1256
+    Polish CP1250
+    Portuguese CP1252
+    Portuguese (BR) CP1252
+    Romanian CP1250
+    Russian UTF-8
+    Serbian CP1250
+    Slovak UTF-8
+    Slovenian CP1250
+    Spanish UTF-8
+    Swedish CP1252
+    Tagalog UTF-8
+    Turkish CP1254
+    */
+    
+//    NSDictionary *encodings = @{@"UTF-8" : @(NSUTF8StringEncoding),
+//                                @"CP1254" : @(),
+//                                @"" : @(),
+//                                };
+    
+    NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
+    [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
+    return string;
+    
     CFStringEncoding e = [UniversalDetector encodingWithData:data];
     NSError *error = nil;
     

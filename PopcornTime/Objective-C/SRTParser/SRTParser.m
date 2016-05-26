@@ -65,6 +65,7 @@
         content = [content stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
         content = [content stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
         content = [content stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"{y:i}" withString:@""];
         
         return [[SRTSubtitle alloc] initWithIndex:index startTime:startTime endTime:endTime content:content];
     } else {

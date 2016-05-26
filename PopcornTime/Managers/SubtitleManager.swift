@@ -153,7 +153,7 @@ import AlamofireXMLRPC
         }
     }
     
-    func searchMovieHash(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
+    func searchWithFile(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
         if let fh = fileHash(movieFile) {
             self.login { success in
                 if success {

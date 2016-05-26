@@ -1378,7 +1378,7 @@ static NSString *const kText = @"kText";
 - (void) createAudioSubsDatasource
 {
     NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
-    [[SubtitleManager sharedManager] searchMovieHash:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
+    [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
         NSLog(@"%@", subtitles);
         _subsTracks = [NSMutableArray array];
         [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];

@@ -11,33 +11,33 @@ import Alamofire
 import AlamofireXMLRPC
 
 @objc class Subtitle: NSObject {
-    
+
     var language: String!
     var encoding: String!
     var fileAddress: String!
     var filePath: String!
     var fileName: String!
     var index: NSNumber? // Obj-C Bridging support
-    
+
     override init() {
         super.init()
     }
-    
+
     convenience init(language: String, fileAddress: String!, fileName: String!, encoding: String!) {
         self.init()
-        
+
         self.language = language
         self.fileAddress = fileAddress
         self.fileName = fileName
         self.encoding = encoding
     }
-    
+
     override var description: String {
         get {
             return "<\(self.dynamicType)> language: \"\(self.language)\"\n file: \"\(self.fileAddress)\"\n"
         }
     }
-    
+
     func downloadSubtitle(completion: ((filePath: String?) -> Void)?) {
         Alamofire.request(.GET, self.fileAddress)
         .responseData { response in
@@ -66,7 +66,7 @@ import AlamofireXMLRPC
             }
         }
     }
-    
+
 }
 
 @objc class SubtitleManager: NSObject, ZipKitDelegate {
@@ -74,12 +74,12 @@ import AlamofireXMLRPC
     typealias CompletionBlock = ((name: String?, path: String?) -> Void)?
 
     var completion: CompletionBlock
-    
+
     private let baseURL = "http://api.opensubtitles.org:80/xml-rpc"
     private let secureBaseURL = "https://api.opensubtitles.org:443/xml-rpc"
     private let userAgent = "Popcorn Time v1"
     private var token: String!
-    
+
     class func sharedManager() -> SubtitleManager {
         struct Struct {
             static let Instance = SubtitleManager()
@@ -101,10 +101,7 @@ import AlamofireXMLRPC
             }
         }
     }
-    
-    /**
-     Login to OpenSubtitles API. Login is required to use the API.
-     */
+
     func login(completion: (success: Bool) -> Void) {
         AlamofireXMLRPC.request(secureBaseURL, methodName: "LogIn", parameters: ["", "", "en", userAgent]).responseXMLRPC { response in
             guard response.result.isSuccess else {
@@ -116,7 +113,7 @@ import AlamofireXMLRPC
             completion(success: true)
         }
     }
-    
+
     func search(episodeName: String?, episodeSeason: Int?, episodeNumber: Int?, imdbId: String?, completion: (subtitles: [Subtitle]?) -> Void) {
         self.login { success in
             if success {

@@ -290,7 +290,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 //        ["playMovie", "screenshot", "fanart", "title", "description", "torrents", "5248007", "The Matrimonial Momentum", "1", "9"]
 
         let torrentsString = pieces[5]
-        
+
         // Only used for TV Shows
         var episodeTitle: String!
         var episodeNumber: String!
@@ -331,7 +331,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     static func streamTorrent(pieces: [String]) {
         // {{MAGNET}}:{{IMAGE}}:{{BACKGROUND_IMAGE}}:{{TITLE}}:{{SHORT_DESCRIPTION}}:{{TORRENTS}}
-        
+
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -345,7 +345,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             viewController.episodeName = pieces[7]
             viewController.episodeNumber = Int(pieces[8])
             viewController.episodeSeason = Int(pieces[9])
-            
+
             NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })

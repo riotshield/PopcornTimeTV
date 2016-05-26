@@ -27,7 +27,7 @@ class ProgressViewController: UIViewController {
     var backgroundImageAddress: String!
     var movieName: String!
     var shortDescription: String!
-    
+
     var episodeName: String!
     var episodeSeason: Int!
     var episodeNumber: Int!
@@ -49,7 +49,7 @@ class ProgressViewController: UIViewController {
         if !self.imdbId.containsString("tt") {
             self.imdbId = nil
         }
-        
+
         SubtitleManager.sharedManager().search(self.episodeName, episodeSeason: self.episodeSeason, episodeNumber: self.episodeNumber, imdbId: self.imdbId) { subtitles in
             self.cachedSubtitles = subtitles
         }
@@ -76,7 +76,7 @@ class ProgressViewController: UIViewController {
                 if let subs = self.cachedSubtitles {
                     self.statsLabel.text! += "  \(subs.count) " + (subs.count == 1 ? "Subtitle Found" : "Subtitles Found")
                 }
-                
+
                 self.progressView.progress = status.bufferingProgress
                 if self.progressView.progress > 0.0 {
                     self.nameLabel.text = "Buffering " + self.movieName + "..."

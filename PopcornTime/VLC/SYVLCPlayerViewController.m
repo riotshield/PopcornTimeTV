@@ -16,6 +16,7 @@
 #import "SRTParser.h"
 #import "UniversalDetector.h"
 
+
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
 static NSString *const kEnd = @"kEnd";
@@ -1318,8 +1319,8 @@ static NSString *const kText = @"kText";
     NSData *data = [NSData dataWithContentsOfFile:path];
     CFStringEncoding e = [UniversalDetector encodingWithData:data];
     NSError *error = nil;
-    
-    if (e) {
+
+    if (e!=kCFStringEncodingInvalidId) {
         NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(e);
         NSString *string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
         return string;

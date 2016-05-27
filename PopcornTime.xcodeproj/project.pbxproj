@@ -620,9 +620,11 @@
 				TargetAttributes = {
 					0026820F1CD0B76200F51D31 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 				};
 			};
@@ -930,7 +932,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
@@ -945,7 +947,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
@@ -1049,7 +1051,7 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1072,7 +1074,7 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 			};

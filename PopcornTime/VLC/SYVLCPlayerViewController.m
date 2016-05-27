@@ -14,7 +14,6 @@
 #import <PopcornTorrent/PopcornTorrent.h>
 #import "PopcornTime-Swift.h"
 #import "SRTParser.h"
-#import "UniversalDetector.h"
 
 
 static NSString *const kIndex = @"kIndex";
@@ -292,19 +291,6 @@ static NSString *const kText = @"kText";
 
 
 #pragma mark - Gesture Low level
-/*
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
-{
-    NSLog(@"touchesBegan");
-    
-}
-
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touchesCancelled");
-}
-*/
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -344,28 +330,7 @@ static NSString *const kText = @"kText";
     //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
     _canPanning = YES;
 }
-/*
-- (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
-{
-    NSLog(@"touchesEstimatedPropertiesUpdated");
-}
 
-
-- (void) pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesBegan");
-}
-
-- (void) pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesChanged");
-}
-
-- (void) pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesCancelled");
-}
-*/
 - (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
@@ -1316,56 +1281,101 @@ static NSString *const kText = @"kText";
 
 - (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
+    /*
+        Arabic CP1256
+        Brazilian CP1252
+        Bulgarian CP1251
+        Burmese UTF-8
+        Catalan Unknown
+        Chinese (simplified) GB18030
+        Chinese (traditional) UTF-8
+        Chinese bilingual UTF-8
+        Croatian UTF-8
+        Czech CP1250
+        Danish CP1252
+        Dutch CP1252
+        English UTF-8
+        Estonian CP1257
+        Finnish CP1252|ISO-8859-
+        French CP1252
+        German UTF-8
+        Greek CP1253
+        Hebrew CP1255
+        Hungarian CP1250
+        Indonesian UTF-8
+        Italian CP1252
+        Japanese CP932
+        Korean CP949
+        Macedonian CP1251
+        Malay UTF-8
+        Norwegian UTF-8
+        Persian CP1256
+        Polish CP1250
+        Portuguese CP1252
+        Portuguese (BR) CP1252
+        Romanian CP1250
+        Russian UTF-8
+        Serbian CP1250
+        Slovak UTF-8
+        Slovenian CP1250
+        Spanish UTF-8
+        Swedish CP1252
+        Tagalog UTF-8
+        Turkish CP1254
+    */
+    
+    NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
+<<<<<<< HEAD
     CFStringEncoding e = [UniversalDetector encodingWithData:data];
     NSError *error = nil;
 
     if (e!=kCFStringEncodingInvalidId) {
         NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(e);
         NSString *string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
+=======
+    
+    NSDictionary *encodings = @{
+                                @"UTF-8" : @(NSUTF8StringEncoding),
+                                @"CP1250" : @(NSWindowsCP1250StringEncoding),
+                                @"CP1251" : @(NSWindowsCP1251StringEncoding),
+                                @"CP1252" : @(NSWindowsCP1252StringEncoding),
+                                @"CP1253" : @(NSWindowsCP1253StringEncoding),
+                                @"CP1254" : @(NSWindowsCP1254StringEncoding)
+                                };
+    
+    NSDictionary *specialEncodings = @{
+                                       @"CP1256" : @(kCFStringEncodingWindowsArabic),
+                                       @"CP949" : @(kCFStringEncodingDOSKorean),
+                                       @"CP932" : @(kCFStringEncodingDOSJapanese),
+                                       @"CP1255" : @(kCFStringEncodingWindowsHebrew),
+                                       @"CP1253" : @(kCFStringEncodingDOSKorean),
+                                       @"CP1257" : @(kCFStringEncodingWindowsBalticRim),
+                                       @"GB18030" : @(kCFStringEncodingGB_18030_2000)
+                                       };
+    
+    if ([encodings.allKeys containsObject:encoding]) {
+        NSStringEncoding encodingType = (NSStringEncoding)encodings[encoding];
+        string = [[NSString alloc] initWithData:data encoding:encodingType];
+        return string;
+    } else if ([specialEncodings.allKeys containsObject:encoding]) {
+        CFStringEncoding encodingType = (CFStringEncoding)specialEncodings[encoding];
+        CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, data.bytes, data.length, encodingType, YES);
+        string = (__bridge NSString *)cfstring;
+        CFRelease(cfstring);
+>>>>>>> PopcornTimeTV/master
         return string;
     } else {
-        NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-        // If UTF-8 Encoding fails, try ISO Latin1 & 2
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+        // Let the system figure out the encoding
+        [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
+        if (string) {
+            return string;
         }
-        
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
-        }
-        
-        if (!string) {
-            NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
-            string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-        }
-        
-        // If that fails try one other format, GBK_95
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
-        }
-        
-        // Give Big5 a try
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-        }
-        
-        // Hong Kong varient
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
-        }
-        
-        // Taiwan varient
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
-        }
-        
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-        }
-        
-        return string;
     }
+
+    // Incase something has gone wrong, use UTF-8 to open the subtitles at the very least
+    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
 }
 
 - (void) newAudioSelected
@@ -1405,7 +1415,7 @@ static NSString *const kText = @"kText";
 - (void) createAudioSubsDatasource
 {
     NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
-    [[SubtitleManager sharedManager] searchMovieHash:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
+    [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
         NSLog(@"%@", subtitles);
         _subsTracks = [NSMutableArray array];
         [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];

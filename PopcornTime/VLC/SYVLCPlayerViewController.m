@@ -1270,7 +1270,7 @@ static NSString *const kText = @"kText";
                 [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
                     NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
                     NSError *error;
-                    lastSelected.filePath=filePath;
+                    lastSelected.filePath = filePath;
                     SRTParser *parser = [[SRTParser alloc] init];
                     _currentSelectedSub = [parser parseString:string error:&error];
                 }];

@@ -11,97 +11,105 @@ import Alamofire
 import AlamofireXMLRPC
 
 @objc class Subtitle: NSObject {
-
+    
     var language: String!
     var encoding: String!
     var fileAddress: String!
     var filePath: String!
     var fileName: String!
     var index: NSNumber? // Obj-C Bridging support
-
+    
     override init() {
         super.init()
     }
-
+    
     convenience init(language: String, fileAddress: String!, fileName: String!, encoding: String!) {
         self.init()
-
+        
         self.language = language
         self.fileAddress = fileAddress
         self.fileName = fileName
         self.encoding = encoding
     }
-
+    
     override var description: String {
         get {
             return "<\(self.dynamicType)> language: \"\(self.language)\"\n file: \"\(self.fileAddress)\"\n"
         }
     }
-
+    
     func downloadSubtitle(completion: ((filePath: String?) -> Void)?) {
         Alamofire.request(.GET, self.fileAddress)
-        .responseData { response in
-            if let data = response.data {
-                let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-                if let cachcesDirectory = paths.first {
-                    do {
-                        var path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
-                        try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
-                        path = path.stringByAppendingPathComponent(self.fileAddress.lastPathComponent)
-                        try data.writeToFile(path, options: .DataWritingAtomic)
-                        let zip = ZKFileArchive(archivePath: path)
-                        if zip.inflateToDiskUsingResourceFork(false) == 1 {
-                            try NSFileManager.defaultManager().removeItemAtPath(path)
+            .responseData { response in
+                if let data = response.data {
+                    let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+                    if let cachcesDirectory = paths.first {
+                        do {
+                            var path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
+                            try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+                            path = path.stringByAppendingPathComponent(self.fileAddress.lastPathComponent)
+                            try data.writeToFile(path, options: .DataWritingAtomic)
+                            let zip = ZKFileArchive(archivePath: path)
+                            if zip.inflateToDiskUsingResourceFork(false) == 1 {
+                                try NSFileManager.defaultManager().removeItemAtPath(path)
+                            }
+                            self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
+                            completion?(filePath: self.filePath)
+                        } catch NSCocoaError.FileWriteFileExistsError {
+                            self.filePath=cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
+                            if (NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
+                                let dirContents = try! NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath)
+                                let onlySRTs = dirContents.filter({$0.containsString(".srt")})
+                                self.filePath=self.filePath.stringByAppendingPathComponent(onlySRTs.first!)
+                            }
+                            completion?(filePath: self.filePath)
+                        } catch {
+                            completion?(filePath: self.filePath)
                         }
-                        self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
-                        completion?(filePath: self.filePath)
-                    } catch {
+                    } else {
                         completion?(filePath: self.filePath)
                     }
                 } else {
                     completion?(filePath: self.filePath)
                 }
-            } else {
-                completion?(filePath: self.filePath)
-            }
         }
     }
-
+    
 }
 
 @objc class SubtitleManager: NSObject, ZipKitDelegate {
-
+    
     typealias CompletionBlock = ((name: String?, path: String?) -> Void)?
-
+    
     var completion: CompletionBlock
-
+    
     private let baseURL = "http://api.opensubtitles.org:80/xml-rpc"
     private let secureBaseURL = "https://api.opensubtitles.org:443/xml-rpc"
     private let userAgent = "Popcorn Time v1"
     private var token: String!
-
+    
     class func sharedManager() -> SubtitleManager {
         struct Struct {
             static let Instance = SubtitleManager()
         }
-
+        
         return Struct.Instance
     }
-
+    
     override init() {
         super.init()
-
+        
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
             let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles")
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
             } catch {
-
+                
             }
         }
     }
-
+    
     func login(completion: (success: Bool) -> Void) {
         AlamofireXMLRPC.request(secureBaseURL, methodName: "LogIn", parameters: ["", "", "en", userAgent]).responseXMLRPC { response in
             guard response.result.isSuccess else {
@@ -113,7 +121,7 @@ import AlamofireXMLRPC
             completion(success: true)
         }
     }
-
+    
     func search(episodeName: String?, episodeSeason: Int?, episodeNumber: Int?, imdbId: String?, completion: (subtitles: [Subtitle]?) -> Void) {
         self.login { success in
             if success {
@@ -193,7 +201,7 @@ import AlamofireXMLRPC
         }
         
     }
-
+    
     func cleanSubs() {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
@@ -204,9 +212,9 @@ import AlamofireXMLRPC
                     try NSFileManager.defaultManager().removeItemAtPath(path.stringByAppendingPathComponent(item))
                 }
             } catch {
-
+                
             }
         }
     }
-
+    
 }

@@ -15,6 +15,7 @@
 #import "PopcornTime-Swift.h"
 #import "SRTParser.h"
 
+
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
 static NSString *const kEnd = @"kEnd";
@@ -1269,6 +1270,7 @@ static NSString *const kText = @"kText";
                 [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
                     NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
                     NSError *error;
+                    lastSelected.filePath=filePath;
                     SRTParser *parser = [[SRTParser alloc] init];
                     _currentSelectedSub = [parser parseString:string error:&error];
                 }];
@@ -1280,92 +1282,15 @@ static NSString *const kText = @"kText";
 
 - (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
-    /*
-        Arabic CP1256
-        Brazilian CP1252
-        Bulgarian CP1251
-        Burmese UTF-8
-        Catalan Unknown
-        Chinese (simplified) GB18030
-        Chinese (traditional) UTF-8
-        Chinese bilingual UTF-8
-        Croatian UTF-8
-        Czech CP1250
-        Danish CP1252
-        Dutch CP1252
-        English UTF-8
-        Estonian CP1257
-        Finnish CP1252|ISO-8859-
-        French CP1252
-        German UTF-8
-        Greek CP1253
-        Hebrew CP1255
-        Hungarian CP1250
-        Indonesian UTF-8
-        Italian CP1252
-        Japanese CP932
-        Korean CP949
-        Macedonian CP1251
-        Malay UTF-8
-        Norwegian UTF-8
-        Persian CP1256
-        Polish CP1250
-        Portuguese CP1252
-        Portuguese (BR) CP1252
-        Romanian CP1250
-        Russian UTF-8
-        Serbian CP1250
-        Slovak UTF-8
-        Slovenian CP1250
-        Spanish UTF-8
-        Swedish CP1252
-        Tagalog UTF-8
-        Turkish CP1254
-    */
     
     NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
-    
-    NSDictionary *encodings = @{
-                                @"UTF-8" : @(NSUTF8StringEncoding),
-                                @"CP1250" : @(NSWindowsCP1250StringEncoding),
-                                @"CP1251" : @(NSWindowsCP1251StringEncoding),
-                                @"CP1252" : @(NSWindowsCP1252StringEncoding),
-                                @"CP1253" : @(NSWindowsCP1253StringEncoding),
-                                @"CP1254" : @(NSWindowsCP1254StringEncoding)
-                                };
-    
-    NSDictionary *specialEncodings = @{
-                                       @"CP1256" : @(kCFStringEncodingWindowsArabic),
-                                       @"CP949" : @(kCFStringEncodingDOSKorean),
-                                       @"CP932" : @(kCFStringEncodingDOSJapanese),
-                                       @"CP1255" : @(kCFStringEncodingWindowsHebrew),
-                                       @"CP1253" : @(kCFStringEncodingDOSKorean),
-                                       @"CP1257" : @(kCFStringEncodingWindowsBalticRim),
-                                       @"GB18030" : @(kCFStringEncodingGB_18030_2000)
-                                       };
-    
-    if ([encodings.allKeys containsObject:encoding]) {
-        NSStringEncoding encodingType = (NSStringEncoding)encodings[encoding];
-        string = [[NSString alloc] initWithData:data encoding:encodingType];
-        return string;
-    } else if ([specialEncodings.allKeys containsObject:encoding]) {
-        CFStringEncoding encodingType = (CFStringEncoding)specialEncodings[encoding];
+
+        CFStringEncoding encodingType = CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encoding);
         CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, data.bytes, data.length, encodingType, YES);
         string = (__bridge NSString *)cfstring;
         CFRelease(cfstring);
         return string;
-    } else {
-        // Let the system figure out the encoding
-        [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
-        if (string) {
-            return string;
-        }
-    }
-
-    // Incase something has gone wrong, use UTF-8 to open the subtitles at the very least
-    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    return string;
 }
 
 - (void) newAudioSelected

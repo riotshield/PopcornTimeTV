@@ -55,7 +55,19 @@ import AlamofireXMLRPC
                         }
                         self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
                         completion?(filePath: self.filePath)
-                    } catch {
+                    } catch NSCocoaError.FileWriteFileExistsError{
+                        self.filePath=cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
+                        if(NSFileManager.defaultManager().fileExistsAtPath(self.filePath)){
+                           
+                            let dirContents = try! NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath)
+                            
+                            
+                            let onlySRTs = dirContents.filter({$0.containsString(".srt")})
+                            self.filePath=self.filePath.stringByAppendingPathComponent(onlySRTs.first!)
+                            
+                        }
+                        completion?(filePath: self.filePath)
+                    }catch{
                         completion?(filePath: self.filePath)
                     }
                 } else {

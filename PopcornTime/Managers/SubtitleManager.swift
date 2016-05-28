@@ -40,30 +40,44 @@ import AlamofireXMLRPC
 
     func downloadSubtitle(completion: ((filePath: String?) -> Void)?) {
         Alamofire.request(.GET, self.fileAddress)
-        .responseData { response in
-            if let data = response.data {
-                let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-                if let cachcesDirectory = paths.first {
-                    do {
-                        var path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
-                        try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
-                        path = path.stringByAppendingPathComponent(self.fileAddress.lastPathComponent)
-                        try data.writeToFile(path, options: .DataWritingAtomic)
-                        let zip = ZKFileArchive(archivePath: path)
-                        if zip.inflateToDiskUsingResourceFork(false) == 1 {
-                            try NSFileManager.defaultManager().removeItemAtPath(path)
+            .responseData { response in
+                if let data = response.data {
+                    let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+                    if let cachcesDirectory = paths.first {
+                        do {
+                            var path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
+                            try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+                            path = path.stringByAppendingPathComponent(self.fileAddress.lastPathComponent)
+                            try data.writeToFile(path, options: .DataWritingAtomic)
+                            let zip = ZKFileArchive(archivePath: path)
+                            if zip.inflateToDiskUsingResourceFork(false) == 1 {
+                                try NSFileManager.defaultManager().removeItemAtPath(path)
+                            }
+                            self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
+                            completion?(filePath: self.filePath)
+                        } catch NSCocoaError.FileWriteFileExistsError {
+                            self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(self.fileName)
+                            if NSFileManager.defaultManager().fileExistsAtPath(self.filePath) {
+                                do {
+                                    let dirContents = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath.stringByDeletingLastPathComponent)
+                                    let srts = dirContents.filter({ $0.containsString(".srt") })
+                                    if let first = srts.first {
+                                        self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(first)
+                                    }
+                                } catch let error as NSError {
+                                    print(error)
+                                }
+                            }
+                            completion?(filePath: self.filePath)
+                        } catch {
+                            completion?(filePath: self.filePath)
                         }
-                        self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
-                        completion?(filePath: self.filePath)
-                    } catch {
+                    } else {
                         completion?(filePath: self.filePath)
                     }
                 } else {
                     completion?(filePath: self.filePath)
                 }
-            } else {
-                completion?(filePath: self.filePath)
-            }
         }
     }
 
@@ -152,8 +166,8 @@ import AlamofireXMLRPC
             }
         }
     }
-    
-    func searchMovieHash(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
+
+    func searchWithFile(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
         if let fh = fileHash(movieFile) {
             self.login { success in
                 if success {
@@ -191,7 +205,7 @@ import AlamofireXMLRPC
             print("....")
             completion(subtitles: nil)
         }
-        
+
     }
 
     func cleanSubs() {

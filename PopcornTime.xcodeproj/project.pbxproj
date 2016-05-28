@@ -620,9 +620,11 @@
 				TargetAttributes = {
 					0026820F1CD0B76200F51D31 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 				};
 			};

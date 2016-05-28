@@ -69,15 +69,33 @@ public struct MovieProductRecipe: RecipeType {
     }
 
     var castString: String {
-        let mapped: [String] = movie.actors.map {
+        let actors: [String] = movie.actors.map {
+            var headshot = ""
+            if $0.mediumImage != "http://62.210.81.37/assets/images/actors/default_avatar.jpg" {
+                headshot = " src=\"\($0.mediumImage)\""
+            }
             let name = $0.name.componentsSeparatedByString(" ")
-            var string = "<monogramLockup>" + "\n"
-            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\"/>"
+            var string = "<monogramLockup actionID=\"showActor»\($0.name)\">" + "\n"
+            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\"\(headshot)/>"
             string += "<title>\($0.name.cleaned)</title>" + "\n"
             string += "<subtitle>Actor</subtitle>" + "\n"
             string += "</monogramLockup>" + "\n"
             return string
         }
+        let directors: [String] = movie.directors.map {
+            var headshot = ""
+            if $0.mediumImage != "http://62.210.81.37/assets/images/directors/default_avatar.jpg" {
+                headshot = " src=\"\($0.mediumImage)\""
+            }
+            let name = $0.name.componentsSeparatedByString(" ")
+            var string = "<monogramLockup actionID=\"showDirector»\($0.name)\">" + "\n"
+            string += "<monogram firstName=\"\(name.first!)\" lastName=\"\(name.last!)\"\(headshot)/>"
+            string += "<title>\($0.name.cleaned)</title>" + "\n"
+            string += "<subtitle>Director</subtitle>" + "\n"
+            string += "</monogramLockup>" + "\n"
+            return string
+        }
+        let mapped = actors + directors
         return mapped.joinWithSeparator("\n")
     }
 

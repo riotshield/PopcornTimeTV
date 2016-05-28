@@ -12,8 +12,9 @@
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
 #import <PopcornTorrent/PopcornTorrent.h>
-//#import "PopcornTime-Swift.h"
+#import "PopcornTime-Swift.h"
 #import "SRTParser.h"
+
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -290,19 +291,6 @@ static NSString *const kText = @"kText";
 
 
 #pragma mark - Gesture Low level
-/*
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
-{
-    NSLog(@"touchesBegan");
-    
-}
-
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touchesCancelled");
-}
-*/
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -342,28 +330,7 @@ static NSString *const kText = @"kText";
     //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
     _canPanning = YES;
 }
-/*
-- (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
-{
-    NSLog(@"touchesEstimatedPropertiesUpdated");
-}
 
-
-- (void) pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesBegan");
-}
-
-- (void) pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesChanged");
-}
-
-- (void) pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesCancelled");
-}
-*/
 - (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
@@ -615,6 +582,7 @@ static NSString *const kText = @"kText";
 
 - (IBAction)panGesture:(id)sender
 {
+    
     //NSLog(@"panGesture");
     UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
@@ -655,6 +623,12 @@ static NSString *const kText = @"kText";
                 [self openTopMenu];
             }
             else if (deltaX > 100.0) {
+                if ([_mediaplayer isPlaying]) {
+                    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
+                    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
+                    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
+                    return;
+                }
                 _finishAnalyzePan = YES;
                 [_mediaplayer pause];
                 _panChangingTime = YES;
@@ -908,14 +882,14 @@ static NSString *const kText = @"kText";
 
 - (void) rememberAudioSub
 {
-    NSDictionary *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
     //NSDictionary *audioSelected = _audioTracks[_lastIndexPathAudio.row];
     //NSLog(@"audio : %@", audioSelected);
     
-    NSString *currentSubs = [subSelected[@"name"]lowercaseString];
+    NSString *currentSubs = [[subSelected language] lowercaseString];
     if (currentSubs) {
-        [[NSUserDefaults standardUserDefaults]setValue:currentSubs forKey:@"currentSubs"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
+        [[NSUserDefaults standardUserDefaults] setValue:currentSubs forKey:@"currentSubs"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -1165,18 +1139,21 @@ static NSString *const kText = @"kText";
 {
     static NSString *identifier = @"TabMenuCollectionViewCell";
     
-    NSDictionary *item = ([collectionView isEqual:self.subTabBarCollectionView]) ? [_subsTracks objectAtIndex:indexPath.row] : [_audioTracks objectAtIndex:indexPath.row];
-    
     SQTabMenuCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     cell.delegate = self;
-    cell.nameLabel.text = item[@"name"];
+    if ([collectionView isEqual:self.subTabBarCollectionView]) {
+        Subtitle *item = [_subsTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item.language;
+    } else {
+        NSDictionary *item = [_audioTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item[@"name"];
+    }
     
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         cell.collectionViewType = SQTabMenuCollectionViewTypeSubtitle;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
-    }
-    else {
+    } else {
         cell.collectionViewType = SQTabMenuCollectionViewTypeAudio;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
@@ -1192,8 +1169,7 @@ static NSString *const kText = @"kText";
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         [self newSubSelected];
         [self closeTopMenu];
-    }
-    else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
+    } else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
         [self newAudioSelected];
         [self closeTopMenu];
     }
@@ -1252,14 +1228,14 @@ static NSString *const kText = @"kText";
 
 - (void) restoreSub
 {
-    NSString *currentSubs = [[NSUserDefaults standardUserDefaults]valueForKey:@"currentSubs"];
+    NSString *currentSubs = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentSubs"];
     if (!currentSubs || [currentSubs isEqual:@"off"]) {
         return;
     }
     
-    for (NSDictionary *sub in _subsTracks) {
+    for (Subtitle *sub in _subsTracks) {
         
-        NSString *name = [sub[@"name"]lowercaseString];
+        NSString *name = [[sub language] lowercaseString];
         
         if ([name isEqual:currentSubs]) {
             NSUInteger row = [_subsTracks indexOfObject:sub];
@@ -1274,51 +1250,58 @@ static NSString *const kText = @"kText";
 
 - (void) newSubSelected
 {
-    NSDictionary *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
     
-    if ([[lastSelected allKeys]containsObject:@"index"]) {
-        [_mediaplayer setCurrentVideoSubTitleIndex:[lastSelected[@"index"]intValue]];
+    if (lastSelected.index) {
+        [_mediaplayer setCurrentVideoSubTitleIndex:lastSelected.index.intValue];
         self.subtitleTextView.hidden = YES;
         [self stopSubtitleParseTimer];
-    }
-    else {
+    } else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
         
-        NSString *file = lastSelected[@"path"];
-        
-        NSString *string = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:NULL];
-        // If UTF-8 Encoding fails, try ISO Latin1
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:file encoding:NSISOLatin1StringEncoding error:NULL];
+        NSString *file = lastSelected.filePath;
+        if (file) {
+            NSString *string = [self readSubtitleAtPath:file withEncoding:lastSelected.encoding];
+            NSError *error;
+            SRTParser *parser = [[SRTParser alloc] init];
+            _currentSelectedSub = [parser parseString:string error:&error];
+        } else {
+            if (lastSelected.fileAddress) {
+                [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
+                    NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
+                    NSError *error;
+                    lastSelected.filePath = filePath;
+                    SRTParser *parser = [[SRTParser alloc] init];
+                    _currentSelectedSub = [parser parseString:string error:&error];
+                }];
+            }
         }
-        // If that fails try one other format, GBK_95
-        if (!string) {
-            string = [NSString stringWithContentsOfFile:file encoding:kCFStringEncodingGBK_95 error:NULL];
-        }
-        // If it's still nil, well we tried everything we could. No subtitles for you!
-        
-        
-        NSError *error;
-        SRTParser *parser = [[SRTParser alloc] init];
-        _currentSelectedSub = [parser parseString:string error:&error];
-
-        
-//        _currentSubParsed = [self parseSubtitle:file];
-        
-        
-        /*
-        [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
-                                                  forHash:_hash
-                                                withBlock:^(NSData *data, NSError *error) {
-                                                    if (data) {
-                                                        _currentSubParsed = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                                                    }
-                                                    else {
-                                                        _currentSubParsed = @{};
-                                                    }
-                                                }];
-        */
     }
+    
+}
+
+- (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
+{
+    
+    NSString *string = nil;
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    CFStringEncoding encodingType = CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encoding);
+    if (encodingType != kCFStringEncodingInvalidId) {
+        CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, data.bytes, data.length, encodingType, YES);
+        string = (__bridge NSString *)cfstring;
+        CFRelease(cfstring);
+        return string;
+    }
+    
+    // Sometimes the encoding is unknown (i.e. Catalan) so we have to fallback on some sort of other check
+    [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
+    if (string) {
+        return string;
+    }
+    
+    // Just as a last resort failsafe, open in UTF-8. Encoding will probably be broken but it will open.
+    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
     
 }
 
@@ -1358,69 +1341,74 @@ static NSString *const kText = @"kText";
 
 - (void) createAudioSubsDatasource
 {
-    
-    _subsTracks = [NSMutableArray array];
-    [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
-    [_subsTracks addObjectsFromArray:_cahcedSubtitles];
-    
-    // Subtitles Internal
-    _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
-    NSArray *subsTrackNames = nil;
-    @try {
-        subsTrackNames = [_mediaplayer videoSubTitlesNames];
-    }
-    
-    @catch (NSException *exception) {
-        NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
-        for (id item in _subsTrackIndexes) {
-            NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
-            [subsTrackNamesMut addObject:subsName];
+    NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
+    [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
+        _subsTracks = [NSMutableArray array];
+        [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];
+        [_subsTracks addObjectsFromArray:subtitles];
+        
+        // Subtitles Internal
+        _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
+        NSArray *subsTrackNames = nil;
+        @try {
+            subsTrackNames = [_mediaplayer videoSubTitlesNames];
         }
-        subsTrackNames = [subsTrackNamesMut copy];
-    }
-    
-    if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
-        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
-            [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
-    }
-    
-    // Audio
-    _audioTracks = [NSMutableArray array];
-    NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
-    NSArray *audioTrackNames = nil;
-    @try {
-        audioTrackNames = [_mediaplayer audioTrackNames];
-    }
-    
-    @catch (NSException *exception) {
-        NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
-        for (id item in audioTrackIndexes) {
-            NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
-            [audioTrackNamesMut addObject:audioName];
+        
+        @catch (NSException *exception) {
+            NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
+            for (id item in _subsTrackIndexes) {
+                NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
+                [subsTrackNamesMut addObject:subsName];
+            }
+            subsTrackNames = [subsTrackNamesMut copy];
         }
-        audioTrackNames = [audioTrackNamesMut copy];
-    }
-    
-    if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
-        for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
-            [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
-    }
-    else {
-        [_audioTracks addObject:@{@"name" : @"Disabled"}];
-    }
-    
-    _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
-    _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    self.subTabBarCollectionView.dataSource = self;
-    self.subTabBarCollectionView.delegate   = self;
-    [self.subTabBarCollectionView reloadData];
-    
-    self.audioTabBarCollectionView.dataSource = self;
-    self.audioTabBarCollectionView.delegate   = self;
-    [self.audioTabBarCollectionView reloadData];
-    
-    [self restoreSub];
+        
+        if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
+            for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++) {
+                Subtitle *item = [[Subtitle alloc] initWithLanguage:[subsTrackNames objectAtIndex:i] fileAddress:nil fileName:nil encoding:nil];
+                item.index = [NSNumber numberWithUnsignedInteger:i];
+                [_subsTracks addObject:item];
+            }
+        }
+        
+        // Audio
+        _audioTracks = [NSMutableArray array];
+        NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
+        NSArray *audioTrackNames = nil;
+        @try {
+            audioTrackNames = [_mediaplayer audioTrackNames];
+        }
+        
+        @catch (NSException *exception) {
+            NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
+            for (id item in audioTrackIndexes) {
+                NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
+                [audioTrackNamesMut addObject:audioName];
+            }
+            audioTrackNames = [audioTrackNamesMut copy];
+        }
+        
+        if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
+            for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
+                [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
+        }
+        else {
+            [_audioTracks addObject:@{@"name" : @"Disabled"}];
+        }
+        
+        _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
+        _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        self.subTabBarCollectionView.dataSource = self;
+        self.subTabBarCollectionView.delegate   = self;
+        [self.subTabBarCollectionView reloadData];
+        
+        self.audioTabBarCollectionView.dataSource = self;
+        self.audioTabBarCollectionView.delegate   = self;
+        [self.audioTabBarCollectionView reloadData];
+        
+        [self restoreSub];
+    }];
     
     /*
     [[SQClientController shareClient]subtitlesListForHash:_hash
@@ -1483,6 +1471,9 @@ static NSString *const kText = @"kText";
     SRTSubtitle *lastFounded = (SRTSubtitle *)[objectsFound lastObject];
     
     if (lastFounded) {
+        if ([lastFounded.content.lowercaseString containsString:@"opensubtitles"]) {
+            return;
+        }
         [self updateSubtitle:lastFounded.content];
         
         CGRect rectBack = [lastFounded.content boundingRectWithSize:CGSizeMake(1920, 1080)
@@ -1545,6 +1536,7 @@ static NSString *const kText = @"kText";
     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
     */
+
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 

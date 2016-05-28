@@ -8,128 +8,206 @@
 
 import Foundation
 import Alamofire
+import AlamofireXMLRPC
+
+@objc class Subtitle: NSObject {
+
+    var language: String!
+    var encoding: String!
+    var fileAddress: String!
+    var filePath: String!
+    var fileName: String!
+    var index: NSNumber? // Obj-C Bridging support
+
+    override init() {
+        super.init()
+    }
+
+    convenience init(language: String, fileAddress: String!, fileName: String!, encoding: String!) {
+        self.init()
+
+        self.language = language
+        self.fileAddress = fileAddress
+        self.fileName = fileName
+        self.encoding = encoding
+    }
+
+    override var description: String {
+        get {
+            return "<\(self.dynamicType)> language: \"\(self.language)\"\n file: \"\(self.fileAddress)\"\n"
+        }
+    }
+
+    func downloadSubtitle(completion: ((filePath: String?) -> Void)?) {
+        Alamofire.request(.GET, self.fileAddress)
+            .responseData { response in
+                if let data = response.data {
+                    let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
+                    if let cachcesDirectory = paths.first {
+                        do {
+                            var path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
+                            try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
+                            path = path.stringByAppendingPathComponent(self.fileAddress.lastPathComponent)
+                            try data.writeToFile(path, options: .DataWritingAtomic)
+                            let zip = ZKFileArchive(archivePath: path)
+                            if zip.inflateToDiskUsingResourceFork(false) == 1 {
+                                try NSFileManager.defaultManager().removeItemAtPath(path)
+                            }
+                            self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
+                            completion?(filePath: self.filePath)
+                        } catch NSCocoaError.FileWriteFileExistsError {
+                            self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(self.fileName)
+                            if NSFileManager.defaultManager().fileExistsAtPath(self.filePath) {
+                                do {
+                                    let dirContents = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath.stringByDeletingLastPathComponent)
+                                    let srts = dirContents.filter({ $0.containsString(".srt") })
+                                    if let first = srts.first {
+                                        self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(first)
+                                    }
+                                } catch let error as NSError {
+                                    print(error)
+                                }
+                            }
+                            completion?(filePath: self.filePath)
+                        } catch {
+                            completion?(filePath: self.filePath)
+                        }
+                    } else {
+                        completion?(filePath: self.filePath)
+                    }
+                } else {
+                    completion?(filePath: self.filePath)
+                }
+        }
+    }
+
+}
 
 @objc class SubtitleManager: NSObject, ZipKitDelegate {
-    
+
     typealias CompletionBlock = ((name: String?, path: String?) -> Void)?
-    
+
     var completion: CompletionBlock
-    
+
+    private let baseURL = "http://api.opensubtitles.org:80/xml-rpc"
+    private let secureBaseURL = "https://api.opensubtitles.org:443/xml-rpc"
+    private let userAgent = "Popcorn Time v1"
+    private var token: String!
+
     class func sharedManager() -> SubtitleManager {
         struct Struct {
             static let Instance = SubtitleManager()
         }
-        
+
         return Struct.Instance
     }
-    
+
     override init() {
         super.init()
-        
+
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
             let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles")
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
             } catch {
-                
+
             }
         }
     }
-    
-    @objc func fetchSubtitlesForIMDB(imdbID: String, completion: (([AnyObject]?) -> Void)?) {
-        // Check if a sub exists
-        if self.subtitlesExist(imdbID) {
-            
+
+    func login(completion: (success: Bool) -> Void) {
+        AlamofireXMLRPC.request(secureBaseURL, methodName: "LogIn", parameters: ["", "", "en", userAgent]).responseXMLRPC { response in
+            guard response.result.isSuccess else {
+                print("Error is \(response.result.error!)")
+                completion(success: false)
+                return
+            }
+            self.token = response.result.value![0]["token"].string
+            completion(success: true)
         }
-        
-        // Clean up everything
-        self.cleanSubs()
-        
-        
-        let endpoint = "http://api.yifysubtitles.com/subs/\(imdbID)"
-        
-        let group = dispatch_group_create()
-        
-        Alamofire.request(.GET, endpoint)
-        .responseJSON { response in
-            var subtitleArray = [AnyObject]()
-            if let response = response.result.value as? [String : AnyObject] {
-                if let subs = response["subs"] as? [String : AnyObject] {
-                    if let subtitles = subs[imdbID] as? [String : AnyObject] {
-                        for (key, value) in subtitles {
-                            if let items = value as? [AnyObject] {
-                                if let first = items.first {
-                                    if let url = first["url"] as? String {
-                                        dispatch_group_enter(group)
-                                        self.downloadSubtitle(imdbID, name: key.capitalizedString, url: "http://yifysubtitles.com\(url)") { name, path in
-                                            if let name = name, let path = path {
-                                                let dict = ["name": name, "path": path]
-                                                subtitleArray.append(dict)
-                                            }
-                                            dispatch_group_leave(group)
-                                        }
-                                    }
+    }
+
+    func search(episodeName: String?, episodeSeason: Int?, episodeNumber: Int?, imdbId: String?, completion: (subtitles: [Subtitle]?) -> Void) {
+        self.login { success in
+            if success {
+                var params: XMLRPCStructure = ["sublanguageid": "all"]
+                if let imdbId = imdbId {
+                    params["imdbid"] = imdbId.stringByReplacingOccurrencesOfString("tt", withString: "")
+                } else {
+                    params["query"] = episodeName
+                    params["season"] = String(episodeSeason!)
+                    params["episode"] = String(episodeNumber!)
+                }
+                let array: XMLRPCArray = [params]
+                let limit: XMLRPCStructure = ["limit": "300"]
+                AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).responseXMLRPC { response in
+                    guard response.result.isSuccess else {
+                        print("Error is \(response.result.error!)")
+                        return
+                    }
+                    if let response = response.result.value![0]["data"].array {
+                        var subtitles = [Subtitle]()
+                        for info in response {
+                            if !subtitles.contains({ subtitle in subtitle.language == info["LanguageName"].string! }) {
+                                if let language = info["LanguageName"].string, let downloadLink = info["ZipDownloadLink"].string, let fileName = info["SubFileName"].string, let encoding = info["SubEncoding"].string {
+                                    subtitles.append(Subtitle(language: language, fileAddress: downloadLink, fileName: fileName, encoding: encoding))
                                 }
                             }
                         }
-                        
-                        dispatch_group_notify(group, dispatch_get_main_queue(), { 
-                            completion?(subtitleArray)
-                        })
+                        subtitles.sortInPlace({ $0.language < $1.language })
+                        completion(subtitles: subtitles)
+                    } else {
+                        completion(subtitles: nil)
                     }
                 }
             } else {
-                completion?(nil)
+                completion(subtitles: nil)
             }
         }
     }
-    
-    func downloadSubtitle(imdbId: String, name: String, url: String, completion: CompletionBlock) {
-        self.completion = completion
-        
-        Alamofire.request(.GET, url)
-        .responseData { response in
-            if let data = response.data {
-                let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-                if let cachcesDirectory = paths.first {
-                    let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(imdbId).stringByAppendingPathComponent(url.lastPathComponent)
-                    self.saveAndExpandSub(imdbId, name: name, path: path, data: data)
+
+    func searchWithFile(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
+        if let fh = fileHash(movieFile) {
+            self.login { success in
+                if success {
+                    var params: XMLRPCStructure = ["sublanguageid": "all"]
+                    params["moviehash"] = fh.hash
+                    params["moviesize"] = fh.size
+                    params["tag"] = fh.name
+                    let array: XMLRPCArray = [params]
+                    let limit: XMLRPCStructure = ["limit": "300"]
+                    AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).responseXMLRPC { response in
+                        guard response.result.isSuccess else {
+                            print("Error is \(response.result.error!)")
+                            return
+                        }
+                        if let response = response.result.value![0]["data"].array {
+                            var subtitles = [Subtitle]()
+                            for info in response {
+                                if !subtitles.contains({ subtitle in subtitle.language == info["LanguageName"].string! }) {
+                                    if let language = info["LanguageName"].string, let downloadLink = info["ZipDownloadLink"].string, let fileName = info["SubFileName"].string, let encoding = info["SubEncoding"].string {
+                                        subtitles.append(Subtitle(language: language, fileAddress: downloadLink, fileName: fileName, encoding: encoding))
+                                    }
+                                }
+                            }
+                            subtitles.sortInPlace({ $0.language < $1.language })
+                            completion(subtitles: subtitles)
+                        } else {
+                            completion(subtitles: nil)
+                        }
+                    }
                 } else {
-                    self.completion?(name: nil, path: nil)
+                    completion(subtitles: nil)
                 }
-            } else {
-                self.completion?(name: nil, path: nil)
             }
+        } else {
+            print("....")
+            completion(subtitles: nil)
         }
+
     }
-    
-    func saveAndExpandSub(imdbId: String, name: String, path: String, data: NSData) {
-        let fileManager = NSFileManager.defaultManager()
-        do {
-            try fileManager.createDirectoryAtPath(path.stringByDeletingLastPathComponent, withIntermediateDirectories: true, attributes: nil)
-            let pathComponent = path.lastPathComponent
-            let newPath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(path.lastPathComponent.stringByDeletingPathExtension).stringByAppendingPathComponent(pathComponent)
-            try fileManager.createDirectoryAtPath(newPath.stringByDeletingLastPathComponent, withIntermediateDirectories: false, attributes: nil)
-            try data.writeToFile(newPath, options: .DataWritingAtomic)
-            let zip = ZKFileArchive(archivePath: newPath)
-            if zip.inflateToDiskUsingResourceFork(false) == 1 {
-                try fileManager.removeItemAtPath(newPath)
-            }
-            if let sub = try fileManager.contentsOfDirectoryAtPath(newPath.stringByDeletingLastPathComponent).first {
-                if sub.pathExtension == "srt" {
-                    self.completion?(name: name, path: newPath.stringByDeletingLastPathComponent.stringByAppendingPathComponent(sub))
-                } else {
-                    self.completion?(name: name, path: nil)
-                }
-            } else {
-                self.completion?(name: nil, path: nil)
-            }
-        } catch {
-            self.completion?(name: nil, path: nil)
-        }
-    }
-    
+
     func cleanSubs() {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
@@ -140,25 +218,9 @@ import Alamofire
                     try NSFileManager.defaultManager().removeItemAtPath(path.stringByAppendingPathComponent(item))
                 }
             } catch {
-                
+
             }
         }
     }
-    
-    func subtitlesExist(imdbId: String) -> Bool {
-        let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
-        if let cachcesDirectory = paths.first {
-            let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(imdbId)
-            
-            var isDir: ObjCBool = false
-            NSFileManager.defaultManager().fileExistsAtPath(path, isDirectory: &isDir)
-            if isDir {
-                return true
-            } else {
-                return false
-            }
-        }
-        return false
-    }
-    
+
 }

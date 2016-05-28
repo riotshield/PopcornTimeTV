@@ -86,9 +86,11 @@ let version = input("Enter the version number: ")
 
 
 // Make sure the tag exsists in versions
-if !versions.contains(version) {
-    print("You entered an incorrect version number. Please rerun this script and try again.")
-    exit(0)
+if version.lowercaseString != "master" {
+    if !versions.contains(version) {
+        print("You entered an incorrect version number. Please rerun this script and try again.")
+        exit(0)
+    }
 }
 
 // Checkout the tag

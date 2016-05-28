@@ -11,6 +11,7 @@
 		002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002682141CD0B76200F51D31 /* ServiceProvider.swift */; };
 		002682191CD0B76200F51D31 /* TopShelf.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 002682101CD0B76200F51D31 /* TopShelf.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
+		002A55A41CEDF2FA00252C3F /* SeasonProductRecipe.js in Resources */ = {isa = PBXBuildFile; fileRef = 002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */; };
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
 		00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */ = {isa = PBXBuildFile; fileRef = 00C28EA51CE1DB2E00E4D8BF /* Genre.js */; };
@@ -31,6 +32,7 @@
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
 		921572391CE422C000A26088 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921572381CE422C000A26088 /* AudioManager.swift */; };
+		92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92190C791CF78AA60060BE73 /* FileHash.swift */; };
 		921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921E44F31CE78F930012FEAD /* SettingsViewController.swift */; };
 		922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */; };
 		923860571CA0E40500A21F3B /* Latest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923860561CA0E40500A21F3B /* Latest.swift */; };
@@ -121,6 +123,7 @@
 		002682111CD0B76200F51D31 /* TVServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TVServices.framework; path = System/Library/Frameworks/TVServices.framework; sourceTree = SDKROOT; };
 		002682141CD0B76200F51D31 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		002682161CD0B76200F51D31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = SeasonProductRecipe.js; sourceTree = "<group>"; };
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
 		00C28EA51CE1DB2E00E4D8BF /* Genre.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Genre.js; sourceTree = "<group>"; };
@@ -147,6 +150,7 @@
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
 		9211E3F11CDC0ADD00BEEB9D /* PopcornTime-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PopcornTime-Bridging-Header.h"; sourceTree = "<group>"; };
 		921572381CE422C000A26088 /* AudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
+		92190C791CF78AA60060BE73 /* FileHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHash.swift; sourceTree = "<group>"; };
 		921E44F31CE78F930012FEAD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = "View Controllers/SettingsViewController.swift"; sourceTree = "<group>"; };
 		922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSDate+Equatable.swift"; path = "Extensions/NSDate+Equatable.swift"; sourceTree = "<group>"; };
 		923860561CA0E40500A21F3B /* Latest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Latest.swift; sourceTree = "<group>"; };
@@ -313,6 +317,7 @@
 				280910361C99E6B200C8EC1C /* Templates */,
 				280910301C99DFA200C8EC1C /* Tabs */,
 				925F8DD41CA9E44C007100EB /* Recipes */,
+				92190C781CF78AA60060BE73 /* Subtitles */,
 				925F8DF31CA9E464007100EB /* Managers */,
 				920550871CE6F71E00B8623F /* Objective-C */,
 				92CF49371CE6689200D666A8 /* External Classes */,
@@ -390,10 +395,19 @@
 			path = VLC;
 			sourceTree = "<group>";
 		};
+		92190C781CF78AA60060BE73 /* Subtitles */ = {
+			isa = PBXGroup;
+			children = (
+				92190C791CF78AA60060BE73 /* FileHash.swift */,
+			);
+			path = Subtitles;
+			sourceTree = "<group>";
+		};
 		924213FE1CB19DAA0055FA15 /* Product */ = {
 			isa = PBXGroup;
 			children = (
 				E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */,
+				002A55A31CEDF2FA00252C3F /* SeasonProductRecipe.js */,
 				E6B5F7901CB08FDE000F0644 /* SeasonProductRecipe.xml */,
 				925F8DDB1CA9E44C007100EB /* MovieProductRecipe.swift */,
 				925F8DDE1CA9E44C007100EB /* MovieProductRecipe.xml */,
@@ -606,9 +620,11 @@
 				TargetAttributes = {
 					0026820F1CD0B76200F51D31 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = LSMKHW6LLV;
 					};
 				};
 			};
@@ -656,6 +672,7 @@
 				926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */,
 				925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */,
 				925F8DEB1CA9E44C007100EB /* SearchRecipe.xml in Resources */,
+				002A55A41CEDF2FA00252C3F /* SeasonProductRecipe.js in Resources */,
 				925F8DE51CA9E44C007100EB /* CatalogRecipe.xml in Resources */,
 				925F8DED1CA9E44C007100EB /* MovieProductRecipe.xml in Resources */,
 			);
@@ -871,6 +888,7 @@
 				92CF4A021CE6692100D666A8 /* ZKCDTrailer64.m in Sources */,
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
 				92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */,
+				92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */,
 				92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */,

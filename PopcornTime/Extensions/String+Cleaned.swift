@@ -20,10 +20,10 @@ extension String {
         var s = stringByReplacingOccurrencesOfString(" ", withString: "-")
         s = s.stringByReplacingOccurrencesOfString(":", withString: "")
         s = s.stringByReplacingOccurrencesOfString("&-", withString: "")
+        s = s.stringByReplacingOccurrencesOfString("'-", withString: "-")
         s = s.stringByReplacingOccurrencesOfString("'", withString: "-")
         s = s.stringByReplacingOccurrencesOfString("(", withString: "")
         s = s.stringByReplacingOccurrencesOfString(")", withString: "")
-        s = s.stringByReplacingOccurrencesOfString("!", withString: "")
         return s.lowercaseString
     }
 

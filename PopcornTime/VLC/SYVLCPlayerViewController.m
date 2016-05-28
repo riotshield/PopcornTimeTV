@@ -291,8 +291,7 @@ static NSString *const kText = @"kText";
 
 
 #pragma mark - Gesture Low level
-<<<<<<< HEAD
-/*
+
  - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
  {
  NSLog(@"touchesBegan");
@@ -304,9 +303,7 @@ static NSString *const kText = @"kText";
  {
  NSLog(@"touchesCancelled");
  }
- */
-=======
->>>>>>> remoteMaster
+
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -346,7 +343,7 @@ static NSString *const kText = @"kText";
     //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
     _canPanning = YES;
 }
-<<<<<<< HEAD
+
 /*
  - (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
  {
@@ -369,9 +366,7 @@ static NSString *const kText = @"kText";
  NSLog(@"pressesCancelled");
  }
  */
-=======
 
->>>>>>> remoteMaster
 - (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
@@ -1299,32 +1294,6 @@ static NSString *const kText = @"kText";
         [self stopSubtitleParseTimer];
     } else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
-        
-<<<<<<< HEAD
-        NSString *file = lastSelected[@"path"];
-        
-        NSString *string = [self readSubtitleAtPath:file forSubtitleName: lastSelected[@"name"]];
-        NSError *error;
-        SRTParser *parser = [[SRTParser alloc] init];
-        _currentSelectedSub = [parser parseString:string error:&error];
-        
-        
-        //        _currentSubParsed = [self parseSubtitle:file];
-        
-        
-        /*
-         [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
-         forHash:_hash
-         withBlock:^(NSData *data, NSError *error) {
-         if (data) {
-         _currentSubParsed = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-         }
-         else {
-         _currentSubParsed = @{};
-         }
-         }];
-         */
-=======
         NSString *file = lastSelected.filePath;
         if (file) {
             NSString *string = [self readSubtitleAtPath:file withEncoding:lastSelected.encoding];
@@ -1342,79 +1311,17 @@ static NSString *const kText = @"kText";
                 }];
             }
         }
->>>>>>> PopcornTimeTV/master
+
     }
     
 }
 
-<<<<<<< HEAD
-- (NSString *)readSubtitleAtPath:(NSString *)path forSubtitleName:(NSString*)name
-{
-    NSError *error = nil;
-    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    // If UTF-8 Encoding fails, try ISO Latin1 & 2
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
-#pragma This is necessary here because the string is parsed from the nsstring method but not correctly so the check !string is not satisfied
-        //If language selected is Greek or Polish execute a read of the subtitles using CoreText with custom encoding to show special characters correctly
-        NSData* dataFile = [NSData dataWithContentsOfFile:path];
-        if([name isEqualToString:@"Greek"]){
-            CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, dataFile.bytes, dataFile.length, kCFStringEncodingISOLatinGreek, YES);
-            string = (__bridge NSString *)cfstring;
-            CFRelease(cfstring);
-        }
-        if([name isEqualToString:@"Polish"]){
-            NSData* dataFile = [NSData dataWithContentsOfFile:path];
-            CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, dataFile.bytes, dataFile.length, kCFStringEncodingISOLatin2, YES);
-            string = (__bridge NSString *)cfstring;
-            CFRelease(cfstring);
-        }
-        if([name isEqualToString:@"Turkish"]){
-            NSData* dataFile = [NSData dataWithContentsOfFile:path];
-            CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, dataFile.bytes, dataFile.length, kCFStringEncodingISOLatin5, YES);
-            string = (__bridge NSString *)cfstring;
-            CFRelease(cfstring);
-        }
-    }
-    
-    
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
-    }
-    
-    if (!string) {
-        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
-        string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-    }
-    
-    // If that fails try one other format, GBK_95
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
-    }
-    
-    // Give Big5 a try
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-    }
-    
-    // Hong Kong varient
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
-    }
-=======
+
 - (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
-<<<<<<< HEAD
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    CFStringEncoding e = [UniversalDetector encodingWithData:data];
-<<<<<<< HEAD
->>>>>>> PopcornTimeTV/master
-    
-=======
->>>>>>> PopcornTimeTV/master
+
     NSError *error = nil;
-=======
->>>>>>> remoteMaster
+
     
     NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -1681,7 +1588,7 @@ static NSString *const kText = @"kText";
     string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
     string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
     
-=======
+
     NSShadow *shadow = [[NSShadow alloc]init];
     shadow.shadowOffset = CGSizeMake(.0, 1.0);
     shadow.shadowBlurRadius = 5.0;
@@ -1696,9 +1603,7 @@ static NSString *const kText = @"kText";
     [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
-    */
 
->>>>>>> PopcornTimeTV/master
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 

@@ -26,7 +26,7 @@ swift install.swift
 ```
 Follow the instructions in the install sript to update your copy of PopcornTime. For all future updates, just run `swift install.swift` and it will walk you through the rest.
 
-If the new install script is failing, revert to the old way and run `git checkout 0.6.4` and `pod update`
+If the new install script is failing, revert to the old way and run `git checkout <release version>` and `pod update`
 
 If you are installing PopcornTime for the first time run and are having issues try running
 `pod install` otherwise if you are updating, run `pod update`.

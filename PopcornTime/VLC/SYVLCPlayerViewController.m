@@ -1270,7 +1270,7 @@ static NSString *const kText = @"kText";
                 [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
                     NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
                     NSError *error;
-                    lastSelected.filePath=filePath;
+                    lastSelected.filePath = filePath;
                     SRTParser *parser = [[SRTParser alloc] init];
                     _currentSelectedSub = [parser parseString:string error:&error];
                 }];
@@ -1285,12 +1285,24 @@ static NSString *const kText = @"kText";
     
     NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
-
-        CFStringEncoding encodingType = CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encoding);
+    CFStringEncoding encodingType = CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encoding);
+    if (encodingType != kCFStringEncodingInvalidId) {
         CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, data.bytes, data.length, encodingType, YES);
         string = (__bridge NSString *)cfstring;
         CFRelease(cfstring);
         return string;
+    }
+    
+    // Sometimes the encoding is unknown (i.e. Catalan) so we have to fallback on some sort of other check
+    [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
+    if (string) {
+        return string;
+    }
+    
+    // Just as a last resort failsafe, open in UTF-8. Encoding will probably be broken but it will open.
+    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
+    
 }
 
 - (void) newAudioSelected
@@ -1331,7 +1343,6 @@ static NSString *const kText = @"kText";
 {
     NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
     [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
-        NSLog(@"%@", subtitles);
         _subsTracks = [NSMutableArray array];
         [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];
         [_subsTracks addObjectsFromArray:subtitles];

@@ -14,7 +14,7 @@
 #import <PopcornTorrent/PopcornTorrent.h>
 #import "PopcornTime-Swift.h"
 #import "SRTParser.h"
-
+#import "UIImageView+Network.h"
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -59,6 +59,9 @@ static NSString *const kText = @"kText";
     NSUInteger _lastButtonSelectedTag;
     
     SQSubSetting *subSetting;
+    
+    NSDictionary *_videoInfo;
+    NSString *_magnet;
 }
 
 @end
@@ -70,6 +73,33 @@ static NSString *const kText = @"kText";
 #define kAlphaNotFocused 0.25
 #define kAlphaFocusedBackground 0.5
 #define kAlphaNotFocusedBackground 0.15
+
+- (id)initWithVideoInfo:(NSDictionary *)videoInfo {
+    self = [super init];
+    
+    if (self) {
+        _lastButtonSelectedTag = 1;
+        _finishAnalyzePan = NO;
+        _didPanGesture = NO;
+        _didClickGesture = NO;
+        _videoDidOpened = NO;
+        self.currentSubTitleDelay = .0;
+        _tryAccount = 0;
+        _canPanning  = NO;
+        _sizeFloat = 68.0;
+        _panChangingTime = NO;
+        
+        // Settings object
+        subSetting = [SQSubSetting loadFromDisk];
+        
+        _videoInfo = videoInfo;
+        _magnet = _videoInfo[@"magnet"];
+        
+        [self beginStreamingTorrent];
+    }
+    
+    return self;
+}
 
 - (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles
 {
@@ -98,6 +128,40 @@ static NSString *const kText = @"kText";
     
 }// initWithURL:
 
+
+- (void)beginStreamingTorrent {
+    // lets not get a retain cycle going
+    __weak __typeof__(self) weakSelf = self;
+    [[PTTorrentStreamer sharedStreamer] startStreamingFromFileOrMagnetLink:_magnet progress:^(PTTorrentStatus status) {
+        
+        // Percentage
+        _percentLabel.text = [NSString stringWithFormat:@"%.0f%%", status.bufferingProgress * 100];
+        
+        // Status
+        NSString *speedString = [NSByteCountFormatter stringFromByteCount:status.downloadSpeed countStyle:NSByteCountFormatterCountStyleBinary];
+        _statsLabel.text = [NSString stringWithFormat:@"Overall Progress: %.0f%%  Speed: %@/s  Seeds: %d  Peers: %d", status.totalProgreess * 100, speedString, status.seeds, status.peers];
+//        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
+        
+        // State
+        _overallProgressView.progress = status.totalProgreess;
+        _progressView.progress = status.bufferingProgress;
+        if (_progressView.progress > 0.0) {
+            [_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
+        }
+    } readyToPlay:^(NSURL *videoFileURL) {
+        _url = videoFileURL;
+        [weakSelf createAudioSubsDatasource];
+        [weakSelf updateLoadingRatio];
+        [weakSelf loadPlayer];
+    } failure:^(NSError *error) {
+        // Throw up an error and dismiss the view
+        [weakSelf showAlertLoadingView];
+    }];
+}
+
+- (void)stopStreamingTorrent {
+    [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+}
 
 - (void)viewDidLoad
 {
@@ -143,13 +207,10 @@ static NSString *const kText = @"kText";
         self.audioTabBarCollectionView.remembersLastFocusedIndexPath = YES;
     }
     
-    // Media player
-    _mediaplayer          = [[VLCMediaPlayer alloc] init];
-    _mediaplayer.drawable = self.containerView;
-    _mediaplayer.media    = [VLCMedia mediaWithURL:_url];
-    _mediaplayer.delegate = self;
+    _mediaplayer              = [[VLCMediaPlayer alloc] init];
+    _mediaplayer.drawable     = self.containerView;
+    _mediaplayer.delegate     = self;
     _mediaplayer.audio.volume = 200;
-    [_mediaplayer play];
     
     self.lineBackView.layer.cornerRadius  = 6.0;
     self.lineBackView.layer.masksToBounds = YES;
@@ -176,10 +237,30 @@ static NSString *const kText = @"kText";
     _panGestureRecognizerDelay = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDelay:)];
     _panGestureRecognizerDelay.delegate = self;
     [self.subValueDelayButton addGestureRecognizer:_panGestureRecognizerDelay];
+<<<<<<< HEAD
     
     self.subsButton.enabled      = NO;
     self.subsDelayButton.enabled = NO;
     self.audioButton.enabled     = NO;
+=======
+
+    if (_videoInfo) {
+        _statsLabel.text = @"";
+        _percentLabel.text = @"0%";
+        _nameLabel.text = [NSString stringWithFormat:@"Processing %@...", _videoInfo[@"movieName"]];
+        
+        [_imageView loadImageFromURL:[NSURL URLWithString:_videoInfo[@"imageAddress"]] placeholderImage:nil];
+        [_backgroundImageView loadImageFromURL:[NSURL URLWithString:_videoInfo[@"backgroundImageAddress"]] placeholderImage:nil];
+    }
+    
+    if (_url) {
+        [self loadPlayer];
+    }
+}
+
+- (void)loadPlayer {
+    [_loadingView setHidden:YES];
+>>>>>>> PopcornTimeTV/master
     
     [self showOSD];
     [self hideDelayButton];
@@ -187,10 +268,18 @@ static NSString *const kText = @"kText";
     self.heightCurrentLineSpace.constant = 25.0;
     [self.view layoutIfNeeded];
     
-    [self updateLoadingRatio];
+    // Media player
+    _mediaplayer.media = [VLCMedia mediaWithURL:_url];
+    [_mediaplayer play];
     
+<<<<<<< HEAD
     [self createAudioSubsDatasource];
     
+=======
+    self.subsButton.enabled      = NO;
+    self.subsDelayButton.enabled = NO;
+    self.audioButton.enabled     = NO;
+>>>>>>> PopcornTimeTV/master
 }
 
 
@@ -203,6 +292,7 @@ static NSString *const kText = @"kText";
 
 - (void) updateLoadingRatio
 {
+<<<<<<< HEAD
     /*
      if (self.isFile) {
      self.progressView.alpha = .0;
@@ -251,6 +341,9 @@ static NSString *const kText = @"kText";
      }];
      */
     
+=======
+
+>>>>>>> PopcornTimeTV/master
 }
 
 
@@ -267,11 +360,16 @@ static NSString *const kText = @"kText";
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
                                                              
+<<<<<<< HEAD
                                                              //                                                             [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
                                                              
                                                              [self dismissViewControllerAnimated:YES completion:^{
                                                                  [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
                                                              }];
+=======
+                                                             [self stopStreamingTorrent];
+                                                             [self.navigationController popViewControllerAnimated:YES];
+>>>>>>> PopcornTimeTV/master
                                                          }];
     [alert addAction:acceptAction];
     [self presentViewController:alert animated:YES completion:nil];
@@ -657,9 +755,9 @@ static NSString *const kText = @"kText";
                 _panGestureRecognizer.cancelsTouchesInView = YES;
                 _finishAnalyzePan = YES;
                 [self openTopMenu];
-            }
-            else if (deltaX > 100.0) {
+            } else if (deltaX > 100.0) {
                 if ([_mediaplayer isPlaying]) {
+                    [self showOSD];
                     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
                     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
                     [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
@@ -731,14 +829,12 @@ static NSString *const kText = @"kText";
             
             if (position == 1.0) {
                 [self done:panGestureRecognizer];
-            }
-            else {
+            } else {
                 [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
                 [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
             }
         }
     }
-    
 }
 
 
@@ -861,7 +957,7 @@ static NSString *const kText = @"kText";
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+            [self stopStreamingTorrent];
             
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -907,7 +1003,7 @@ static NSString *const kText = @"kText";
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+            [self stopStreamingTorrent];
             
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -1025,10 +1121,6 @@ static NSString *const kText = @"kText";
 
 - (void) showSwipeMessage
 {
-    // It's trailer
-    if (_hash.length == 0) {
-        return;
-    }
     
     if (self.swipeTopConstraint.constant == 26) {
         return;

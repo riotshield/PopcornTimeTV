@@ -103,9 +103,9 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="t1K-2N-WYF" firstAttribute="leading" secondItem="mYD-Xa-w1D" secondAttribute="leading" id="BXd-H3-bJp"/>
-                            <constraint firstItem="t1K-2N-WYF" firstAttribute="bottom" secondItem="Zwh-FH-fPr" secondAttribute="top" id="GYc-ML-1Lw"/>
-                            <constraint firstItem="t1K-2N-WYF" firstAttribute="top" secondItem="JDI-yQ-NxC" secondAttribute="bottom" id="Xq9-0S-9h5"/>
+                            <constraint firstItem="t1K-2N-WYF" firstAttribute="top" secondItem="JDI-yQ-NxC" secondAttribute="bottom" id="NJX-pD-tVJ"/>
                             <constraint firstAttribute="trailing" secondItem="t1K-2N-WYF" secondAttribute="trailing" id="eC9-bh-HaO"/>
+                            <constraint firstItem="t1K-2N-WYF" firstAttribute="bottom" secondItem="Zwh-FH-fPr" secondAttribute="top" id="syg-es-cYE"/>
                         </constraints>
                     </view>
                     <connections>

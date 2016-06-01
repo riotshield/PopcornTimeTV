@@ -334,6 +334,27 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
+        
+        let info: [String : AnyObject] = [
+            "magnet" : magnet,
+            "imdbId" : pieces[6],
+            "imageAddress" : pieces[2],
+            "backgroundImageAddress" : pieces[3],
+            "movieName" : pieces[4],
+            "shortDescription" : pieces[5],
+            "episodeName" : pieces[7],
+            "episodeNumber" : Int(pieces[8])!,
+            "episodeSeason" : Int(pieces[9])!
+        ]
+        
+        let player = SYVLCPlayerViewController(videoInfo: info)
+        
+        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+            Kitchen.appController.navigationController.pushViewController(player, animated: true)
+//            player.imageView.kf_setImageWithURL(NSURL(string: pieces[2])!)
+//            player.backgroundImageView.kf_setImageWithURL(NSURL(string: pieces[3])!)
+        })
+        /*
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
             viewController.magnet = magnet
@@ -350,6 +371,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
             })
         }
+        */
 
     }
 

@@ -9,6 +9,7 @@
 import UIKit
 import TVMLKitchen
 import PopcornKit
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
         Kitchen.prepare(cookbook)
+        
+        /*
+        Alamofire.request(.GET, "https://api.ipify.org/?format=json").responseJSON { response in
+            print(response.result.value)
+        }
+         */
 
         let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in

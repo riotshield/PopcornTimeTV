@@ -42,6 +42,7 @@
                 <outlet property="subtitlesBottomSpace" destination="GsB-Gz-DQH" id="s5I-XB-4qm"/>
                 <outlet property="swipeMesaggeContainerView" destination="DAd-2S-Jzs" id="pcd-1y-Wmq"/>
                 <outlet property="swipeMesaggeLabel" destination="td7-vn-6lv" id="3oi-3W-or3"/>
+                <outlet property="swipeTopConstraint" destination="PQ5-FC-dMR" id="tFI-2F-Ycy"/>
                 <outlet property="thumbImageView" destination="VxV-ER-aNy" id="kWe-bs-16W"/>
                 <outlet property="topButton" destination="nxK-5P-fgT" id="7V4-07-lCn"/>
                 <outlet property="topButtonContainerView" destination="Gvj-fx-CrO" id="X7l-61-31W"/>

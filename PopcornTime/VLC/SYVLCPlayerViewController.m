@@ -496,7 +496,7 @@ static NSString *const kText = @"kText";
     else if (context.nextFocusedView.tag == 1001) {
         if ([context.previouslyFocusedView isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
             [self deactiveCollectionViews];
-            self.middleButton.hidden = YES;
+//            self.middleButton.hidden = YES;
             [self setNeedsFocusUpdate];
         }
         else {
@@ -509,7 +509,7 @@ static NSString *const kText = @"kText";
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocused] forState:UIControlStateFocused];
     }
     else if (context.previouslyFocusedView.tag == 4) {
-        self.middleButton.hidden = YES;
+//        self.middleButton.hidden = YES;
         [self activeHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocusedBackground] forState:UIControlStateFocused];
     }
@@ -543,7 +543,7 @@ static NSString *const kText = @"kText";
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        _middleButton.hidden = NO;
+//        _middleButton.hidden = NO;
         [self setNeedsFocusUpdate];
     }];
 }
@@ -559,7 +559,7 @@ static NSString *const kText = @"kText";
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _topMenuContainerView.hidden = YES;
-        _middleButton.hidden         = YES;
+//        _middleButton.hidden         = YES;
         _topButton.hidden            = YES;
         [self setNeedsFocusUpdate];
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
@@ -576,14 +576,14 @@ static NSString *const kText = @"kText";
 
 - (void) showMiddleButton
 {
-    self.middleButton.hidden = NO;
+//    self.middleButton.hidden = NO;
     
 }
 
 
 - (void) hideMiddleButton
 {
-    self.middleButton.hidden = YES;
+//    self.middleButton.hidden = YES;
     
 }
 

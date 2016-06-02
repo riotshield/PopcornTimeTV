@@ -42,7 +42,7 @@ static NSString *const kText = @"kText";
     float _sizeFloat;
     float _offsetFloat;
     
-    BOOL _canPanning;
+    BOOL _isPanning;
     CGPoint _lastPointPan;
     CGFloat _lastPointDelayPanX;
     NSIndexPath *_lastIndexPathSubtitle;
@@ -62,6 +62,8 @@ static NSString *const kText = @"kText";
     
     NSDictionary *_videoInfo;
     NSString *_magnet;
+    
+    BOOL _videoLoaded;
 }
 
 @end
@@ -85,7 +87,7 @@ static NSString *const kText = @"kText";
         _videoDidOpened = NO;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
-        _canPanning  = NO;
+        _isPanning  = NO;
         _sizeFloat = 68.0;
         _panChangingTime = NO;
         
@@ -94,6 +96,7 @@ static NSString *const kText = @"kText";
         
         _videoInfo = videoInfo;
         _magnet = _videoInfo[@"magnet"];
+        _videoLoaded = NO;
         
         [self beginStreamingTorrent];
     }
@@ -116,7 +119,7 @@ static NSString *const kText = @"kText";
         _cahcedSubtitles = cahcedSubtitles;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
-        _canPanning  = NO;
+        _isPanning  = NO;
         _sizeFloat = 68.0;
         _panChangingTime = NO;
         
@@ -150,6 +153,7 @@ static NSString *const kText = @"kText";
         }
     } readyToPlay:^(NSURL *videoFileURL) {
         _url = videoFileURL;
+        _videoLoaded = YES;
         [weakSelf createAudioSubsDatasource];
         [weakSelf updateLoadingRatio];
         [weakSelf loadPlayer];
@@ -166,6 +170,8 @@ static NSString *const kText = @"kText";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.view canBecomeFocused];
     
     // Sub back
     if (subSetting.backgroundType == SQSubSettingBackgroundBlack) {
@@ -309,6 +315,7 @@ static NSString *const kText = @"kText";
 - (IBAction)menuButton:(id)sender
 {
     if ([self isTopMenuOnScreen]) {
+        NSLog(@"Menu Out");
         [self closeTopMenu];
     }
     else {
@@ -324,7 +331,7 @@ static NSString *const kText = @"kText";
     //NSLog(@"touchesEnded: %@ - %@", touches, event);
     
     if (self.osdView.alpha == .0) {
-        _canPanning = YES;
+        _isPanning = YES;
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
@@ -334,11 +341,10 @@ static NSString *const kText = @"kText";
         if (_didClickGesture) {
             _didClickGesture = NO;
         }
-    }
-    else if (self.topTopMenuSpace.constant != .0) {
+    } else if (self.topTopMenuSpace.constant != .0) {
         
         if (!_didClickGesture && !_didPanGesture) {
-            _canPanning = NO;
+            _isPanning = NO;
             [self hideOSD];
         }
         
@@ -355,10 +361,10 @@ static NSString *const kText = @"kText";
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
-    _canPanning = YES;
+    _isPanning = YES;
 }
 
-- (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
+- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
     
@@ -377,6 +383,7 @@ static NSString *const kText = @"kText";
                 !self.subsButton.focused &&
                 !self.subsDelayButton.focused) {
                 [self closeTopMenu];
+                NSLog(@"A Click anywhere");
             }
         }
         else {
@@ -407,6 +414,10 @@ static NSString *const kText = @"kText";
 
 - (UIView *) preferredFocusedView
 {
+    if (![self isTopMenuOnScreen]) {
+        return self.view;
+    }
+    
     if ([self.subValueDelayButton isFocused]) {
         
         self.subsButton.enabled      = YES;
@@ -492,23 +503,21 @@ static NSString *const kText = @"kText";
         else {
             [self deactiveHeaderButtons];
         }
-    }
-    else if (context.nextFocusedView.tag == 1001) {
+    } else if (context.nextFocusedView.tag == 1001) {
         if ([context.previouslyFocusedView isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
             [self deactiveCollectionViews];
 //            self.middleButton.hidden = YES;
             [self setNeedsFocusUpdate];
-        }
-        else {
+        } else {
             [self closeTopMenu];
+//            NSLog(@"Update Focus");
         }
     }
     
     if (context.nextFocusedView.tag == 4) {
         [self deactiveHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocused] forState:UIControlStateFocused];
-    }
-    else if (context.previouslyFocusedView.tag == 4) {
+    } else if (context.previouslyFocusedView.tag == 4) {
 //        self.middleButton.hidden = YES;
         [self activeHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocusedBackground] forState:UIControlStateFocused];
@@ -528,13 +537,13 @@ static NSString *const kText = @"kText";
 - (void) openTopMenu
 {
     [self hideSwipeMessage];
-    
+
     self.subsButton.enabled      = NO;
     self.subsDelayButton.enabled = NO;
     self.audioButton.enabled     = NO;
-    
+
     self.topTopMenuSpace.constant = .0;
-    
+
     _panGestureRecognizer.enabled = NO;
     
     _topMenuContainerView.hidden = NO;
@@ -543,7 +552,6 @@ static NSString *const kText = @"kText";
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-//        _middleButton.hidden = NO;
         [self setNeedsFocusUpdate];
     }];
 }
@@ -551,15 +559,20 @@ static NSString *const kText = @"kText";
 
 - (void) closeTopMenu
 {
-    self.topTopMenuSpace.constant = -232.0;
+    _finishAnalyzePan = NO;
+    _didPanGesture = NO;
+    _didClickGesture = NO;
+    _isPanning  = NO;
+    _panChangingTime = NO;
     
+    self.topTopMenuSpace.constant = -232.0;
+
     _panGestureRecognizer.enabled = YES;
     
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _topMenuContainerView.hidden = YES;
-//        _middleButton.hidden         = YES;
         _topButton.hidden            = YES;
         [self setNeedsFocusUpdate];
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
@@ -610,32 +623,31 @@ static NSString *const kText = @"kText";
 - (IBAction)panGesture:(id)sender
 {
     
-    //NSLog(@"panGesture");
+//    NSLog(@"panGesture");
+    
+    if (!_videoLoaded) return;
+
     UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
     
     if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
         _panGestureDeltaPoint = CGPointZero;
         _finishAnalyzePan = NO;
         
         if (self.osdView.alpha == 0) {
             [self showOSD];
             [self showSwipeMessage];
-        }
-        else {
+        } else {
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
             
-            _canPanning = YES;
+            _isPanning = YES;
             self.heightCurrentLineSpace.constant = 40.0;
             [UIView animateWithDuration:0.3 animations:^{
                 [self.view layoutIfNeeded];
             }];
         }
-    }
-    else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         CGPoint currentPoint = [panGestureRecognizer translationInView:self.view];
         
         if (!_finishAnalyzePan) {
@@ -644,26 +656,25 @@ static NSString *const kText = @"kText";
             CGFloat yValue = (deltaY < .0) ? .0 : _panGestureDeltaPoint.y + deltaY;
             
             _panGestureDeltaPoint = CGPointMake(_panGestureDeltaPoint.x + fabs(deltaX), yValue);
+            
             if (deltaY < -50.0) {
                 _panGestureRecognizer.cancelsTouchesInView = YES;
                 _finishAnalyzePan = YES;
                 [self openTopMenu];
             } else if (deltaX > 100.0) {
-                if ([_mediaplayer isPlaying]) {
+                if (![_mediaplayer isPlaying]) {
                     [self showOSD];
                     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
                     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-                    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-                    return;
+                    
+                    _finishAnalyzePan = YES;
+                    [_mediaplayer pause];
+                    _panChangingTime = YES;
                 }
-                _finishAnalyzePan = YES;
-                [_mediaplayer pause];
-                _panChangingTime = YES;
             }
         }
         
-        
-        if (_canPanning && _finishAnalyzePan) {
+        if (_isPanning && _finishAnalyzePan) {
             
             _didPanGesture = YES;
             _leftCurrentLineSpace.constant += ((currentPoint.x - _lastPointPan.x) * 0.15);
@@ -679,7 +690,13 @@ static NSString *const kText = @"kText";
             _lastPointPan = currentPoint;
             
             float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-
+            NSLog(@"%f - %f", position, self.overallProgressView.progress);
+            if (position >= self.overallProgressView.progress) {
+                NSLog(@"CANT LOAD PAST THE DOWNLOADED POINT");
+            } else {
+                NSLog(@"Safe to load");
+            }
+            
             // Left label
             {
                 int actualSeconds = (int) (([[_mediaplayer time]intValue] - [[_mediaplayer remainingTime]intValue]) * 0.001 * position);
@@ -700,34 +717,32 @@ static NSString *const kText = @"kText";
                 self.rightLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
             }
         }
-    }
-    else {
-        _canPanning = NO;
-        _panChangingTime = NO;
-        _panGestureRecognizer.cancelsTouchesInView = NO;
-        
-        self.heightCurrentLineSpace.constant = 25.0;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.view layoutIfNeeded];
-        }];
-        
-        _lastPointPan = CGPointZero;
-        
-        if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-            float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-            [_mediaplayer pause];
-            [_mediaplayer setPosition:position];
+    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        _finishAnalyzePan = NO;
+        float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
+        [_mediaplayer pause];
+        [_mediaplayer setPosition:position];
 
-            self.indicatorView.hidden = NO;
-            
-            if (position == 1.0) {
-                [self done:panGestureRecognizer];
-            } else {
-                [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
-                [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-            }
+        self.indicatorView.hidden = NO;
+        
+        if (position == 1.0) {
+            [self done:panGestureRecognizer];
+        } else {
+            [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
+            [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
         }
     }
+    
+//    _isPanning = NO;
+//    _panChangingTime = NO;
+//    _panGestureRecognizer.cancelsTouchesInView = NO;
+//    
+//    self.heightCurrentLineSpace.constant = 25.0;
+//    [UIView animateWithDuration:0.3 animations:^{
+//        [self.view layoutIfNeeded];
+//    }];
+//    
+//    _lastPointPan = CGPointZero;
 }
 
 
@@ -744,8 +759,7 @@ static NSString *const kText = @"kText";
             [self showOSD];
             [self showSwipeMessage];
         }
-    }
-    else if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateChanged) {
+    } else if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateChanged) {
         
         CGPoint currentPoint = [_panGestureRecognizerDelay translationInView:self.view];
         
@@ -760,8 +774,7 @@ static NSString *const kText = @"kText";
                 _panGestureRecognizer.cancelsTouchesInView = YES;
                 _finishAnalyzePan = YES;
                 [self setNeedsFocusUpdate];
-            }
-            else if (deltaX > 100.0) {
+            } else if (deltaX > 100.0) {
                 _finishAnalyzePan = YES;
             }
         }
@@ -776,11 +789,9 @@ static NSString *const kText = @"kText";
         
         _lastPointDelayPanX = currentPoint.x;
     }
-    else {
-        _panGestureRecognizerDelay.cancelsTouchesInView = NO;
-        _lastPointPan = CGPointZero;
-    }
     
+    _panGestureRecognizerDelay.cancelsTouchesInView = NO;
+    _lastPointPan = CGPointZero;
 }
 
 
@@ -1058,7 +1069,7 @@ static NSString *const kText = @"kText";
 
 - (void) hideOSD
 {
-    _canPanning = NO;
+    _isPanning = NO;
     self.subtitlesBottomSpace.constant = 72.0;
     
     [self hideSwipeMessage];

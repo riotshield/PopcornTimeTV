@@ -29,7 +29,7 @@
 
 // Focus
 @property (nonatomic, weak) IBOutlet UIView *topMenuContainerView;
-@property (nonatomic, weak) IBOutlet UIButton *middleButton;
+//@property (nonatomic, weak) IBOutlet UIButton *middleButton;
 @property (nonatomic, weak) IBOutlet UIButton *topButton;
 @property (nonatomic, weak) IBOutlet UIButton *subValueDelayButton;
 

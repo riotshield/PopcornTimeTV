@@ -341,37 +341,20 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             "imageAddress" : pieces[2],
             "backgroundImageAddress" : pieces[3],
             "movieName" : pieces[4],
-            "shortDescription" : pieces[5],
-            "episodeName" : pieces[7],
-            "episodeNumber" : Int(pieces[8])!,
-            "episodeSeason" : Int(pieces[9])!
+            "shortDescription" : pieces[5]
         ]
         
-        let player = SYVLCPlayerViewController(videoInfo: info)
+//        if pieces.indices.count > 7 {
+//            info["episodeName"] = pieces[7]
+//            info["episodeNumber"] = Int(pieces[8])!
+//            info["episodeSeason"] = Int(pieces[9])!
+//        }
         
+        let player = SYVLCPlayerViewController(videoInfo: info)
+//        Kitchen.appController.navigationController.pushViewController(player, animated: true)
         NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
             Kitchen.appController.navigationController.pushViewController(player, animated: true)
-//            player.imageView.kf_setImageWithURL(NSURL(string: pieces[2])!)
-//            player.backgroundImageView.kf_setImageWithURL(NSURL(string: pieces[3])!)
         })
-        /*
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
-            viewController.magnet = magnet
-            viewController.imdbId = pieces[6]
-            viewController.imageAddress = pieces[2]
-            viewController.backgroundImageAddress = pieces[3]
-            viewController.movieName = pieces[4]
-            viewController.shortDescription = pieces[5]
-            viewController.episodeName = pieces[7]
-            viewController.episodeNumber = Int(pieces[8])
-            viewController.episodeSeason = Int(pieces[9])
-
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
-            })
-        }
-        */
 
     }
 

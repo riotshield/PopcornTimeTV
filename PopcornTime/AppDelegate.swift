@@ -10,6 +10,7 @@ import UIKit
 import TVMLKitchen
 import PopcornKit
 import Alamofire
+import GCDWebServer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,7 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print(response.result.value)
         }
          */
-
+        if let webServer = NSUserDefaults.standardUserDefaults().objectForKey("StartWebServer") as? Bool {
+            if webServer {
+                WebServerManager.sharedManager().startServer(8181);
+            }
+        }
+        
         let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in
             if let servers = servers {

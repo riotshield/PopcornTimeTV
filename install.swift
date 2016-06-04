@@ -3,7 +3,7 @@
 import Foundation
 
 public extension NSURLSession {
-    
+
     /// Return data from synchronous URL request
     public static func requestSynchronousData(request: NSURLRequest) -> NSData? {
         var data: NSData? = nil
@@ -18,20 +18,20 @@ public extension NSURLSession {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         return data
     }
-    
+
     /// Return data synchronous from specified endpoint
     public static func requestSynchronousDataWithURLString(requestString: String) -> NSData? {
         guard let url = NSURL(string:requestString) else {return nil}
         let request = NSURLRequest(URL: url)
         return NSURLSession.requestSynchronousData(request)
     }
-    
+
     /// Return JSON synchronous from URL request
     public static func requestSynchronousJSON(request: NSURLRequest) -> AnyObject? {
         guard let data = NSURLSession.requestSynchronousData(request) else {return nil}
         return try? NSJSONSerialization.JSONObjectWithData(data, options: [])
     }
-    
+
     /// Return JSON synchronous from specified endpoint
     public static func requestSynchronousJSONWithURLString(requestString: String) -> AnyObject? {
         guard let url = NSURL(string: requestString) else {return nil}
@@ -69,13 +69,13 @@ print("\n# Fetching the latest verion info...")
 
 var versions = [String]()
 if let jsonData = NSURLSession.requestSynchronousJSONWithURLString("https://api.github.com/repos/PopcornTimeTV/PopcornTimeTV/releases") as? [[String : AnyObject]] {
-    
+
     for info in jsonData {
         if let string = info["tag_name"] as? String {
             versions.append(string)
         }
     }
-    
+
     for i in 0...4 {
         print(versions[i])
     }
@@ -101,7 +101,7 @@ run("-c", "git checkout \(version)", "git pop")
 let podsInstalled = input("Do you have cocoapods installed? (Enter Yes or No): ").lowercaseString
 if podsInstalled.rangeOfString("no") != nil {
     print("Installing cocoapod gem...")
-    run("-c", "gem install cocoapods")
+    run("-c", "sudo gem install cocoapods")
 }
 
 // Install all of the pods

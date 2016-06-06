@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.contentInset = UIEdgeInsetsMake(100, -50, 0, 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 100, left: -50, bottom: 0, right: 0)
         self.settingsIcon.image = UIImage(named: "settings.png")
     }
 
@@ -245,12 +245,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 let alertController = UIAlertController(title: "Start Web Sever", message: "Starts a web server that allows you to browse to PopcornTimeTV from any browser http://\(ip!):8181 and view the downloaded media.", preferredStyle: .Alert)
                 alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "StartWebServer")
-                    WebServerManager.sharedManager().startServer(8181);
+                    WebServerManager.sharedManager().startServer(8181)
                     tableView.reloadData()
                 }))
                 alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: { action in
                     NSUserDefaults.standardUserDefaults().setBool(false, forKey: "StartWebServer")
-                    WebServerManager.sharedManager().stopServer();
+                    WebServerManager.sharedManager().stopServer()
                     tableView.reloadData()
                 }))
                 self.presentViewController(alertController, animated: true, completion: nil)

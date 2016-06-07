@@ -334,7 +334,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
-        
+
         let info: [String : AnyObject] = [
             "magnet" : magnet,
             "imdbId" : pieces[6],
@@ -343,13 +343,13 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             "movieName" : pieces[4],
             "shortDescription" : pieces[5]
         ]
-        
+
 //        if pieces.indices.count > 7 {
 //            info["episodeName"] = pieces[7]
 //            info["episodeNumber"] = Int(pieces[8])!
 //            info["episodeSeason"] = Int(pieces[9])!
 //        }
-        
+
         let player = SYVLCPlayerViewController(videoInfo: info)
 //        Kitchen.appController.navigationController.pushViewController(player, animated: true)
         NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in

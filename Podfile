@@ -12,6 +12,7 @@ target 'PopcornTime' do
   pod 'AlamofireXMLRPC', :git => 'https://github.com/PopcornTimeTV/AlamofireXMLRPC.git'
   pod 'PopcornTorrent'
   pod 'TVVLCKit'
+  pod 'GCDWebServer', '~> 3.3.2'
 end
 
 target 'TopShelf' do

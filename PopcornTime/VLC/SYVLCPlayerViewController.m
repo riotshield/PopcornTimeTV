@@ -1,4 +1,3 @@
-
 #import "SYVLCPlayerViewController.h"
 //#import "SYAppDelegate.h"
 //#import "SQMovieViewController.h"
@@ -143,7 +142,7 @@ static NSString *const kText = @"kText";
         // Status
         NSString *speedString = [NSByteCountFormatter stringFromByteCount:status.downloadSpeed countStyle:NSByteCountFormatterCountStyleBinary];
         _statsLabel.text = [NSString stringWithFormat:@"Overall Progress: %.0f%%  Speed: %@/s  Seeds: %d  Peers: %d", status.totalProgreess * 100, speedString, status.seeds, status.peers];
-//        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
+        //        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
         
         // State
         _overallProgressView.progress = status.totalProgreess;
@@ -243,13 +242,7 @@ static NSString *const kText = @"kText";
     _panGestureRecognizerDelay = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDelay:)];
     _panGestureRecognizerDelay.delegate = self;
     [self.subValueDelayButton addGestureRecognizer:_panGestureRecognizerDelay];
-<<<<<<< HEAD
     
-    self.subsButton.enabled      = NO;
-    self.subsDelayButton.enabled = NO;
-    self.audioButton.enabled     = NO;
-=======
-
     if (_videoInfo) {
         _statsLabel.text = @"";
         _percentLabel.text = @"0%";
@@ -266,7 +259,6 @@ static NSString *const kText = @"kText";
 
 - (void)loadPlayer {
     [_loadingView setHidden:YES];
->>>>>>> PopcornTimeTV/master
     
     [self showOSD];
     [self hideDelayButton];
@@ -278,14 +270,9 @@ static NSString *const kText = @"kText";
     _mediaplayer.media = [VLCMedia mediaWithURL:_url];
     [_mediaplayer play];
     
-<<<<<<< HEAD
-    [self createAudioSubsDatasource];
-    
-=======
     self.subsButton.enabled      = NO;
     self.subsDelayButton.enabled = NO;
     self.audioButton.enabled     = NO;
->>>>>>> PopcornTimeTV/master
 }
 
 
@@ -298,58 +285,7 @@ static NSString *const kText = @"kText";
 
 - (void) updateLoadingRatio
 {
-<<<<<<< HEAD
-    /*
-     if (self.isFile) {
-     self.progressView.alpha = .0;
-     return;
-     }
-     
-     if (self.progressView.ratio == 1.0) {
-     [UIView animateWithDuration:0.3 animations:^{
-     self.loadingLogo.alpha = .0;
-     self.progressView.alpha = .0;
-     }];
-     return;
-     }
-     
-     [[SQClientController shareClient]loadingRatioForHash:_hash withBlock:^(NSData *data, NSError *error) {
-     SBJsonParser *parser = [[SBJsonParser alloc]init];
-     id object = [parser objectWithData:data];
-     
-     if (![object isKindOfClass:[NSDictionary class]]) {
-     [self showAlertLoadingView];
-     return;
-     }
-     
-     NSDictionary *responseDict = (NSDictionary *) object;
-     if ([[responseDict allKeys]containsObject:@"error"]) {
-     [self showAlertLoadingView];
-     return;
-     }
-     
-     float ratio = [responseDict[@"ratio"]floatValue];NSLog(@"%f", ratio);
-     if (ratio > 1.0) {
-     ratio = 1.0;
-     }
-     
-     if (self.progressView.ratio >= ratio) {
-     if (self.progressView.ratio < 0.4) {
-     ratio = self.progressView.ratio + 0.025;
-     }
-     else {
-     ratio = 0.4;
-     }
-     }
-     
-     [self.progressView setRatio:ratio animated:YES];
-     [self performSelector:@selector(updateLoadingRatio) withObject:nil afterDelay:1.0];
-     }];
-     */
     
-=======
-
->>>>>>> PopcornTimeTV/master
 }
 
 
@@ -366,16 +302,8 @@ static NSString *const kText = @"kText";
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
                                                              
-<<<<<<< HEAD
-                                                             //                                                             [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
-                                                             
-                                                             [self dismissViewControllerAnimated:YES completion:^{
-                                                                 [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
-                                                             }];
-=======
                                                              [self stopStreamingTorrent];
                                                              [self.navigationController popViewControllerAnimated:YES];
->>>>>>> PopcornTimeTV/master
                                                          }];
     [alert addAction:acceptAction];
     [self presentViewController:alert animated:YES completion:nil];
@@ -396,19 +324,6 @@ static NSString *const kText = @"kText";
 
 
 #pragma mark - Gesture Low level
-
- - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
- {
- NSLog(@"touchesBegan");
- 
- }
- 
- 
- - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
- {
- NSLog(@"touchesCancelled");
- }
-
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
@@ -448,34 +363,7 @@ static NSString *const kText = @"kText";
     _isPanning = YES;
 }
 
-<<<<<<< HEAD
-/*
- - (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
- {
- NSLog(@"touchesEstimatedPropertiesUpdated");
- }
- 
- 
- - (void) pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
- {
- NSLog(@"pressesBegan");
- }
- 
- - (void) pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
- {
- NSLog(@"pressesChanged");
- }
- 
- - (void) pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
- {
- NSLog(@"pressesCancelled");
- }
- */
-
-- (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-=======
 - (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
->>>>>>> PopcornTimeTV/master
 {
     //NSLog(@"pressesEnded: %@ - %@", presses, event);
     
@@ -617,11 +505,11 @@ static NSString *const kText = @"kText";
     } else if (context.nextFocusedView.tag == 1001) {
         if ([context.previouslyFocusedView isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
             [self deactiveCollectionViews];
-//            self.middleButton.hidden = YES;
+            //            self.middleButton.hidden = YES;
             [self setNeedsFocusUpdate];
         } else {
             [self closeTopMenu];
-//            NSLog(@"Update Focus");
+            //            NSLog(@"Update Focus");
         }
     }
     
@@ -629,7 +517,7 @@ static NSString *const kText = @"kText";
         [self deactiveHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocused] forState:UIControlStateFocused];
     } else if (context.previouslyFocusedView.tag == 4) {
-//        self.middleButton.hidden = YES;
+        //        self.middleButton.hidden = YES;
         [self activeHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocusedBackground] forState:UIControlStateFocused];
     }
@@ -648,13 +536,13 @@ static NSString *const kText = @"kText";
 - (void) openTopMenu
 {
     [self hideSwipeMessage];
-
+    
     self.subsButton.enabled      = NO;
     self.subsDelayButton.enabled = NO;
     self.audioButton.enabled     = NO;
-
+    
     self.topTopMenuSpace.constant = .0;
-
+    
     _panGestureRecognizer.enabled = NO;
     
     _topMenuContainerView.hidden = NO;
@@ -677,7 +565,7 @@ static NSString *const kText = @"kText";
     _panChangingTime = NO;
     
     self.topTopMenuSpace.constant = -232.0;
-
+    
     _panGestureRecognizer.enabled = YES;
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -700,14 +588,14 @@ static NSString *const kText = @"kText";
 
 - (void) showMiddleButton
 {
-//    self.middleButton.hidden = NO;
+    //    self.middleButton.hidden = NO;
     
 }
 
 
 - (void) hideMiddleButton
 {
-//    self.middleButton.hidden = YES;
+    //    self.middleButton.hidden = YES;
     
 }
 
@@ -734,10 +622,10 @@ static NSString *const kText = @"kText";
 - (IBAction)panGesture:(id)sender
 {
     
-//    NSLog(@"panGesture");
+    //    NSLog(@"panGesture");
     
     if (!_videoLoaded) return;
-
+    
     UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
     
@@ -758,13 +646,7 @@ static NSString *const kText = @"kText";
                 [self.view layoutIfNeeded];
             }];
         }
-<<<<<<< HEAD
-    }
-    else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        
-=======
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
->>>>>>> PopcornTimeTV/master
         CGPoint currentPoint = [panGestureRecognizer translationInView:self.view];
         
         if (!_finishAnalyzePan) {
@@ -807,15 +689,12 @@ static NSString *const kText = @"kText";
             _lastPointPan = currentPoint;
             
             float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-<<<<<<< HEAD
-=======
             NSLog(@"%f - %f", position, self.overallProgressView.progress);
             if (position >= self.overallProgressView.progress) {
                 NSLog(@"CANT LOAD PAST THE DOWNLOADED POINT");
             } else {
                 NSLog(@"Safe to load");
             }
->>>>>>> PopcornTimeTV/master
             
             // Left label
             {
@@ -837,40 +716,12 @@ static NSString *const kText = @"kText";
                 self.rightLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
             }
         }
-<<<<<<< HEAD
-    }
-    else {
-        _canPanning = NO;
-        _panChangingTime = NO;
-        _panGestureRecognizer.cancelsTouchesInView = NO;
-        
-        self.heightCurrentLineSpace.constant = 25.0;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.view layoutIfNeeded];
-        }];
-        
-        _lastPointPan = CGPointZero;
-        
-        if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-            float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-            [_mediaplayer pause];
-            [_mediaplayer setPosition:position];
-            
-            self.indicatorView.hidden = NO;
-            
-            if (position == 1.0) {
-                [self done:panGestureRecognizer];
-            } else {
-                [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
-                [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-            }
-=======
     } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         _finishAnalyzePan = NO;
         float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
         [_mediaplayer pause];
         [_mediaplayer setPosition:position];
-
+        
         self.indicatorView.hidden = NO;
         
         if (position == 1.0) {
@@ -878,20 +729,19 @@ static NSString *const kText = @"kText";
         } else {
             [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
             [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
->>>>>>> PopcornTimeTV/master
         }
     }
     
-//    _isPanning = NO;
-//    _panChangingTime = NO;
-//    _panGestureRecognizer.cancelsTouchesInView = NO;
-//    
-//    self.heightCurrentLineSpace.constant = 25.0;
-//    [UIView animateWithDuration:0.3 animations:^{
-//        [self.view layoutIfNeeded];
-//    }];
-//    
-//    _lastPointPan = CGPointZero;
+    //    _isPanning = NO;
+    //    _panChangingTime = NO;
+    //    _panGestureRecognizer.cancelsTouchesInView = NO;
+    //
+    //    self.heightCurrentLineSpace.constant = 25.0;
+    //    [UIView animateWithDuration:0.3 animations:^{
+    //        [self.view layoutIfNeeded];
+    //    }];
+    //
+    //    _lastPointPan = CGPointZero;
 }
 
 
@@ -1439,6 +1289,7 @@ static NSString *const kText = @"kText";
         [self stopSubtitleParseTimer];
     } else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
+        
         NSString *file = lastSelected.filePath;
         if (file) {
             NSString *string = [self readSubtitleAtPath:file withEncoding:lastSelected.encoding];
@@ -1456,17 +1307,12 @@ static NSString *const kText = @"kText";
                 }];
             }
         }
-
     }
     
 }
 
-
 - (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
-
-    NSError *error = nil;
-
     
     NSString *string = nil;
     NSData *data = [NSData dataWithContentsOfFile:path];
@@ -1706,7 +1552,6 @@ static NSString *const kText = @"kText";
 - (void) updateSubtitle:(NSString *) string
 {
     /*
-<<<<<<< HEAD
      NSShadow *shadow = [[NSShadow alloc]init];
      shadow.shadowOffset = CGSizeMake(.0, 1.0);
      shadow.shadowBlurRadius = 5.0;
@@ -1723,32 +1568,6 @@ static NSString *const kText = @"kText";
      [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
      */
     
-    // <b></b>
-    // <i></i>
-    // <u></u>
-    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
-    
-
-    NSShadow *shadow = [[NSShadow alloc]init];
-    shadow.shadowOffset = CGSizeMake(.0, 1.0);
-    shadow.shadowBlurRadius = 5.0;
-    shadow.shadowColor = [UIColor blackColor];
-    
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    paragraphStyle.lineSpacing = 1.6;
-    
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc]initWithString:string];
-    [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:_sizeFloat weight:UIFontWeightMedium] range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
-
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 

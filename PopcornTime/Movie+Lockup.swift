@@ -20,10 +20,10 @@ extension Movie {
 
 }
 
-extension KATResult{
-    
-    
-    
+extension KATResult {
+
+
+
     var torrents: String {
         let filteredTorrents: [String] = self.torrents.map { torrent in
             return "quality=\(torrent.quality)&hash=\(torrent.hash)"
@@ -38,5 +38,5 @@ extension KATResult{
         string += "</listItemLockup>"
         return string
     }
-    
+
 }

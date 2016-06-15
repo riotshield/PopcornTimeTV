@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.contentInset = UIEdgeInsetsMake(100, -50, 0, 0)
+        self.tableView.contentInset = UIEdgeInsets(top: 100, left: -50, bottom: 0, right: 0)
         self.settingsIcon.image = UIImage(named: "settings.png")
     }
 
@@ -28,7 +28,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     // MARK: Table View
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -41,6 +41,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if section == 2 {
             return 2
         }
+        if section == 3 {
+            return 1
+        }
         return 0
     }
 
@@ -49,7 +52,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case 0: return "TV Shows"
         case 1: return "Other"
         case 2: return "Player"
-
+        case 3: return "Web Server"
         default: return nil
         }
     }
@@ -114,7 +117,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
                 cell.accessoryType = .None
             }
-
+        case 3:
+            cell.textLabel?.text = "Start"
+            if let startWebServer = NSUserDefaults.standardUserDefaults().objectForKey("StartWebServer") as? Bool {
+                cell.detailTextLabel?.text = startWebServer.boolValue ? "Yes" : "No"
+            } else {
+                cell.detailTextLabel?.text = "No"
+            }
+            cell.accessoryType = .None
         default: break
         }
 
@@ -226,7 +236,26 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.presentViewController(alertController, animated: true, completion: nil)
                 }
             }
+        case 3:
+            if indexPath.row == 0 {
+                var ip = WebServerManager.sharedManager().getWiFiAddress()
+                if ip == nil {
+                    ip = WebServerManager.sharedManager().getLANAddress()
+                }
+                let alertController = UIAlertController(title: "Start Web Sever", message: "Starts a web server that allows you to browse to PopcornTimeTV from any browser http://\(ip!):8181 and view the downloaded media.", preferredStyle: .Alert)
+                alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { action in
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "StartWebServer")
+                    WebServerManager.sharedManager().startServer(8181)
+                    tableView.reloadData()
+                }))
+                alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: { action in
+                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "StartWebServer")
+                    WebServerManager.sharedManager().stopServer()
+                    tableView.reloadData()
+                }))
+                self.presentViewController(alertController, animated: true, completion: nil)
 
+            }
         default: break
         }
     }

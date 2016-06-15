@@ -334,22 +334,27 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
-            viewController.magnet = magnet
-            viewController.imdbId = pieces[6]
-            viewController.imageAddress = pieces[2]
-            viewController.backgroundImageAddress = pieces[3]
-            viewController.movieName = pieces[4]
-            viewController.shortDescription = pieces[5]
-            viewController.episodeName = pieces[7]
-            viewController.episodeNumber = Int(pieces[8])
-            viewController.episodeSeason = Int(pieces[9])
 
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
-            })
-        }
+        let info: [String : AnyObject] = [
+            "magnet" : magnet,
+            "imdbId" : pieces[6],
+            "imageAddress" : pieces[2],
+            "backgroundImageAddress" : pieces[3],
+            "movieName" : pieces[4],
+            "shortDescription" : pieces[5]
+        ]
+
+//        if pieces.indices.count > 7 {
+//            info["episodeName"] = pieces[7]
+//            info["episodeNumber"] = Int(pieces[8])!
+//            info["episodeSeason"] = Int(pieces[9])!
+//        }
+
+        let player = SYVLCPlayerViewController(videoInfo: info)
+//        Kitchen.appController.navigationController.pushViewController(player, animated: true)
+        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+            Kitchen.appController.navigationController.pushViewController(player, animated: true)
+        })
 
     }
 

@@ -29,6 +29,7 @@
 		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
 		9205508D1CE6F71E00B8623F /* SRTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9205508A1CE6F71E00B8623F /* SRTParser.m */; };
 		9205508E1CE6F71E00B8623F /* SRTSubtitle.m in Sources */ = {isa = PBXBuildFile; fileRef = 9205508C1CE6F71E00B8623F /* SRTSubtitle.m */; };
+		920C33D91CFE77C7003278EE /* UIImageView+Network.m in Sources */ = {isa = PBXBuildFile; fileRef = 920C33D81CFE77C7003278EE /* UIImageView+Network.m */; };
 		9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */; };
 		9211E3F01CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */; };
 		921572391CE422C000A26088 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921572381CE422C000A26088 /* AudioManager.swift */; };
@@ -54,7 +55,6 @@
 		926A48781CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 926A48751CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m */; };
 		926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 926A48761CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib */; };
 		92925B2F1C9CA4E80086D362 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92925B2D1C9CA4E80086D362 /* Main.storyboard */; };
-		92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B301C9CA5BC0086D362 /* ProgressViewController.swift */; };
 		92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92925B331C9CAB360086D362 /* PlayerViewController.swift */; };
 		92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49331CE6591A00D666A8 /* SubtitleManager.swift */; };
 		92CF49361CE666EC00D666A8 /* String+PathComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CF49351CE666EC00D666A8 /* String+PathComponents.swift */; };
@@ -78,6 +78,7 @@
 		92D0A7DA1CE28EE900B3279B /* WatchlistRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92D0A7D91CE28EE900B3279B /* WatchlistRecipe.xml */; };
 		92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */; };
 		92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */; };
+		DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD32B1C11D0274D00015EB28 /* WebServerManager.swift */; };
 		E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */; };
 		E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */; };
 		E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B5F78E1CB08954000F0644 /* SeasonProductRecipe.swift */; };
@@ -145,6 +146,8 @@
 		9205508A1CE6F71E00B8623F /* SRTParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTParser.m; sourceTree = "<group>"; };
 		9205508B1CE6F71E00B8623F /* SRTSubtitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTSubtitle.h; sourceTree = "<group>"; };
 		9205508C1CE6F71E00B8623F /* SRTSubtitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRTSubtitle.m; sourceTree = "<group>"; };
+		920C33D71CFE77AB003278EE /* UIImageView+Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Network.h"; sourceTree = "<group>"; };
+		920C33D81CFE77C7003278EE /* UIImageView+Network.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Network.m"; sourceTree = "<group>"; };
 		9211E3EC1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SYVLCPlayerViewController.h; sourceTree = "<group>"; };
 		9211E3ED1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SYVLCPlayerViewController.m; sourceTree = "<group>"; };
 		9211E3EE1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SYVLCPlayerViewController.xib; sourceTree = "<group>"; };
@@ -174,7 +177,6 @@
 		926A48751CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQTabMenuCollectionViewCell.m; sourceTree = "<group>"; };
 		926A48761CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SQTabMenuCollectionViewCell.xib; sourceTree = "<group>"; };
 		92925B2E1C9CA4E80086D362 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		92925B301C9CA5BC0086D362 /* ProgressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProgressViewController.swift; path = "View Controllers/ProgressViewController.swift"; sourceTree = "<group>"; };
 		92925B331C9CAB360086D362 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = "View Controllers/PlayerViewController.swift"; sourceTree = "<group>"; };
 		92CF49331CE6591A00D666A8 /* SubtitleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubtitleManager.swift; sourceTree = "<group>"; };
 		92CF49351CE666EC00D666A8 /* String+PathComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+PathComponents.swift"; path = "Extensions/String+PathComponents.swift"; sourceTree = "<group>"; };
@@ -217,6 +219,8 @@
 		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
 		AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.debug.xcconfig"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD32B1C11D0274D00015EB28 /* WebServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServerManager.swift; sourceTree = "<group>"; };
+		DD53E3861D01F5E400147716 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		E31248A9DC45B7AEBE724E1D /* Pods-PopcornTime.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PopcornTime.release.xcconfig"; path = "Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime.release.xcconfig"; sourceTree = "<group>"; };
 		E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeasonPickerRecipe.swift; sourceTree = "<group>"; };
 		E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = SeasonPickerRecipe.xml; sourceTree = "<group>"; };
@@ -365,6 +369,8 @@
 			isa = PBXGroup;
 			children = (
 				920550881CE6F71E00B8623F /* SRTParser */,
+				920C33D71CFE77AB003278EE /* UIImageView+Network.h */,
+				920C33D81CFE77C7003278EE /* UIImageView+Network.m */,
 			);
 			path = "Objective-C";
 			sourceTree = "<group>";
@@ -484,6 +490,7 @@
 				925F8DF41CA9E464007100EB /* WatchlistManager.swift */,
 				921572381CE422C000A26088 /* AudioManager.swift */,
 				92CF49331CE6591A00D666A8 /* SubtitleManager.swift */,
+				DD32B1C11D0274D00015EB28 /* WebServerManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -491,7 +498,6 @@
 		92925B321C9CA5BE0086D362 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				92925B301C9CA5BC0086D362 /* ProgressViewController.swift */,
 				92925B331C9CAB360086D362 /* PlayerViewController.swift */,
 				921E44F31CE78F930012FEAD /* SettingsViewController.swift */,
 			);
@@ -550,6 +556,7 @@
 		F1EDDAB5F2E1772C41C22B7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD53E3861D01F5E400147716 /* libiconv.tbd */,
 				92CF4A091CE6692900D666A8 /* libz.tbd */,
 				C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */,
 				002682111CD0B76200F51D31 /* TVServices.framework */,
@@ -565,8 +572,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
 			buildPhases = (
-				D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */,
 				DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */,
+				D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */,
 				0026820C1CD0B76200F51D31 /* Sources */,
 				0026820D1CD0B76200F51D31 /* Frameworks */,
 				0026820E1CD0B76200F51D31 /* Resources */,
@@ -586,8 +593,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
-				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
 				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
+				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,
@@ -620,11 +627,11 @@
 				TargetAttributes = {
 					0026820F1CD0B76200F51D31 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = LSMKHW6LLV;
+						DevelopmentTeam = HN75UA2F78;
 					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = LSMKHW6LLV;
+						DevelopmentTeam = HN75UA2F78;
 					};
 				};
 			};
@@ -861,7 +868,6 @@
 				28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */,
 				925F8DF01CA9E44C007100EB /* ShowWatchlistRecipe.swift in Sources */,
 				92CF49F91CE6692100D666A8 /* NSDate+ZKAdditions.m in Sources */,
-				92925B311C9CA5BC0086D362 /* ProgressViewController.swift in Sources */,
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
 				92CF4A071CE6692100D666A8 /* ZKLFHeader.m in Sources */,
 				00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */,
@@ -879,7 +885,9 @@
 				921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
+				DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
+				920C33D91CFE77C7003278EE /* UIImageView+Network.m in Sources */,
 				921572391CE422C000A26088 /* AudioManager.swift in Sources */,
 				92925B341C9CAB360086D362 /* PlayerViewController.swift in Sources */,
 				92CF4A001CE6692100D666A8 /* ZKCDHeader.m in Sources */,
@@ -930,10 +938,12 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -945,10 +955,12 @@
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime.TopShelf;
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
@@ -1043,6 +1055,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1051,8 +1064,13 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PopcornTime/Objective-C/TOSMBClient/libdsm",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1066,6 +1084,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1074,8 +1093,13 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos.PopcornTime;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PopcornTime/Objective-C/TOSMBClient/libdsm",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
 			};
 			name = Release;

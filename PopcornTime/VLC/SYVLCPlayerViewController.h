@@ -16,6 +16,7 @@
 
 @property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, weak) IBOutlet UIView *osdView;
+@property (nonatomic, weak) IBOutlet UIProgressView *overallProgressView;
 @property (nonatomic, weak) IBOutlet UIView *lineBackView;
 @property (nonatomic, weak) IBOutlet UIView *currentLineView;
 @property (nonatomic, weak) IBOutlet UIView *topButtonContainerView;
@@ -28,7 +29,7 @@
 
 // Focus
 @property (nonatomic, weak) IBOutlet UIView *topMenuContainerView;
-@property (nonatomic, weak) IBOutlet UIButton *middleButton;
+//@property (nonatomic, weak) IBOutlet UIButton *middleButton;
 @property (nonatomic, weak) IBOutlet UIButton *topButton;
 @property (nonatomic, weak) IBOutlet UIButton *subValueDelayButton;
 
@@ -69,6 +70,16 @@
 @property (nonatomic, weak)   UIViewController <SYVLCPlayerViewControllerDelegate> *rootViewController;
 @property (nonatomic, weak) id <SQTabMenuCollectionViewCellDelegate> delegate;
 
+@property (nonatomic, weak) IBOutlet UIView *loadingView;
+@property (nonatomic, weak) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UIProgressView *progressView;
+@property (nonatomic, weak) IBOutlet UILabel *percentLabel;
+@property (nonatomic, weak) IBOutlet UILabel *statsLabel;
+
+
+- (id)initWithVideoInfo:(NSDictionary *)videoInfo;
 - (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles;
 
 @end

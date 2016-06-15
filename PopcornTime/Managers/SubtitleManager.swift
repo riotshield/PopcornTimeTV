@@ -11,33 +11,33 @@ import Alamofire
 import AlamofireXMLRPC
 
 @objc class Subtitle: NSObject {
-    
+
     var language: String!
     var encoding: String!
     var fileAddress: String!
     var filePath: String!
     var fileName: String!
     var index: NSNumber? // Obj-C Bridging support
-    
+
     override init() {
         super.init()
     }
-    
+
     convenience init(language: String, fileAddress: String!, fileName: String!, encoding: String!) {
         self.init()
-        
+
         self.language = language
         self.fileAddress = fileAddress
         self.fileName = fileName
         self.encoding = encoding
     }
-    
+
     override var description: String {
         get {
             return "<\(self.dynamicType)> language: \"\(self.language)\"\n file: \"\(self.fileAddress)\"\n"
         }
     }
-    
+
     func downloadSubtitle(completion: ((filePath: String?) -> Void)?) {
         Alamofire.request(.GET, self.fileAddress)
             .responseData { response in
@@ -56,11 +56,17 @@ import AlamofireXMLRPC
                             self.filePath = path.stringByDeletingLastPathComponent.stringByAppendingPathComponent(self.fileName)
                             completion?(filePath: self.filePath)
                         } catch NSCocoaError.FileWriteFileExistsError {
-                            self.filePath=cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language)
-                            if (NSFileManager.defaultManager().fileExistsAtPath(self.filePath)) {
-                                let dirContents = try! NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath)
-                                let onlySRTs = dirContents.filter({$0.containsString(".srt")})
-                                self.filePath=self.filePath.stringByAppendingPathComponent(onlySRTs.first!)
+                            self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(self.fileName)
+                            if NSFileManager.defaultManager().fileExistsAtPath(self.filePath) {
+                                do {
+                                    let dirContents = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(self.filePath.stringByDeletingLastPathComponent)
+                                    let srts = dirContents.filter({ $0.containsString(".srt") })
+                                    if let first = srts.first {
+                                        self.filePath = cachcesDirectory.stringByAppendingPathComponent("Subtitles").stringByAppendingPathComponent(self.language).stringByAppendingPathComponent(first)
+                                    }
+                                } catch let error as NSError {
+                                    print(error)
+                                }
                             }
                             completion?(filePath: self.filePath)
                         } catch {
@@ -74,42 +80,42 @@ import AlamofireXMLRPC
                 }
         }
     }
-    
+
 }
 
 @objc class SubtitleManager: NSObject, ZipKitDelegate {
-    
+
     typealias CompletionBlock = ((name: String?, path: String?) -> Void)?
-    
+
     var completion: CompletionBlock
-    
+
     private let baseURL = "http://api.opensubtitles.org:80/xml-rpc"
     private let secureBaseURL = "https://api.opensubtitles.org:443/xml-rpc"
     private let userAgent = "Popcorn Time v1"
     private var token: String!
-    
+
     class func sharedManager() -> SubtitleManager {
         struct Struct {
             static let Instance = SubtitleManager()
         }
-        
+
         return Struct.Instance
     }
-    
+
     override init() {
         super.init()
-        
+
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
             let path = cachcesDirectory.stringByAppendingPathComponent("Subtitles")
             do {
                 try NSFileManager.defaultManager().createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil)
             } catch {
-                
+
             }
         }
     }
-    
+
     func login(completion: (success: Bool) -> Void) {
         AlamofireXMLRPC.request(secureBaseURL, methodName: "LogIn", parameters: ["", "", "en", userAgent]).responseXMLRPC { response in
             guard response.result.isSuccess else {
@@ -121,7 +127,7 @@ import AlamofireXMLRPC
             completion(success: true)
         }
     }
-    
+
     func search(episodeName: String?, episodeSeason: Int?, episodeNumber: Int?, imdbId: String?, completion: (subtitles: [Subtitle]?) -> Void) {
         self.login { success in
             if success {
@@ -135,7 +141,8 @@ import AlamofireXMLRPC
                 }
                 let array: XMLRPCArray = [params]
                 let limit: XMLRPCStructure = ["limit": "300"]
-                AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).responseXMLRPC { response in
+                let queue = dispatch_queue_create("com.popcorn-time.response.queue", DISPATCH_QUEUE_CONCURRENT)
+                AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).response(queue: queue, responseSerializer: Request.XMLRPCResponseSerializer(), completionHandler: { response in
                     guard response.result.isSuccess else {
                         print("Error is \(response.result.error!)")
                         return
@@ -150,17 +157,21 @@ import AlamofireXMLRPC
                             }
                         }
                         subtitles.sortInPlace({ $0.language < $1.language })
-                        completion(subtitles: subtitles)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            completion(subtitles: subtitles)
+                        })
                     } else {
-                        completion(subtitles: nil)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            completion(subtitles: nil)
+                        })
                     }
-                }
+                })
             } else {
                 completion(subtitles: nil)
             }
         }
     }
-    
+
     func searchWithFile(movieFile: String, completion: (subtitles: [Subtitle]?) -> Void) {
         if let fh = fileHash(movieFile) {
             self.login { success in
@@ -171,7 +182,8 @@ import AlamofireXMLRPC
                     params["tag"] = fh.name
                     let array: XMLRPCArray = [params]
                     let limit: XMLRPCStructure = ["limit": "300"]
-                    AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).responseXMLRPC { response in
+                    let queue = dispatch_queue_create("com.popcorn-time.response.queue", DISPATCH_QUEUE_CONCURRENT)
+                    AlamofireXMLRPC.request(self.secureBaseURL, methodName: "SearchSubtitles", parameters: [self.token, array, limit], headers: ["User-Agent": self.userAgent]).response(queue: queue, responseSerializer: Request.XMLRPCResponseSerializer(), completionHandler: { response in
                         guard response.result.isSuccess else {
                             print("Error is \(response.result.error!)")
                             return
@@ -186,11 +198,15 @@ import AlamofireXMLRPC
                                 }
                             }
                             subtitles.sortInPlace({ $0.language < $1.language })
-                            completion(subtitles: subtitles)
+                            dispatch_async(dispatch_get_main_queue(), {
+                                completion(subtitles: subtitles)
+                            })
                         } else {
-                            completion(subtitles: nil)
+                            dispatch_async(dispatch_get_main_queue(), {
+                                completion(subtitles: nil)
+                            })
                         }
-                    }
+                    })
                 } else {
                     completion(subtitles: nil)
                 }
@@ -199,9 +215,9 @@ import AlamofireXMLRPC
             print("....")
             completion(subtitles: nil)
         }
-        
+
     }
-    
+
     func cleanSubs() {
         let paths = NSSearchPathForDirectoriesInDomains(.CachesDirectory, .UserDomainMask, true)
         if let cachcesDirectory = paths.first {
@@ -212,9 +228,9 @@ import AlamofireXMLRPC
                     try NSFileManager.defaultManager().removeItemAtPath(path.stringByAppendingPathComponent(item))
                 }
             } catch {
-                
+
             }
         }
     }
-    
+
 }

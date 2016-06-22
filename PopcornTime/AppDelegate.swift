@@ -37,8 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in
             if let servers = servers {
-                if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
-                    manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
+                if let yts = servers["yts"] as? [String],
+                   let eztv = servers["eztv"] as? [String],
+                   let kat = servers["kat"] as? [String] {
+                    manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!, kat: kat.first!)
 
                     // Save the amount of TV Show pages
                     manager.fetchShowPageNumbers({ (pageNumbers, error) in

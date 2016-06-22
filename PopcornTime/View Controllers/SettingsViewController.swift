@@ -36,7 +36,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             return 1
         }
         if section == 1 {
-            return 1
+            return 2
         }
         if section == 2 {
             return 2
@@ -80,6 +80,16 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Clear All Cache"
                 cell.detailTextLabel?.text = ""
+                cell.accessoryType = .None
+            }
+
+            if indexPath.row == 1 {
+                cell.textLabel?.text = "Kick Ass Search"
+                if let katSearch = NSUserDefaults.standardUserDefaults().objectForKey("KATSearch") as? Bool {
+                    cell.detailTextLabel?.text = katSearch.boolValue ? "Yes" : "No"
+                } else {
+                    cell.detailTextLabel?.text = "No"
+                }
                 cell.accessoryType = .None
             }
 
@@ -178,6 +188,19 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     self.clearCache()
                 }))
 
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
+
+            if indexPath.row == 1 {
+                let alertController = UIAlertController(title: "Kick Ass Torrent Search", message: "Activate Kick Ass torrent search that allows you search movies & tv shows from \"kat.cr\". You must restart application to apply this setting.", preferredStyle: .Alert)
+                alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { action in
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "KATSearch")
+                    tableView.reloadData()
+                }))
+                alertController.addAction(UIAlertAction(title: "No", style: .Default, handler: { action in
+                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "KATSearch")
+                    tableView.reloadData()
+                }))
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
 

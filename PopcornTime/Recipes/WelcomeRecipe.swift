@@ -88,6 +88,18 @@ public struct WelcomeRecipe: RecipeType {
         return shows[Int(arc4random_uniform(UInt32(shows.count)))].fanartImage
     }
 
+    public var katSearch: String {
+        var content = ""
+        if let katSearch = NSUserDefaults.standardUserDefaults().objectForKey("KATSearch") as? Bool {
+            if katSearch.boolValue {
+                content = "<lockup actionID=\"chooseKickassCategory\">"
+                content += "<img class=\"round\" src=\"http://i.cubeupload.com/0LUcIF.png\" width=\"548\" height=\"250\"></img>"
+                content += "<overlay><title>Kickass Search</title></overlay></lockup>"
+            }
+        }
+        return content
+    }
+
     public var randomWatchlistArt: String {
         if watchListShows.count > 0 {
             if let image = watchListShows[Int(arc4random_uniform(UInt32(watchListShows.count)))].fanartImage {
@@ -127,6 +139,7 @@ public struct WelcomeRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIES_BACKGROUND}}", withString: randomMovieFanart)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TVSHOWS_BACKGROUND}}", withString: randomTVShowFanart)
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_BACKGROUND}}", withString: randomWatchlistArt)
+                xml = xml.stringByReplacingOccurrencesOfString("{{KAT_SEARCH}}", withString: katSearch)
 
                 if popularMovies.characters.count > 10 {
                     shelfs += self.buildShelf("Popular Movies", content: popularMovies)

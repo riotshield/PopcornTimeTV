@@ -34,8 +34,10 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
         
         manager.fetchServers { servers, error in
             if let servers = servers {
-                if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
-                    self.manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
+                if let yts = servers["yts"] as? [String],
+                   let eztv = servers["eztv"] as? [String],
+                   let kat = servers["kat"] as? [String] {
+                    self.manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!, kat: kat.first!)
                     self.manager.fetchShowsForPage(1) { shows, error in
                         if let shows = shows {
                             self.manager.fetchMovies(limit: 10, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in

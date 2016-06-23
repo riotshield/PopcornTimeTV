@@ -9,10 +9,14 @@
 import TVMLKitchen
 import PopcornKit
 
-public struct CatalogRecipe: RecipeType {
+public class CatalogRecipe: RecipeType {
+    private var currentPage = 1
+    public var minimumRating = 0
+    public var sortBy = "date_added"
 
     public let theme = DefaultTheme()
     public var presentationType = PresentationType.Tab
+    var fetchType: FetchType! = .Movies
 
     let title: String
     let movies: [Movie]!
@@ -69,6 +73,45 @@ public struct CatalogRecipe: RecipeType {
             }
         }
         return xml
+    }
+
+    public func highlightLockup(page: Int, callback: (String -> Void)) {
+        var data = ""
+        let semaphore = dispatch_semaphore_create(0)
+        if self.currentPage != page {
+            switch self.fetchType! {
+            case .Movies:
+                NetworkManager.sharedManager().fetchMovies(limit: 50, page: page, quality: "1080p", minimumRating: self.minimumRating, queryTerm: nil, genre: nil, sortBy: self.sortBy, orderBy: "desc") { movies, error in
+                    if let movies = movies {
+                        let mapped: [String] = movies.map { movie in
+                            movie.lockUp
+                        }
+                        data = mapped.joinWithSeparator("")
+                        dispatch_semaphore_signal(semaphore)
+                    }
+                }
+            case .Shows:
+                let manager = NetworkManager.sharedManager()
+                manager.fetchShowPageNumbers { pageNumbers, error in
+                    if let _ = pageNumbers {
+                        // this is temporary limit until solve pagination
+                        manager.fetchShows([page], sort: self.sortBy) { shows, error in
+                            if let shows = shows {
+                                let mapped: [String] = shows.map { show in
+                                    show.lockUp
+                                }
+                                data = mapped.joinWithSeparator("\n")
+                                dispatch_semaphore_signal(semaphore)
+                            }
+                        }
+                    }
+                }
+            }
+            self.currentPage = page
+        }
+
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        callback(data)
     }
 
 }

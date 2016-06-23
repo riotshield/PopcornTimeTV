@@ -16,5 +16,5 @@ target 'PopcornTime' do
 end
 
 target 'TopShelf' do
-    pod 'PopcornKit', :git => 'https://github.com/PopcornTimeTV/PopcornKit.git'
+    pod 'PopcornKit', :git => 'https://github.com/PopcornTimeTV/PopcornKit.git', :tag => '1.1.0'
 end

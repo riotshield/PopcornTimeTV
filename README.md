@@ -1,12 +1,12 @@
 #PopcornTime TV
-[![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV)
+[![Build Status](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV.svg?branch=master)](https://travis-ci.org/PopcornTimeTV/PopcornTimeTV) 
 
 An Apple TV 4 application to torrent movies and tv shows for streaming.
 A simple and easy to use application based on TVML to bring the native desktop
 PopcornTime experience to Apple TV.
 
 ##Version
-Release notes for every version can be found here https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Release-Notes
+Release notes for every version can be [found here](https://github.com/PopcornTimeTV/PopcornTimeTV/releases)
 
 ##Setup
 
@@ -33,6 +33,8 @@ If you are installing PopcornTime for the first time run and are having issues t
 
 If issues persist when installing TVVLC, remove the Pods folder and Podfile.lock and run this command in terminal `rm -rf ~/.cocoapods/repos/popcorntimetv`
 
+Or you can find super easy [guide here](https://github.com/PopcornTimeTV/PopcornTimeTV/wiki/Building-PopcornTime)
+
 **Open the project with**
 
 PopcornTime.xcworkspace
@@ -43,7 +45,6 @@ PopcornTime.xcworkspace
 
 ##Want to help?
 
-Join the project Slack channel and be part of the PopcornTime experience for AppleTV. Designer? Developer? Curious person? You're welcome! Come in and say hello. Want to report a bug, request a feature or even contribute? You can join our community Slack group to keep up-to-date and speak to the team.
+Join the project [Slack channel](http://popcorntimetv.herokuapp.com) and be part of the PopcornTime experience for AppleTV. Designer? Developer? Curious person? You're welcome! Come in and say hello. Want to report a bug, request a feature or even contribute? You can join our community Slack group to keep up-to-date and speak to the team.
 
 If you plan on contributing, make sure to follow along with the guidelines found in the `CONTRIBUTING.md` file.
-

@@ -15,6 +15,8 @@
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
 		00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */ = {isa = PBXBuildFile; fileRef = 00C28EA51CE1DB2E00E4D8BF /* Genre.js */; };
+		00C949601D1E634700F98803 /* Movie+Torrents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C9495F1D1E634700F98803 /* Movie+Torrents.swift */; };
+		00C949611D1E634700F98803 /* Movie+Torrents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C9495F1D1E634700F98803 /* Movie+Torrents.swift */; };
 		00F75A971D1BE27C004C9E44 /* Pagination.js in Resources */ = {isa = PBXBuildFile; fileRef = 00F75A961D1BE27C004C9E44 /* Pagination.js */; };
 		00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28B61CE0CB3A00D29EA8 /* Genre.swift */; };
 		00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */; };
@@ -130,6 +132,7 @@
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
 		00C28EA51CE1DB2E00E4D8BF /* Genre.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Genre.js; sourceTree = "<group>"; };
+		00C9495F1D1E634700F98803 /* Movie+Torrents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Torrents.swift"; sourceTree = "<group>"; };
 		00F75A961D1BE27C004C9E44 /* Pagination.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Pagination.js; sourceTree = "<group>"; };
 		00FD28B61CE0CB3A00D29EA8 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GenreRecipe.xml; sourceTree = "<group>"; };
@@ -355,6 +358,7 @@
 				00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */,
 				922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */,
 				92CF49351CE666EC00D666A8 /* String+PathComponents.swift */,
+				00C9495F1D1E634700F98803 /* Movie+Torrents.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -854,6 +858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */,
+				00C949611D1E634700F98803 /* Movie+Torrents.swift in Sources */,
 				0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -893,6 +898,7 @@
 				921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
+				00C949601D1E634700F98803 /* Movie+Torrents.swift in Sources */,
 				DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
 				920C33D91CFE77C7003278EE /* UIImageView+Network.m in Sources */,

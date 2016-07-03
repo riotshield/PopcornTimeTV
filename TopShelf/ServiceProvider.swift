@@ -55,7 +55,7 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
                                         )
                                     }
                                     
-                                    let latestMoviesSectionTitle = "Latest Movies"
+                                    let latestMoviesSectionTitle = "Top Movies"
                                     let latestMovieSectionItem = TVContentItem(contentIdentifier: TVContentIdentifier(identifier: latestMoviesSectionTitle, container: nil)!)
                                     latestMovieSectionItem!.title = latestMoviesSectionTitle
                                     latestMovieSectionItem!.topShelfItems = movieItems

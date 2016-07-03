@@ -13,11 +13,21 @@
         tv-position: bottom-left;
         margin: 15 15 15 15;
         }
+        .imgGradient {
+        tv-img-treatment: blurOverlay;
+        tv-img-treatment:uber;
+        }
+        .text {
+        text-shadow: 2px 5px 10px #000000;
+        }
+        .img {
+        tv-placeholder:movie;
+        }
     </style>
 </head>
 <productBundleTemplate>
     <background>
-        <!--<img src="{{FANART_IMAGE}}" />-->
+        <!--<img class="imgGradient" src="{{FANART_IMAGE}}" style="tv-tint-color: linear-gradient(top, 0.33, transparent, 0.66, rgba(000,000,000,0.7), rgba(000,000,000,1.0));" />-->
     </background>
     <banner>
         <stack>
@@ -31,7 +41,7 @@
                 <badge src="resource://cc" class="badge" />
                 {{AIR_DATE_TIME}}
             </row>
-            <description allowsZooming="true" moreLabel="more" actionID="showDescription»{{TITLE}}»{{DESCRIPTION}}">{{DESCRIPTION}}</description>
+            <description class="text" allowsZooming="true" moreLabel="more" actionID="showDescription»{{TITLE}}»{{DESCRIPTION}}">{{DESCRIPTION}}</description>
             <row>
                 {{SEASONS_BUTTON}}
                 {{WATCH_LIST_BUTTON}}
@@ -39,6 +49,7 @@
         </stack>
         
         <heroImg src="{{IMAGE}}" />
+        
     </banner>
     
     <!-- Episodes -->

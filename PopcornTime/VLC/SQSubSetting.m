@@ -27,7 +27,7 @@
         subSetting.sizeFloat = 48.0;
         subSetting.textColor = [UIColor whiteColor];
         subSetting.fontName = @"system";
-        subSetting.backgroundType = SQSubSettingBackgroundBlack;
+        subSetting.backgroundType = SQSubSettingBackgroundNone;
         return subSetting;
     }
     

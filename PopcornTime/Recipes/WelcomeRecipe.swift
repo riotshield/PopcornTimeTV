@@ -58,6 +58,13 @@ public struct WelcomeRecipe: RecipeType {
         return mapped.joinWithSeparator("\n")
     }
 
+    public var carousel: String {
+        let mapped: [String] = shows.map {
+            return $0.carousel
+        }
+        return mapped.joinWithSeparator("\n")
+    }
+    
     public var moviesWatchList: String {
         let mapped: [String] = watchListMovies.map {
             var string = "<lockup actionID=\"showMovie»\($0.id)\">"
@@ -92,9 +99,8 @@ public struct WelcomeRecipe: RecipeType {
         var content = ""
         if let katSearch = NSUserDefaults.standardUserDefaults().objectForKey("KATSearch") as? Bool {
             if katSearch.boolValue {
-                content = "<lockup actionID=\"chooseKickassCategory\">"
-                content += "<img class=\"round\" src=\"http://i.cubeupload.com/0LUcIF.png\" width=\"548\" height=\"250\"></img>"
-                content += "<overlay><title>Kickass Search</title></overlay></lockup>"
+                content = "<card class=\"simpleCard\" actionID=\"chooseKickassCategory\">"
+                content += "<title class=\"simpleCardTitle\">Kickass Search</title></card>"
             }
         }
         return content
@@ -137,6 +143,7 @@ public struct WelcomeRecipe: RecipeType {
             do {
                 xml = try String(contentsOfURL: file)
                 xml = xml.stringByReplacingOccurrencesOfString("{{MOVIES_BACKGROUND}}", withString: randomMovieFanart)
+                xml = xml.stringByReplacingOccurrencesOfString("{{CAROUSEL}}", withString: carousel)
                 xml = xml.stringByReplacingOccurrencesOfString("{{TVSHOWS_BACKGROUND}}", withString: randomTVShowFanart)
                 xml = xml.stringByReplacingOccurrencesOfString("{{WATCHLIST_BACKGROUND}}", withString: randomWatchlistArt)
                 xml = xml.stringByReplacingOccurrencesOfString("{{KAT_SEARCH}}", withString: katSearch)

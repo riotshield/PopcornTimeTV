@@ -1,5 +1,8 @@
 <head>
     <style>
+        .img {
+        tv-placeholder:movie;
+        }
     </style>
 </head>
 <catalogTemplate>

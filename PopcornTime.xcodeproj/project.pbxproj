@@ -15,6 +15,9 @@
 		00987D421CDB6B9C005AFB22 /* Show+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */; };
 		00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */; };
 		00C28EA61CE1DB2E00E4D8BF /* Genre.js in Resources */ = {isa = PBXBuildFile; fileRef = 00C28EA51CE1DB2E00E4D8BF /* Genre.js */; };
+		00C949601D1E634700F98803 /* Movie+Torrents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C9495F1D1E634700F98803 /* Movie+Torrents.swift */; };
+		00C949611D1E634700F98803 /* Movie+Torrents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C9495F1D1E634700F98803 /* Movie+Torrents.swift */; };
+		00F75A971D1BE27C004C9E44 /* Pagination.js in Resources */ = {isa = PBXBuildFile; fileRef = 00F75A961D1BE27C004C9E44 /* Pagination.js */; };
 		00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28B61CE0CB3A00D29EA8 /* Genre.swift */; };
 		00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */; };
 		00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */; };
@@ -25,6 +28,7 @@
 		287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 287B853E1C9873A200EEF5C8 /* Assets.xcassets */; };
 		287B85471C98771300EEF5C8 /* ActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B85461C98771300EEF5C8 /* ActionHandler.swift */; };
 		28EB626C1CA3364300985F78 /* String+Cleaned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EB626B1CA3364300985F78 /* String+Cleaned.swift */; };
+		40CD02871D295C4800995E48 /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40CD02861D295C4800995E48 /* Movie+Parallax.swift */; };
 		4D6953C8BDE957ED2E9EFD94 /* Pods_PopcornTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */; };
 		6230DD5B10305EF5B545642E /* Pods_TopShelf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */; };
 		9205508D1CE6F71E00B8623F /* SRTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9205508A1CE6F71E00B8623F /* SRTParser.m */; };
@@ -77,8 +81,7 @@
 		92CF4A0A1CE6692900D666A8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CF4A091CE6692900D666A8 /* libz.tbd */; };
 		92D0A7DA1CE28EE900B3279B /* WatchlistRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = 92D0A7D91CE28EE900B3279B /* WatchlistRecipe.xml */; };
 		92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */; };
-		92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */; };
-		D94F191B1D12004500245177 /* KickassSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94F191A1D12004500245177 /* KickassSearch.swift */; };
+		92DF99D11CA6FB0800D6944C /* Welcome+Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Welcome+Carousel.swift */; };
 		D94F191D1D12065C00245177 /* KATSearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = D94F191C1D12065C00245177 /* KATSearchRecipe.xml */; };
 		DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD32B1C11D0274D00015EB28 /* WebServerManager.swift */; };
 		E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */; };
@@ -130,6 +133,8 @@
 		00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Show+Lockup.swift"; sourceTree = "<group>"; };
 		00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Lockup.swift"; sourceTree = "<group>"; };
 		00C28EA51CE1DB2E00E4D8BF /* Genre.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Genre.js; sourceTree = "<group>"; };
+		00C9495F1D1E634700F98803 /* Movie+Torrents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Movie+Torrents.swift"; sourceTree = "<group>"; };
+		00F75A961D1BE27C004C9E44 /* Pagination.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Pagination.js; sourceTree = "<group>"; };
 		00FD28B61CE0CB3A00D29EA8 /* Genre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Genre.swift; sourceTree = "<group>"; };
 		00FD28B91CE0CB5600D29EA8 /* GenreRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = GenreRecipe.xml; sourceTree = "<group>"; };
 		00FD28BA1CE0CB5600D29EA8 /* GenreRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreRecipe.swift; sourceTree = "<group>"; };
@@ -142,6 +147,7 @@
 		287B85401C9873A200EEF5C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		287B85461C98771300EEF5C8 /* ActionHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionHandler.swift; sourceTree = "<group>"; };
 		28EB626B1CA3364300985F78 /* String+Cleaned.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Cleaned.swift"; path = "Extensions/String+Cleaned.swift"; sourceTree = "<group>"; };
+		40CD02861D295C4800995E48 /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
 		599430A8BF92BACDAFBDDD7B /* Pods-TopShelf.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.release.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.release.xcconfig"; sourceTree = "<group>"; };
 		5F0B1AC1E109CFA23D328453 /* Pods_TopShelf.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TopShelf.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		920550891CE6F71E00B8623F /* SRTParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRTParser.h; sourceTree = "<group>"; };
@@ -218,10 +224,9 @@
 		92CF4A091CE6692900D666A8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		92D0A7D91CE28EE900B3279B /* WatchlistRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = WatchlistRecipe.xml; sourceTree = "<group>"; };
 		92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchlistRecipe.swift; sourceTree = "<group>"; };
-		92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Movie+Parallax.swift"; path = "Extensions/Movie+Parallax.swift"; sourceTree = "<group>"; };
+		92DF99D01CA6FB0800D6944C /* Welcome+Carousel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Welcome+Carousel.swift"; path = "Extensions/Welcome+Carousel.swift"; sourceTree = "<group>"; };
 		AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.debug.xcconfig"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D94F191A1D12004500245177 /* KickassSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KickassSearch.swift; sourceTree = "<group>"; };
 		D94F191C1D12065C00245177 /* KATSearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = KATSearchRecipe.xml; sourceTree = "<group>"; };
 		DD32B1C11D0274D00015EB28 /* WebServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServerManager.swift; sourceTree = "<group>"; };
 		DD53E3861D01F5E400147716 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
@@ -277,12 +282,12 @@
 		280910301C99DFA200C8EC1C /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				D94F191A1D12004500245177 /* KickassSearch.swift */,
 				925F8DF61CA9E477007100EB /* Watchlist.swift */,
 				923860561CA0E40500A21F3B /* Latest.swift */,
 				280910311C99DFDA00C8EC1C /* Popular.swift */,
 				280910331C99E0E000C8EC1C /* Search.swift */,
 				00FD28B61CE0CB3A00D29EA8 /* Genre.swift */,
+				00F75A961D1BE27C004C9E44 /* Pagination.js */,
 			);
 			name = Tabs;
 			sourceTree = "<group>";
@@ -349,12 +354,14 @@
 		28EB626A1CA3362B00985F78 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				92DF99D01CA6FB0800D6944C /* Movie+Parallax.swift */,
+				92DF99D01CA6FB0800D6944C /* Welcome+Carousel.swift */,
 				28EB626B1CA3364300985F78 /* String+Cleaned.swift */,
 				00987D411CDB6B9C005AFB22 /* Show+Lockup.swift */,
 				00987D431CDB6CD2005AFB22 /* Movie+Lockup.swift */,
 				922F6A691CE0E481007B1EA3 /* NSDate+Equatable.swift */,
 				92CF49351CE666EC00D666A8 /* String+PathComponents.swift */,
+				00C9495F1D1E634700F98803 /* Movie+Torrents.swift */,
+				40CD02861D295C4800995E48 /* Movie+Parallax.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -578,12 +585,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
 			buildPhases = (
+				D3704357EBE28DF03D620E54 /* [CP] Check Pods Manifest.lock */,
 				DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */,
-				D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */,
 				0026820C1CD0B76200F51D31 /* Sources */,
 				0026820D1CD0B76200F51D31 /* Frameworks */,
 				0026820E1CD0B76200F51D31 /* Resources */,
-				C7D00E5B2BF0BC3307FB3BE0 /* 📦 Copy Pods Resources */,
+				C7D00E5B2BF0BC3307FB3BE0 /* [CP] Copy Pods Resources */,
 				F5C3E1819E9516669816D3B4 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -599,13 +606,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
+				A0783997FAC27A13BB5CB365 /* [CP] Check Pods Manifest.lock */,
 				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
-				A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,
-				85B764B0AA36833E1E9526FC /* 📦 Embed Pods Frameworks */,
-				1B4490875F574D4B15982419 /* 📦 Copy Pods Resources */,
+				85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */,
+				1B4490875F574D4B15982419 /* [CP] Copy Pods Resources */,
 				5F0A8FD16E3C29A44C805B14 /* Embed Pods Frameworks */,
 				38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */,
 				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
@@ -633,11 +640,9 @@
 				TargetAttributes = {
 					0026820F1CD0B76200F51D31 = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = LSMKHW6LLV;
 					};
 					287B85331C9873A200EEF5C8 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = LSMKHW6LLV;
 					};
 				};
 			};
@@ -682,6 +687,7 @@
 				287B853F1C9873A200EEF5C8 /* Assets.xcassets in Resources */,
 				00FD28BB1CE0CB5600D29EA8 /* GenreRecipe.xml in Resources */,
 				925F8DE71CA9E44C007100EB /* DescriptionRecipe.xml in Resources */,
+				00F75A971D1BE27C004C9E44 /* Pagination.js in Resources */,
 				E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */,
 				926A48791CDFAB7000D02962 /* SQTabMenuCollectionViewCell.xib in Resources */,
 				925F8DF21CA9E44C007100EB /* WelcomeRecipe.xml in Resources */,
@@ -695,14 +701,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1B4490875F574D4B15982419 /* 📦 Copy Pods Resources */ = {
+		1B4490875F574D4B15982419 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -740,14 +746,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		85B764B0AA36833E1E9526FC /* 📦 Embed Pods Frameworks */ = {
+		85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -755,14 +761,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A0783997FAC27A13BB5CB365 /* 📦 Check Pods Manifest.lock */ = {
+		A0783997FAC27A13BB5CB365 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -770,14 +776,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		C7D00E5B2BF0BC3307FB3BE0 /* 📦 Copy Pods Resources */ = {
+		C7D00E5B2BF0BC3307FB3BE0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -785,14 +791,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D3704357EBE28DF03D620E54 /* 📦 Check Pods Manifest.lock */ = {
+		D3704357EBE28DF03D620E54 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -853,6 +859,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				002682151CD0B76200F51D31 /* ServiceProvider.swift in Sources */,
+				00C949611D1E634700F98803 /* Movie+Torrents.swift in Sources */,
 				0026821E1CD0F1EB00F51D31 /* String+Cleaned.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -878,7 +885,7 @@
 				923860571CA0E40500A21F3B /* Latest.swift in Sources */,
 				92CF4A071CE6692100D666A8 /* ZKLFHeader.m in Sources */,
 				00FD28B71CE0CB3A00D29EA8 /* Genre.swift in Sources */,
-				92DF99D11CA6FB0800D6944C /* Movie+Parallax.swift in Sources */,
+				92DF99D11CA6FB0800D6944C /* Welcome+Carousel.swift in Sources */,
 				92CF49361CE666EC00D666A8 /* String+PathComponents.swift in Sources */,
 				92CF4A041CE6692100D666A8 /* ZKDataArchive.m in Sources */,
 				92CF4A011CE6692100D666A8 /* ZKCDTrailer.m in Sources */,
@@ -890,9 +897,9 @@
 				E6B5F78F1CB08954000F0644 /* SeasonProductRecipe.swift in Sources */,
 				926A48771CDFAB7000D02962 /* SQSubSetting.m in Sources */,
 				921E44F41CE78F930012FEAD /* SettingsViewController.swift in Sources */,
-				D94F191B1D12004500245177 /* KickassSearch.swift in Sources */,
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
+				00C949601D1E634700F98803 /* Movie+Torrents.swift in Sources */,
 				DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
 				920C33D91CFE77C7003278EE /* UIImageView+Network.m in Sources */,
@@ -907,6 +914,7 @@
 				92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */,
+				40CD02871D295C4800995E48 /* Movie+Parallax.swift in Sources */,
 				92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */,
 				92CF4A081CE6692100D666A8 /* ZKLog.m in Sources */,
 				9211E3EF1CDC0A8C00BEEB9D /* SYVLCPlayerViewController.m in Sources */,
@@ -949,11 +957,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-<<<<<<< HEAD
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos81.PopcornTime.TopShelf;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
->>>>>>> Kickass-Search
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -970,11 +974,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TopShelf/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-<<<<<<< HEAD
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos81.PopcornTime.TopShelf;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime.TopShelf;
->>>>>>> Kickass-Search
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
@@ -1080,15 +1080,11 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-<<<<<<< HEAD
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PopcornTime/Objective-C/TOSMBClient/libdsm",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos81.PopcornTime;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
->>>>>>> Kickass-Search
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";
@@ -1113,15 +1109,11 @@
 				);
 				INFOPLIST_FILE = PopcornTime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-<<<<<<< HEAD
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/PopcornTime/Objective-C/TOSMBClient/libdsm",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.aggelos81.PopcornTime;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = com.popcorntime.PopcornTime;
->>>>>>> Kickass-Search
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "PopcornTime/PopcornTime-Bridging-Header.h";

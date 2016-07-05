@@ -1,6 +1,7 @@
 language: objective-c
 notifications:
   email: false
+  slack: popcorntimetv:7ipJqXmdGZ5u3zm9VkOZiHIV
 osx_image: xcode7.3
 before_install:
   - bundle install

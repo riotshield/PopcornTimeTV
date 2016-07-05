@@ -2,58 +2,74 @@
     <style>
         .round {
             tv-img-treatment:corner-small;
-            
         }
         .hover {
             tv-text-highlight-style: marquee-and-show-on-highlight;
+        }
+        .overlay {
+        tv-position: top;
+        tv-align: left;
+        margin: 0 0 38;
+        
+        }
+        .text {
+            text-shadow: 2px 5px 10px #000000;
+        }
+        .img {
+        tv-placeholder:movie;
+        }
+        .simpleCard {
+        width: 548;
+        tv-img-treatment:corner-small;
+        height: 100;
+        background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .simpleCardTitle {
+        tv-position: center;
+        color: rgba(0, 0, 0, 0.6);
+        tv-text-style: headline;
+        tv-text-max-lines: 1;
+        text-align: center;
         }
     </style>
 </head>
 
 <stackTemplate>
-    
     <background>
         <img src="http://i.cubeupload.com/DYdaxx.png"></img>
     </background>
-    
     <collectionList>
+        <carousel>
+            <section>
+                {{CAROUSEL}}
+            </section>
+        </carousel>
+        
         <shelf>
             <section>
-                <lockup actionID="showMovies">
-                    <img class="round" src="{{MOVIES_BACKGROUND}}" width="548" height="250"></img>
-                    <overlay>
-                        <title>Movies</title>
-                    </overlay>
-                </lockup>
-                <lockup actionID="showTVShows">
-                    <img class="round" src="{{TVSHOWS_BACKGROUND}}" width="548" height="250"></img>
-                    <overlay>
-                        <title>TV Shows</title>
-                    </overlay>
-                </lockup>
-                <lockup actionID="showGlobalWatchlist">
-                    <img class="round" src="{{WATCHLIST_BACKGROUND}}" width="548" height="250"></img>
-                    <overlay>
-                        <title>Watchlist</title>
-                    </overlay>
-                </lockup>
-                <lockup actionID="showKickassSearch">
-                    <img class="round" src="http://i.cubeupload.com/0LUcIF.png" width="548" height="250"></img>
-                    <overlay>
-                        <title>Kickass Search</title>
-                    </overlay>
-                </lockup>
-                <lockup actionID="showSettings">
-                    <img class="round" src="http://i.cubeupload.com/ZaJQcD.png" width="548" height="250"></img>
-                    <overlay>
-                        <title>Settings</title>
-                    </overlay>
-                </lockup>
+                
+                <card class="simpleCard" actionID="showMovies">
+                    <title class="simpleCardTitle">Movies</title>
+                </card>
+                <card class="simpleCard" actionID="showTVShows">
+                    <title class="simpleCardTitle">TV Shows</title>
+                </card>
+                <card class="simpleCard" actionID="showGlobalWatchlist">
+                    <title class="simpleCardTitle">Watchlist</title>
+                </card>
+                {{KAT_SEARCH}}
+                <card class="simpleCard" actionID="showSettings">
+                    <title class="simpleCardTitle">Settings</title>
+                </card>
+                
+                
             </section>
         </shelf>
-    
-        {{SHELFS}}
+
         
+        {{SHELFS}}
+    
     </collectionList>
     
 </stackTemplate>

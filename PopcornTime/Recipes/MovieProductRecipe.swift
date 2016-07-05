@@ -42,7 +42,7 @@ public struct MovieProductRecipe: RecipeType {
 
     var genresString: String {
         if movie.genres.count == 2 {
-            return "<text>\(movie.genres[0])</text>" + "/" + "<text>\(movie.genres[1])</text>"
+            return "<text>\(movie.genres[0])</text>" + ", " + "<text>\(movie.genres[1])</text>"
         } else {
             return "<text>\(movie.genres.first!)</text>"
         }
@@ -102,7 +102,7 @@ public struct MovieProductRecipe: RecipeType {
     var watchlistButton: String {
         var string = "<buttonLockup actionID=\"addWatchlist»\(String(movie.id))»\(movie.title.cleaned)»movie»\(movie.largeCoverImage)»\(movie.backgroundImage)\">\n"
         string += "<badge src=\"resource://button-{{WATCHLIST_ACTION}}\" />\n"
-        string += "<title>Watchlist</title>\n"
+        string += "<title>Watch List</title>\n"
         string += "</buttonLockup>"
         return string
     }
@@ -154,6 +154,7 @@ public struct MovieProductRecipe: RecipeType {
                 xml = xml.stringByReplacingOccurrencesOfString("{{BACKGROUND_IMAGE}}", withString: movie.backgroundImage)
                 xml = xml.stringByReplacingOccurrencesOfString("{{YEAR}}", withString: String(movie.year))
                 xml = xml.stringByReplacingOccurrencesOfString("{{RATING}}", withString: movie.mpaRating.lowercaseString)
+                xml = xml.stringByReplacingOccurrencesOfString("{{STAR_RATING}}", withString: String(movie.rating))
                 xml = xml.stringByReplacingOccurrencesOfString("{{AIR_DATE_TIME}}", withString: "")
 
                 xml = xml.stringByReplacingOccurrencesOfString("{{YOUTUBE_PREVIEW_URL}}", withString: movie.youtubeTrailerURL)

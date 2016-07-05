@@ -3,6 +3,9 @@
         .hover {
             tv-text-highlight-style: marquee-and-show-on-highlight;
         }
+        .img {
+        tv-placeholder:movie;
+        }
     </style>
 </head>
 

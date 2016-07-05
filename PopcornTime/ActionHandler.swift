@@ -23,7 +23,14 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
         case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Genre(), Watchlist(), Search()]))
-        case "showKickassSearch": Kitchen.serve(recipe: KitchenTabBar(items: [KickassSearch()]))
+        case "chooseKickassCategory":
+            var buttons = [AlertButton]()
+            buttons.append(AlertButton(title: "Movies", actionID: "showKickassSearch»movies"))
+            buttons.append(AlertButton(title: "Shows", actionID: "showKickassSearch»shows"))
+            Kitchen.serve(recipe: AlertRecipe(title: "Category", description: "", buttons: buttons, presentationType: .Modal))
+        case "showKickassSearch":
+             let kickassSearchRecipe = KATSearchRecipe(type: .Search, category: pieces[1])
+             Kitchen.serve(recipe: kickassSearchRecipe)
         case "showTVShows":
             var latest = Latest()
             latest.fetchType = .Shows
@@ -81,7 +88,17 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
      - parameter id: The actionID of the element pressed
      */
     static func play(id: String) {
+        let pieces = id.componentsSeparatedByString("»")
+        switch pieces.first! { // swiftlint:disable:this force_cast
 
+        case "playMovieById":
+            playMovieById(pieces)
+
+        case "showShow":
+            showShow(pieces)
+
+        default: break
+        }
     }
 
     // MARK: Actions
@@ -126,7 +143,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             if let _ = movies, let _ = shows {
                 Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                var recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
+                let recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
                 recipe.presentationType = .DefaultWithLoadingIndicator
                 Kitchen.serve(recipe: recipe)
             } else {
@@ -285,11 +302,17 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     }
 
-    static func playMovie(pieces: [String]) {
-        print(pieces.count)
-        print(pieces)
-//        ["playMovie", "screenshot", "fanart", "title", "description", "torrents", "5248007", "The Matrimonial Momentum", "1", "9"]
+    static func playMovieById(pieces: [String]) {
+        NetworkManager.sharedManager().showDetailsForMovie(movieId: Int(pieces.last!)!, withImages: false, withCast: true) { movie, error in
+            if let movie = movie {
+                playMovie(["playMovie", movie.largeCoverImage,
+                           movie.backgroundImage, movie.title.cleaned,
+                           movie.summary.cleaned, movie.torrentsText, movie.imdbId])
+            }
+        }
+    }
 
+    static func playMovie(pieces: [String]) {
         let torrentsString = pieces[5]
 
         // Only used for TV Shows

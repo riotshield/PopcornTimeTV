@@ -43,13 +43,16 @@ class YIFYSearchRecipe: SearchRecipe {
 
 class KATSearchRecipe: SearchRecipe {
     private var currentSearchText=""
-    override init(type: PresentationType = .Search) {
+    private var category = "movies"
+
+    init(type: PresentationType = .Search, category: String) {
         super.init(type: type)
+        self.category = category
     }
 
     override func filterSearchText(text: String, callback: (String -> Void)) {
         currentSearchText=text
-        NetworkManager.sharedManager().fetchKATResults(page: 1, queryTerm: text, genre: nil, sortBy: "seeders", orderBy: "desc") { movies, error in
+        NetworkManager.sharedManager().fetchKATResults(page: 1, queryTerm: text, genre: nil, category: self.category, sortBy: "seeders", orderBy: "desc") { movies, error in
             if let movies = movies {
                 let mapped: [String] = movies.map { movie in
                     return movie.lockUp

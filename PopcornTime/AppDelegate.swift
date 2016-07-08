@@ -11,6 +11,8 @@ import TVMLKitchen
 import PopcornKit
 import Alamofire
 import GCDWebServer
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
         Kitchen.prepare(cookbook)
+
+        Fabric.with([Crashlytics.self])
 
         /*
         Alamofire.request(.GET, "https://api.ipify.org/?format=json").responseJSON { response in

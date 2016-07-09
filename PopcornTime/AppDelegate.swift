@@ -25,7 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.playActionIDHandler = ActionHandler.play
         Kitchen.prepare(cookbook)
 
-        Fabric.with([Crashlytics.self])
+        let bundleID = NSBundle.mainBundle().bundleIdentifier
+        if bundleID! == "com.popcorntime.PopcornTime" {
+            Fabric.with([Crashlytics.self])
+        }
 
         /*
         Alamofire.request(.GET, "https://api.ipify.org/?format=json").responseJSON { response in

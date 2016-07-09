@@ -51,12 +51,12 @@ public struct ShowInfo {
         self.contentRating = seriesInfo["ContentRating"].element!.text!
 
         self.cast = seriesInfo["Actors"].element!.text!.componentsSeparatedByString("|")
-        self.cast.removeAtIndex(self.cast.count - 1)
-        self.cast.removeAtIndex(0)
+        self.cast = self.cast.filter { $0 != "" }
+        print(cast)
 
         self.genres = seriesInfo["Genre"].element!.text!.componentsSeparatedByString("|")
-        self.genres.removeAtIndex(self.genres.count - 1)
-        self.genres.removeAtIndex(0)
+        self.genres = self.genres.filter { $0 != "" }
+        print(genres)
 
         self.network = seriesInfo["Network"].element!.text!
 

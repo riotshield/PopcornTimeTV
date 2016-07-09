@@ -52,11 +52,9 @@ public struct ShowInfo {
 
         self.cast = seriesInfo["Actors"].element!.text!.componentsSeparatedByString("|")
         self.cast = self.cast.filter { $0 != "" }
-        print(cast)
 
         self.genres = seriesInfo["Genre"].element!.text!.componentsSeparatedByString("|")
         self.genres = self.genres.filter { $0 != "" }
-        print(genres)
 
         self.network = seriesInfo["Network"].element!.text!
 

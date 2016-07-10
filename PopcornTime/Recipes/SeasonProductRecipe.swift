@@ -189,7 +189,7 @@ public struct SeasonProductRecipe: RecipeType {
                 overview = synopsis.cleaned
             }
             var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\(overview)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)»\(show.title.cleaned)»\($0.episode.episode)»\($0.episode.season)\">" + "\n"
-            string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
+            string += "<img src=\"\($0.mediumScreenshot)\" width=\"310\" height=\"175\" />" + "\n"
             string += "<title>\($0.episode.episode). \($0.episodeTitle.cleaned)</title>" + "\n"
             string += "<overlay class=\"overlayPosition\">" + "\n"
             string += "<badge src=\"resource://button-play\" class=\"whiteButton overlayPosition\"/>" + "\n"

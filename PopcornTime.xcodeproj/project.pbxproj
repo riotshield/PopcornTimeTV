@@ -617,6 +617,8 @@
 				38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */,
 				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
 				92CF49871CE668A100D666A8 /* Embed Frameworks */,
+				76ED25221D3053AA007794F9 /* Crashlytics Setup */,
+				7608A9FC1D30F0D200B7564A /* Set Build number */,
 			);
 			buildRules = (
 			);
@@ -745,6 +747,34 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7608A9FC1D30F0D200B7564A /* Set Build number */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Set Build number";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=`git rev-list master --count`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+		76ED25221D3053AA007794F9 /* Crashlytics Setup */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Crashlytics Setup";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 00300bfeec376832434eb23fb0fa10bd66c1969b 272fad76b8959a14c34e1c9d2c8ef5ef2a73432345e70937602abcc742b60e51";
 		};
 		85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

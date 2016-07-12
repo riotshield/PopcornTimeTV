@@ -13,6 +13,8 @@ target 'PopcornTime' do
   pod 'PopcornTorrent'
   pod 'TVVLCKit'
   pod 'GCDWebServer', '~> 3.3.2'
+  pod 'Fabric'
+  pod 'Crashlytics'
 end
 
 target 'TopShelf' do

@@ -789,7 +789,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/Applications/Fabric.app/Contents/MacOS/upload-symbols -a 00300bfeec376832434eb23fb0fa10bd66c1969b -p tvos -- ${BUILT_PRODUCTS_DIR}";
+			shellScript = "find ${BUILT_PRODUCTS_DIR} -name \"*.dSYM\" | xargs -I \\{\\}  ${PODS_ROOT}/Fabric/upload-symbols -a 00300bfeec376832434eb23fb0fa10bd66c1969b -p tvos \\{\\}";
 		};
 		85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

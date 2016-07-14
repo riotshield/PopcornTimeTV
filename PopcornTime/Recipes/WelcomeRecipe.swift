@@ -64,7 +64,7 @@ public struct WelcomeRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     public var moviesWatchList: String {
         let mapped: [String] = watchListMovies.map {
             var string = "<lockup actionID=\"showMovie»\($0.id)\">"

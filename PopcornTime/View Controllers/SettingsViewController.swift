@@ -81,13 +81,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             let settings = SQSubSetting.loadFromDisk()
             if indexPath.row == 0 {
                 cell.textLabel?.text = "Font Size"
-                if settings.sizeFloat == 20.0 {
+                if settings.sizeFloat == 46.0 {
                     cell.detailTextLabel?.text = "Small"
-                } else if settings.sizeFloat == 25.0 {
+                } else if settings.sizeFloat == 56.0 {
                     cell.detailTextLabel?.text = "Medium"
-                } else if settings.sizeFloat == 30.0 {
+                } else if settings.sizeFloat == 66.0 {
                     cell.detailTextLabel?.text = "Medium Large"
-                } else if settings.sizeFloat == 45.0 {
+                } else if settings.sizeFloat == 96.0 {
                     cell.detailTextLabel?.text = "Large"
                 }
                 cell.accessoryType = .None
@@ -193,24 +193,28 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 if indexPath.row == 0 {
                     let alertController = UIAlertController(title: "Subtitle Font Size", message: "Choose a font size for subtitles.", preferredStyle: .Alert)
                     alertController.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: nil))
-                    alertController.addAction(UIAlertAction(title: "Small (20pts)", style: .Default, handler: { action in
-                        settings.sizeFloat = 20.0
+                    alertController.addAction(UIAlertAction(title: "Small (46pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 46.0
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
-                    alertController.addAction(UIAlertAction(title: "Medium (25pts)", style: .Default, handler: { action in
-                        settings.sizeFloat = 25.0
+                    alertController.addAction(UIAlertAction(title: "Medium (56pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 56.0
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
-                    alertController.addAction(UIAlertAction(title: "Medium Large (30pts)", style: .Default, handler: { action in
-                        settings.sizeFloat = 30.0
+                    alertController.addAction(UIAlertAction(title: "Medium Large (66pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 66.0
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
-                    alertController.addAction(UIAlertAction(title: "Large (45pts)", style: .Default, handler: { action in
-                        settings.sizeFloat = 45.0
+                    alertController.addAction(UIAlertAction(title: "Large (96pts)", style: .Default, handler: { action in
+                        settings.sizeFloat = 96.0
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
                     self.presentViewController(alertController, animated: true, completion: nil)
@@ -222,21 +226,25 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     alertController.addAction(UIAlertAction(title: "Blur", style: .Default, handler: { action in
                         settings.backgroundType = .Blur
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
                     alertController.addAction(UIAlertAction(title: "Black", style: .Default, handler: { action in
                         settings.backgroundType = .Black
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
                     alertController.addAction(UIAlertAction(title: "White", style: .Default, handler: { action in
                         settings.backgroundType = .White
                         settings.writeToDisk()
+                        tableView.reloadData()
                     }))
 
                     alertController.addAction(UIAlertAction(title: "None", style: .Default, handler: { action in
                         settings.backgroundType = .None
                         settings.writeToDisk()
+                        tableView.reloadData()
 
                     }))
 

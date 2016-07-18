@@ -585,13 +585,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0026821C1CD0B76300F51D31 /* Build configuration list for PBXNativeTarget "TopShelf" */;
 			buildPhases = (
+				DAE866628DAE328D8C12F221 /* 📦 Check Pods Manifest.lock */,
 				D3704357EBE28DF03D620E54 /* [CP] Check Pods Manifest.lock */,
-				DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */,
 				0026820C1CD0B76200F51D31 /* Sources */,
 				0026820D1CD0B76200F51D31 /* Frameworks */,
 				0026820E1CD0B76200F51D31 /* Resources */,
 				C7D00E5B2BF0BC3307FB3BE0 /* [CP] Copy Pods Resources */,
-				F5C3E1819E9516669816D3B4 /* Copy Pods Resources */,
+				F5C3E1819E9516669816D3B4 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -606,15 +606,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 287B85431C9873A200EEF5C8 /* Build configuration list for PBXNativeTarget "PopcornTime" */;
 			buildPhases = (
+				F86603FA0D441AE41BDB3192 /* 📦 Check Pods Manifest.lock */,
 				A0783997FAC27A13BB5CB365 /* [CP] Check Pods Manifest.lock */,
-				F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */,
 				287B85301C9873A200EEF5C8 /* Sources */,
 				287B85311C9873A200EEF5C8 /* Frameworks */,
 				287B85321C9873A200EEF5C8 /* Resources */,
 				85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */,
 				1B4490875F574D4B15982419 /* [CP] Copy Pods Resources */,
-				5F0A8FD16E3C29A44C805B14 /* Embed Pods Frameworks */,
-				38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */,
+				5F0A8FD16E3C29A44C805B14 /* 📦 Embed Pods Frameworks */,
+				38D540A7F3ACB45353BAFF90 /* 📦 Copy Pods Resources */,
 				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
 				92CF49871CE668A100D666A8 /* Embed Frameworks */,
 				76ED25221D3053AA007794F9 /* Crashlytics Setup */,
@@ -719,14 +719,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		38D540A7F3ACB45353BAFF90 /* Copy Pods Resources */ = {
+		38D540A7F3ACB45353BAFF90 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -734,14 +734,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5F0A8FD16E3C29A44C805B14 /* Embed Pods Frameworks */ = {
+		5F0A8FD16E3C29A44C805B14 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -851,14 +851,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		DAE866628DAE328D8C12F221 /* Check Pods Manifest.lock */ = {
+		DAE866628DAE328D8C12F221 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -866,14 +866,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		F5C3E1819E9516669816D3B4 /* Copy Pods Resources */ = {
+		F5C3E1819E9516669816D3B4 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -881,14 +881,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F86603FA0D441AE41BDB3192 /* Check Pods Manifest.lock */ = {
+		F86603FA0D441AE41BDB3192 /* 📦 Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

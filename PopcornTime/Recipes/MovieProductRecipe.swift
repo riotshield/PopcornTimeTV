@@ -42,7 +42,7 @@ public struct MovieProductRecipe: RecipeType {
 
     var genresString: String {
         if movie.genres.count == 2 {
-            return "<text>\(movie.genres[0])</text>" + ", " + "<text>\(movie.genres[1])</text>"
+            return "<text>\(movie.genres[0]) &amp; \(movie.genres[1])</text>"
         } else {
             return "<text>\(movie.genres.first!)</text>"
         }
@@ -54,7 +54,7 @@ public struct MovieProductRecipe: RecipeType {
 
     var runtime: String {
         let (hours, minutes, _) = self.secondsToHoursMinutesSeconds(movie.runtime * 60)
-        return "\(hours)h \(minutes)m"
+        return "\(hours) h \(minutes) min"
     }
 
     var suggestionsString: String {

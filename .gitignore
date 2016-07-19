@@ -155,3 +155,5 @@ fastlane/screenshots
 
 .DS_Store
 Podfile.lock
+
+PopcornTime/Info.plist

@@ -351,7 +351,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             torrents.append(torrentDict)
         }
 
-        torrents.sortInPlace({ $0["quality"] > $1["quality"] })
+        torrents.sortInPlace({ $0["quality"] < $1["quality"] })
 
         var buttons = [AlertButton]()
         for torrent in torrents {

@@ -189,7 +189,15 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     if let xml = response {
                         let seriesInfo = xml["Data"]["Series"]
 
-                        let slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        var slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        if slug.rangeOfString(".") != nil {
+                            let characterAfterDot = slug.componentsSeparatedByString(".")[1].characters.first
+                            if String(characterAfterDot).rangeOfString("-") != nil {
+                              slug = slug.removeSpecialCharacters()
+                            } else {
+                              slug = slug.stringByReplacingOccurrencesOfString(".", withString: "-")
+                            }
+                        }
 
                         manager.fetchTraktSeasonEpisodesInfoForIMDB(slug, season: seasonInfo.current) { response, error in
                             if let response = response {
@@ -438,5 +446,11 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         })
     }
+}
 
+extension String {
+    func removeSpecialCharacters() -> String {
+      let okayChars: Set<Character> = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890-".characters)
+      return String(self.characters.filter {okayChars.contains($0) })
+  }
 }

@@ -64,7 +64,7 @@ public struct WelcomeRecipe: RecipeType {
         }
         return mapped.joinWithSeparator("\n")
     }
-    
+
     public var moviesWatchList: String {
         let mapped: [String] = watchListMovies.map {
             var string = "<lockup actionID=\"showMovie»\($0.id)\">"
@@ -99,8 +99,9 @@ public struct WelcomeRecipe: RecipeType {
         var content = ""
         if let katSearch = NSUserDefaults.standardUserDefaults().objectForKey("KATSearch") as? Bool {
             if katSearch.boolValue {
-                content = "<card class=\"simpleCard\" actionID=\"chooseKickassCategory\">"
-                content += "<title class=\"simpleCardTitle\">Kickass Search</title></card>"
+                content = "<lockup actionID=\"chooseKickassCategory\">"
+                content += "<img class=\"round\" src=\"http://i.cubeupload.com/0LUcIF.png\" width=\"548\" height=\"250\"></img>"
+                content += "<overlay><title>Kickass Search</title></overlay></lockup>"
             }
         }
         return content

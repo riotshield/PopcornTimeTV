@@ -618,6 +618,7 @@
 				0026821D1CD0B76300F51D31 /* Embed App Extensions */,
 				92CF49871CE668A100D666A8 /* Embed Frameworks */,
 				76ED25221D3053AA007794F9 /* Crashlytics Setup */,
+				76F406D61D38045700A88E04 /* Upload dSYM to Crashlytics */,
 				7608A9FC1D30F0D200B7564A /* Set Build number */,
 			);
 			buildRules = (
@@ -775,6 +776,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 00300bfeec376832434eb23fb0fa10bd66c1969b 272fad76b8959a14c34e1c9d2c8ef5ef2a73432345e70937602abcc742b60e51";
+		};
+		76F406D61D38045700A88E04 /* Upload dSYM to Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload dSYM to Crashlytics";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "find ${BUILT_PRODUCTS_DIR} -name \"*.dSYM\" | xargs -I \\{\\}  ${PODS_ROOT}/Fabric/upload-symbols -a 00300bfeec376832434eb23fb0fa10bd66c1969b -p tvos \\{\\}";
 		};
 		85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -136,7 +136,7 @@ static NSString *const kText = @"kText";
         //        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
         
         // State
-#pragma TODO - need to add progress of overall movie
+        self.transportBar.bufferEndFraction=status.totalProgreess;
         _progressView.progress = status.bufferingProgress;
         if (_progressView.progress > 0.0) {
             [_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
@@ -233,7 +233,6 @@ static NSString *const kText = @"kText";
     
     UITapGestureRecognizer *menuTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(menuButtonPressed:)];
     menuTapGestureRecognizer.allowedPressTypes = @[@(UIPressTypeMenu)];
-    menuTapGestureRecognizer.delegate = self;
     [self.view addGestureRecognizer:menuTapGestureRecognizer];
     
     // IR only recognizer
@@ -256,7 +255,8 @@ static NSString *const kText = @"kText";
     [simultaneousGestureRecognizers addObject:siriArrowRecognizer];
     
     self.simultaneousGestureRecognizers = simultaneousGestureRecognizers;
-    
+    [_mediaplayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    [_mediaplayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
     
     if (_videoInfo) {
         _statsLabel.text = @"";
@@ -289,7 +289,6 @@ static NSString *const kText = @"kText";
     if([streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]){
         [_mediaplayer pause];
         [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
-        
         UIAlertController* continueWatchingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *continueWatching = [UIAlertAction actionWithTitle:@"Continue Watching" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
             [_mediaplayer play];
@@ -301,6 +300,7 @@ static NSString *const kText = @"kText";
         [continueWatchingAlert addAction:continueWatching];
         [continueWatchingAlert addAction:startWatching];
         [self presentViewController:continueWatchingAlert animated:YES completion:nil];
+        [_mediaplayer pause];
     }
     
     self.subsButton.enabled      = NO;
@@ -336,6 +336,8 @@ static NSString *const kText = @"kText";
                                                                  [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
                                                              }
                                                              [_mediaplayer stop];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"time"];
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
                                                              
@@ -433,10 +435,13 @@ static NSString *const kText = @"kText";
         [_mediaplayer setPosition:bar.scrubbingFraction];
     } else if(_mediaplayer.playing) {
         [_mediaplayer pause];
+    }else if(!_mediaplayer.playing){
+        [self playandPause:nil];
     }
 }
 - (void)menuButtonPressed:(UITapGestureRecognizer *)recognizer
 {
+    
     VLCTransportBar *bar = self.transportBar;
     if (bar.scrubbing) {
         [UIView animateWithDuration:0.3 animations:^{
@@ -446,6 +451,10 @@ static NSString *const kText = @"kText";
         [self updateTimeLabelsForScrubbingFraction:bar.playbackFraction];
         [self stopScrubbing];
         [self hidePlaybackControlsIfNeededAfterDelay];
+    }else if([self isTopMenuOnScreen]){
+        [self closeTopMenu];
+    }else{
+        [self done:recognizer];
     }
 }
 
@@ -732,7 +741,7 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     BOOL isVisible = self.dimmingView.alpha == 1.0;
     if (shouldBeVisible != isVisible) {
         [UIView animateWithDuration:0.3 animations:^{
-            self.dimmingView.alpha = shouldBeVisible ? 1.0 : 0.0;
+            self.dimmingView.alpha = shouldBeVisible ? 0.2 : 0.0;
         }];
     }
 }
@@ -836,50 +845,37 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     _hidePlaybackControlsViewAfterDeleayTimer = hidePlaybackControlsViewAfterDeleayTimer;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-- (IBAction)menuButton:(id)sender
-{
-    if ([self isTopMenuOnScreen]) {
-        NSLog(@"Menu Out");
-        [self closeTopMenu];
-    }
-    else {
-        [self done:sender];
-    }
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
+    [self playbackPositionUpdated];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Change focus
@@ -1048,21 +1044,6 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     return (!_topMenuContainerView.hidden);
 }
 
-
-- (void) showMiddleButton
-{
-    //    self.middleButton.hidden = NO;
-    
-}
-
-
-- (void) hideMiddleButton
-{
-    //    self.middleButton.hidden = YES;
-    
-}
-
-
 #pragma mark - Actions
 
 - (IBAction)playandPause:(id)sender
@@ -1070,21 +1051,13 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     [self showOSD];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     
     if (_mediaplayer.isPlaying) {
         [_mediaplayer pause];
         return;
     }
-    
+    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     [_mediaplayer play];
-    
-}
-
-- (void) playDelay
-{
-    [_mediaplayer play];
-    self.indicatorView.hidden = YES;
     
 }
 
@@ -1146,8 +1119,11 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
             }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
+            
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
@@ -1195,12 +1171,15 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
             }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
             [self stopStreamingTorrent];
+            
             
             [self.navigationController popViewControllerAnimated:YES];
         }

@@ -83,6 +83,11 @@
 		92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D0A7DB1CE28EF300B3279B /* WatchlistRecipe.swift */; };
 		92DF99D11CA6FB0800D6944C /* Welcome+Carousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF99D01CA6FB0800D6944C /* Welcome+Carousel.swift */; };
 		D94F191D1D12065C00245177 /* KATSearchRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = D94F191C1D12065C00245177 /* KATSearchRecipe.xml */; };
+		D98BB7B91D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BB7B61D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.m */; };
+		D98BB7BA1D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BB7B81D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.m */; };
+		D98BB7BF1D3FB52100A164B0 /* VLCBufferingBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BB7BC1D3FB52100A164B0 /* VLCBufferingBar.m */; };
+		D98BB7C01D3FB52100A164B0 /* VLCTransportBar.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BB7BE1D3FB52100A164B0 /* VLCTransportBar.m */; };
+		D98BB7C31D3FB8BF00A164B0 /* VLCFrostedGlasView.m in Sources */ = {isa = PBXBuildFile; fileRef = D98BB7C21D3FB8BF00A164B0 /* VLCFrostedGlasView.m */; };
 		DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD32B1C11D0274D00015EB28 /* WebServerManager.swift */; };
 		E6295F2B1CACF96100CD45E3 /* SeasonPickerRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6295F2A1CACF96100CD45E3 /* SeasonPickerRecipe.swift */; };
 		E6295F2D1CACF9C100CD45E3 /* SeasonPickerRecipe.xml in Resources */ = {isa = PBXBuildFile; fileRef = E6295F2C1CACF9C100CD45E3 /* SeasonPickerRecipe.xml */; };
@@ -228,6 +233,16 @@
 		AFEF107134131C2FAC746C22 /* Pods-TopShelf.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TopShelf.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TopShelf/Pods-TopShelf.debug.xcconfig"; sourceTree = "<group>"; };
 		C900A4508BB37D7070FA6888 /* Pods_PopcornTime.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PopcornTime.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D94F191C1D12065C00245177 /* KATSearchRecipe.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = KATSearchRecipe.xml; sourceTree = "<group>"; };
+		D98BB7B51D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCIRTVTapGestureRecognizer.h; sourceTree = "<group>"; };
+		D98BB7B61D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCIRTVTapGestureRecognizer.m; sourceTree = "<group>"; };
+		D98BB7B71D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCSiriRemoteGestureRecognizer.h; sourceTree = "<group>"; };
+		D98BB7B81D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCSiriRemoteGestureRecognizer.m; sourceTree = "<group>"; };
+		D98BB7BB1D3FB52100A164B0 /* VLCBufferingBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCBufferingBar.h; sourceTree = "<group>"; };
+		D98BB7BC1D3FB52100A164B0 /* VLCBufferingBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCBufferingBar.m; sourceTree = "<group>"; };
+		D98BB7BD1D3FB52100A164B0 /* VLCTransportBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCTransportBar.h; sourceTree = "<group>"; };
+		D98BB7BE1D3FB52100A164B0 /* VLCTransportBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCTransportBar.m; sourceTree = "<group>"; };
+		D98BB7C11D3FB8BF00A164B0 /* VLCFrostedGlasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VLCFrostedGlasView.h; sourceTree = "<group>"; };
+		D98BB7C21D3FB8BF00A164B0 /* VLCFrostedGlasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VLCFrostedGlasView.m; sourceTree = "<group>"; };
 		DD32B1C11D0274D00015EB28 /* WebServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebServerManager.swift; sourceTree = "<group>"; };
 		DD53E3861D01F5E400147716 /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		E31248A9DC45B7AEBE724E1D /* Pods-PopcornTime.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PopcornTime.release.xcconfig"; path = "Pods/Target Support Files/Pods-PopcornTime/Pods-PopcornTime.release.xcconfig"; sourceTree = "<group>"; };
@@ -401,6 +416,16 @@
 		9211E3EB1CDC0A8C00BEEB9D /* VLC */ = {
 			isa = PBXGroup;
 			children = (
+				D98BB7C11D3FB8BF00A164B0 /* VLCFrostedGlasView.h */,
+				D98BB7C21D3FB8BF00A164B0 /* VLCFrostedGlasView.m */,
+				D98BB7BB1D3FB52100A164B0 /* VLCBufferingBar.h */,
+				D98BB7BC1D3FB52100A164B0 /* VLCBufferingBar.m */,
+				D98BB7BD1D3FB52100A164B0 /* VLCTransportBar.h */,
+				D98BB7BE1D3FB52100A164B0 /* VLCTransportBar.m */,
+				D98BB7B51D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.h */,
+				D98BB7B61D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.m */,
+				D98BB7B71D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.h */,
+				D98BB7B81D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.m */,
 				926A48721CDFAB7000D02962 /* SQSubSetting.h */,
 				926A48731CDFAB7000D02962 /* SQSubSetting.m */,
 				926A48741CDFAB7000D02962 /* SQTabMenuCollectionViewCell.h */,
@@ -945,6 +970,7 @@
 				925F8DE41CA9E44C007100EB /* CatalogRecipe.swift in Sources */,
 				287B85381C9873A200EEF5C8 /* AppDelegate.swift in Sources */,
 				00C949601D1E634700F98803 /* Movie+Torrents.swift in Sources */,
+				D98BB7BF1D3FB52100A164B0 /* VLCBufferingBar.m in Sources */,
 				DD32B1C21D0274D00015EB28 /* WebServerManager.swift in Sources */,
 				925F8DEE1CA9E44C007100EB /* YIFYSearchRecipe.swift in Sources */,
 				920C33D91CFE77C7003278EE /* UIImageView+Network.m in Sources */,
@@ -957,8 +983,10 @@
 				925F8DE61CA9E44C007100EB /* DescriptionRecipe.swift in Sources */,
 				92CF49341CE6591A00D666A8 /* SubtitleManager.swift in Sources */,
 				92190C7C1CF78AA60060BE73 /* FileHash.swift in Sources */,
+				D98BB7C01D3FB52100A164B0 /* VLCTransportBar.m in Sources */,
 				925F8DF81CA9E477007100EB /* Watchlist.swift in Sources */,
 				92CF49FF1CE6692100D666A8 /* ZKArchive.m in Sources */,
+				D98BB7B91D3FB43400A164B0 /* VLCIRTVTapGestureRecognizer.m in Sources */,
 				40CD02871D295C4800995E48 /* Movie+Parallax.swift in Sources */,
 				92D0A7DC1CE28EF300B3279B /* WatchlistRecipe.swift in Sources */,
 				92CF4A081CE6692100D666A8 /* ZKLog.m in Sources */,
@@ -966,6 +994,8 @@
 				922F6A6A1CE0E481007B1EA3 /* NSDate+Equatable.swift in Sources */,
 				00987D441CDB6CD2005AFB22 /* Movie+Lockup.swift in Sources */,
 				925F8DEA1CA9E44C007100EB /* MovieProductRecipe.swift in Sources */,
+				D98BB7BA1D3FB43400A164B0 /* VLCSiriRemoteGestureRecognizer.m in Sources */,
+				D98BB7C31D3FB8BF00A164B0 /* VLCFrostedGlasView.m in Sources */,
 				00FD28BC1CE0CB5600D29EA8 /* GenreRecipe.swift in Sources */,
 				926A48781CDFAB7000D02962 /* SQTabMenuCollectionViewCell.m in Sources */,
 			);

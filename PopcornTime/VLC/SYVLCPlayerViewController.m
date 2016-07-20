@@ -270,6 +270,24 @@ static NSString *const kText = @"kText";
     _mediaplayer.media = [VLCMedia mediaWithURL:_url];
     [_mediaplayer play];
     
+    NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+    if([streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]){
+        [_mediaplayer pause];
+        [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
+        
+        UIAlertController* continueWatchingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *continueWatching = [UIAlertAction actionWithTitle:@"Continue Watching" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [_mediaplayer play];
+        }];
+        UIAlertAction *startWatching = [UIAlertAction actionWithTitle:@"Start from beginning" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [_mediaplayer setTime:[VLCTime timeWithInt:0]];
+            [_mediaplayer play];
+        }];
+        [continueWatchingAlert addAction:continueWatching];
+        [continueWatchingAlert addAction:startWatching];
+        [self presentViewController:continueWatchingAlert animated:YES completion:nil];
+    }
+    
     self.subsButton.enabled      = NO;
     self.subsDelayButton.enabled = NO;
     self.audioButton.enabled     = NO;
@@ -298,6 +316,10 @@ static NSString *const kText = @"kText";
     UIAlertAction* acceptAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Accept", @"Accept")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction * action) {
+                                                             if(_mediaplayer.position<1.0){
+                                                                 NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                                                                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+                                                             }
                                                              [_mediaplayer stop];
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
@@ -854,6 +876,10 @@ static NSString *const kText = @"kText";
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLoadingRatio) object:nil];
             
+            if(_mediaplayer.position<1.0){
+                NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+            }
             [_mediaplayer stop];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
@@ -899,7 +925,10 @@ static NSString *const kText = @"kText";
              */
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLoadingRatio) object:nil];
-            
+            if(_mediaplayer.position<1.0){
+                NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+            }
             [_mediaplayer stop];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;

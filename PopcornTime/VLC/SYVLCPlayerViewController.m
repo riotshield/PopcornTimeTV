@@ -54,6 +54,7 @@ static NSString *const kText = @"kText";
     NSIndexPath *_lastIndexPathAudio;
     
     NSUInteger _lastButtonSelectedTag;
+    BOOL selectActivated;
     
     SQSubSetting *subSetting;
     
@@ -125,6 +126,7 @@ static NSString *const kText = @"kText";
 - (void)beginStreamingTorrent {
     // lets not get a retain cycle going
     __weak __typeof__(self) weakSelf = self;
+    selectActivated=NO;
     [[PTTorrentStreamer sharedStreamer] startStreamingFromFileOrMagnetLink:_magnet progress:^(PTTorrentStatus status) {
         
         // Percentage
@@ -221,7 +223,7 @@ static NSString *const kText = @"kText";
     NSMutableSet<UIGestureRecognizer *> *simultaneousGestureRecognizers = [NSMutableSet set];
     
     // Panning and Swiping
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+    UIPanGestureRecognizer* panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
     panGestureRecognizer.delegate = self;
     [self.view addGestureRecognizer:panGestureRecognizer];
     [simultaneousGestureRecognizers addObject:panGestureRecognizer];
@@ -380,9 +382,10 @@ static NSString *const kText = @"kText";
     CGPoint translation = [panGestureRecognizer translationInView:view];
     
     if (!bar.scrubbing) {
-        if (ABS(translation.x) > 150.0) {
+        if (ABS(translation.x) > 150.0 && selectActivated) {
             if (self.isSeekable) {
                 [self startScrubbing];
+                selectActivated=NO;
             } else {
                 return;
             }
@@ -435,6 +438,7 @@ static NSString *const kText = @"kText";
         [_mediaplayer setPosition:bar.scrubbingFraction];
     } else if(_mediaplayer.playing) {
         [_mediaplayer pause];
+        selectActivated=YES;
     }else if(!_mediaplayer.playing){
         [self playandPause:nil];
     }
@@ -741,7 +745,7 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     BOOL isVisible = self.dimmingView.alpha == 1.0;
     if (shouldBeVisible != isVisible) {
         [UIView animateWithDuration:0.3 animations:^{
-            self.dimmingView.alpha = shouldBeVisible ? 0.2 : 0.0;
+            self.dimmingView.alpha = shouldBeVisible ? 1.0 : 0.0;
         }];
     }
 }
@@ -804,13 +808,13 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     BOOL playing = [_mediaplayer isPlaying];
     if (playing) {
         [self animatePlaybackControlsToVisibility:NO];
+        
     }
 }
 - (void)showPlaybackControlsIfNeededForUserInteraction
 {
     if (self.osdView.alpha == 0.0) {
         [self animatePlaybackControlsToVisibility:YES];
-        
         // We need an additional update here because in some cases (e.g. when the playback was
         // paused or started buffering), the transport bar is only updated when it is visible
         // and if the playback is interrupted, no updates of the transport bar are triggered.
@@ -1476,7 +1480,6 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
 
 - (void) newItemSelected:(id) cell
 {
-    [self performSelector:@selector(showMiddleButton) withObject:nil afterDelay:1.0];
     
     if ([cell isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
         SQTabMenuCollectionViewCell *tabCell = (SQTabMenuCollectionViewCell *) cell;

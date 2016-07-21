@@ -69,6 +69,7 @@
 #else
     _effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleDark]];
     _effectView.frame = self.bounds;
+    _effectView.alpha=0.3;
     _effectView.clipsToBounds = YES;
     _effectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self insertSubview:_effectView atIndex:0];

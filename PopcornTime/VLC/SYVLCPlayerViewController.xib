@@ -168,6 +168,10 @@
                         <constraint firstAttribute="width" constant="32" id="yc8-6T-LPA"/>
                     </constraints>
                 </activityIndicatorView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEb-xs-LS2" userLabel="DimmingView">
+                    <rect key="frame" x="0.0" y="97" width="1920" height="886"/>
+                    <color key="backgroundColor" red="0.57858573719999995" green="0.57858573719999995" blue="0.57858573719999995" alpha="0.45000000000000001" colorSpace="calibratedRGB"/>
+                </view>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eSt-ui-PBw">
                     <rect key="frame" x="0.0" y="800" width="1920" height="243"/>
                     <constraints>
@@ -381,10 +385,6 @@
                         <constraint firstItem="NHx-e4-FMa" firstAttribute="top" secondItem="V2b-SN-sQy" secondAttribute="top" id="raD-Hk-QSk"/>
                         <constraint firstItem="mKj-1k-JOw" firstAttribute="leading" secondItem="V2b-SN-sQy" secondAttribute="leading" id="y2R-zt-OdE"/>
                     </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEb-xs-LS2" userLabel="DimmingView">
-                    <rect key="frame" x="0.0" y="97" width="1920" height="886"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.20000000000000001" colorSpace="calibratedWhite"/>
                 </view>
                 <button hidden="YES" opaque="NO" tag="1001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nxK-5P-fgT" userLabel="Top Focus Button">
                     <rect key="frame" x="0.0" y="-318" width="1920" height="86"/>

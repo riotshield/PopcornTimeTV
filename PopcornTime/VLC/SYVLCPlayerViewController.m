@@ -60,6 +60,7 @@ static NSString *const kText = @"kText";
     
     NSDictionary *_videoInfo;
     NSString *_magnet;
+    NSURL* _filePath;
     
     BOOL _videoLoaded;
 }
@@ -93,6 +94,7 @@ static NSString *const kText = @"kText";
         _videoInfo = videoInfo;
         _magnet = _videoInfo[@"magnet"];
         _videoLoaded = NO;
+        _filePath=[[NSURL alloc]initWithString:@""];
         
         [self beginStreamingTorrent];
     }
@@ -113,6 +115,7 @@ static NSString *const kText = @"kText";
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
         _sizeFloat = 68.0;
+        _filePath=[[NSURL alloc]initWithString:@""];
         
         // Settings object
         subSetting = [SQSubSetting loadFromDisk];
@@ -141,11 +144,12 @@ static NSString *const kText = @"kText";
         self.transportBar.bufferEndFraction=status.totalProgreess;
         _progressView.progress = status.bufferingProgress;
         if (_progressView.progress > 0.0) {
-            [_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
+            _nameLabel.text=[_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
         }
-    } readyToPlay:^(NSURL *videoFileURL) {
+    } readyToPlay:^(NSURL *videoFileURL,NSURL* videoFilePath) {
         _url = videoFileURL;
         _videoLoaded = YES;
+        _filePath=videoFilePath;
         [weakSelf createAudioSubsDatasource];
         [weakSelf updateLoadingRatio];
         [weakSelf loadPlayer];
@@ -1639,7 +1643,7 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
 
 - (void) createAudioSubsDatasource
 {
-    NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
+    NSString *path = [_filePath.relativePath stringByRemovingPercentEncoding];
     [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
         _subsTracks = [NSMutableArray array];
         [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];

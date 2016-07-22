@@ -10,10 +10,19 @@
 #import "SQTabMenuCollectionViewCell.h"
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
-#import <PopcornTorrent/PopcornTorrent.h>
 #import "PopcornTime-Swift.h"
+#import <PopcornTorrent/PopcornTorrent.h>
 #import "SRTParser.h"
 #import "UIImageView+Network.h"
+#import "VLCIRTVTapGestureRecognizer.h"
+#import "VLCSiriRemoteGestureRecognizer.h"
+
+typedef NS_ENUM(NSInteger, VLCPlayerScanState)
+{
+    VLCPlayerScanStateNone,
+    VLCPlayerScanStateForward2,
+    VLCPlayerScanStateForward4,
+};
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -41,30 +50,24 @@ static NSString *const kText = @"kText";
     float _sizeFloat;
     float _offsetFloat;
     
-    BOOL _isPanning;
-    CGPoint _lastPointPan;
-    CGFloat _lastPointDelayPanX;
     NSIndexPath *_lastIndexPathSubtitle;
     NSIndexPath *_lastIndexPathAudio;
     
-    UIPanGestureRecognizer *_panGestureRecognizer;
-    UIPanGestureRecognizer *_panGestureRecognizerDelay;
-    
-    CGPoint _panGestureDeltaPoint; // Calcula la cantidad de variacion que ha habido en ambas coordenadas (diferencia de signo en cada detección)
-    BOOL _finishAnalyzePan;
-    BOOL _didPanGesture;
-    BOOL _didClickGesture;
-    BOOL _panChangingTime;
     NSUInteger _lastButtonSelectedTag;
+    BOOL selectActivated;
     
     SQSubSetting *subSetting;
     
     NSDictionary *_videoInfo;
     NSString *_magnet;
+    NSURL* _filePath;
     
     BOOL _videoLoaded;
 }
-
+@property (nonatomic) NSTimer *hidePlaybackControlsViewAfterDeleayTimer;
+@property (nonatomic) VLCPlayerScanState scanState;
+@property (nonatomic) NSNumber *scanSavedPlaybackRate;
+@property (nonatomic) NSSet<UIGestureRecognizer *> *simultaneousGestureRecognizers;
 @end
 
 
@@ -80,15 +83,10 @@ static NSString *const kText = @"kText";
     
     if (self) {
         _lastButtonSelectedTag = 1;
-        _finishAnalyzePan = NO;
-        _didPanGesture = NO;
-        _didClickGesture = NO;
         _videoDidOpened = NO;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
-        _isPanning  = NO;
         _sizeFloat = 68.0;
-        _panChangingTime = NO;
         
         // Settings object
         subSetting = [SQSubSetting loadFromDisk];
@@ -96,6 +94,7 @@ static NSString *const kText = @"kText";
         _videoInfo = videoInfo;
         _magnet = _videoInfo[@"magnet"];
         _videoLoaded = NO;
+        _filePath=[[NSURL alloc]initWithString:@""];
         
         [self beginStreamingTorrent];
     }
@@ -109,18 +108,14 @@ static NSString *const kText = @"kText";
     
     if (self) {
         _lastButtonSelectedTag = 1;
-        _finishAnalyzePan = NO;
-        _didPanGesture = NO;
-        _didClickGesture = NO;
         _url = url;
         _videoDidOpened = NO;
         _hash = hash;
         _cahcedSubtitles = cahcedSubtitles;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
-        _isPanning  = NO;
         _sizeFloat = 68.0;
-        _panChangingTime = NO;
+        _filePath=[[NSURL alloc]initWithString:@""];
         
         // Settings object
         subSetting = [SQSubSetting loadFromDisk];
@@ -134,6 +129,7 @@ static NSString *const kText = @"kText";
 - (void)beginStreamingTorrent {
     // lets not get a retain cycle going
     __weak __typeof__(self) weakSelf = self;
+    selectActivated=NO;
     [[PTTorrentStreamer sharedStreamer] startStreamingFromFileOrMagnetLink:_magnet progress:^(PTTorrentStatus status) {
         
         // Percentage
@@ -145,14 +141,15 @@ static NSString *const kText = @"kText";
         //        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
         
         // State
-        _overallProgressView.progress = status.totalProgreess;
+        self.transportBar.bufferEndFraction=status.totalProgreess;
         _progressView.progress = status.bufferingProgress;
         if (_progressView.progress > 0.0) {
-            [_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
+            _nameLabel.text=[_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
         }
-    } readyToPlay:^(NSURL *videoFileURL) {
+    } readyToPlay:^(NSURL *videoFileURL,NSURL* videoFilePath) {
         _url = videoFileURL;
         _videoLoaded = YES;
+        _filePath=videoFilePath;
         [weakSelf createAudioSubsDatasource];
         [weakSelf updateLoadingRatio];
         [weakSelf loadPlayer];
@@ -217,31 +214,55 @@ static NSString *const kText = @"kText";
     _mediaplayer.delegate     = self;
     _mediaplayer.audio.volume = 200;
     
-    self.lineBackView.layer.cornerRadius  = 6.0;
-    self.lineBackView.layer.masksToBounds = YES;
+    self.transportBar.bufferStartFraction = 0.0;
+    self.transportBar.bufferEndFraction = 1.0;
+    self.transportBar.playbackFraction = 0.0;
+    self.transportBar.scrubbingFraction = 0.0;
     
     self.backSubtitleView.layer.cornerRadius  = 10.0;
     self.backSubtitleView.layer.masksToBounds = YES;
+    self.dimmingView.alpha = 0.0;
+    self.osdView.alpha = 0.0;
     
-    // Exit filters
-    UITapGestureRecognizer *menuButtonResetFiltersSearch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(menuButton:)];
-    menuButtonResetFiltersSearch.allowedPressTypes = @[[NSNumber numberWithInteger:UIPressTypeMenu]];
-    [self.view addGestureRecognizer:menuButtonResetFiltersSearch];
+    NSMutableSet<UIGestureRecognizer *> *simultaneousGestureRecognizers = [NSMutableSet set];
     
-    // Play/Pause
-    UITapGestureRecognizer *playPauseTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playandPause:)];
-    playPauseTapGesture.allowedPressTypes = @[@(UIPressTypePlayPause)];
-    [self.view addGestureRecognizer:playPauseTapGesture];
+    // Panning and Swiping
+    UIPanGestureRecognizer* panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+    panGestureRecognizer.delegate = self;
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    [simultaneousGestureRecognizers addObject:panGestureRecognizer];
     
-    // Pan
-    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
-    _panGestureRecognizer.delegate = self;
-    [self.view addGestureRecognizer:_panGestureRecognizer];
+    // Button presses
+    UITapGestureRecognizer *playpauseGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPausePressed)];
+    playpauseGesture.allowedPressTypes = @[@(UIPressTypePlayPause)];
+    [self.view addGestureRecognizer:playpauseGesture];
     
-    // Pan Delay
-    _panGestureRecognizerDelay = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDelay:)];
-    _panGestureRecognizerDelay.delegate = self;
-    [self.subValueDelayButton addGestureRecognizer:_panGestureRecognizerDelay];
+    UITapGestureRecognizer *menuTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(menuButtonPressed:)];
+    menuTapGestureRecognizer.allowedPressTypes = @[@(UIPressTypeMenu)];
+    [self.view addGestureRecognizer:menuTapGestureRecognizer];
+    
+    // IR only recognizer
+    UITapGestureRecognizer *downArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(showInfoVCIfNotScrubbing)];
+    downArrowRecognizer.allowedPressTypes = @[@(UIPressTypeDownArrow)];
+    [self.view addGestureRecognizer:downArrowRecognizer];
+    
+    UITapGestureRecognizer *leftArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(handleIRPressLeft)];
+    leftArrowRecognizer.allowedPressTypes = @[@(UIPressTypeLeftArrow)];
+    [self.view addGestureRecognizer:leftArrowRecognizer];
+    
+    UITapGestureRecognizer *rightArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(handleIRPressRight)];
+    rightArrowRecognizer.allowedPressTypes = @[@(UIPressTypeRightArrow)];
+    [self.view addGestureRecognizer:rightArrowRecognizer];
+    
+    // Siri remote arrow presses
+    VLCSiriRemoteGestureRecognizer *siriArrowRecognizer = [[VLCSiriRemoteGestureRecognizer alloc] initWithTarget:self action:@selector(handleSiriRemote:)];
+    siriArrowRecognizer.delegate = self;
+    [self.view addGestureRecognizer:siriArrowRecognizer];
+    [simultaneousGestureRecognizers addObject:siriArrowRecognizer];
+    
+    self.simultaneousGestureRecognizers = simultaneousGestureRecognizers;
+    [_mediaplayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    [_mediaplayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
     
     if (_videoInfo) {
         _statsLabel.text = @"";
@@ -274,7 +295,6 @@ static NSString *const kText = @"kText";
     if([streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]){
         [_mediaplayer pause];
         [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
-        
         UIAlertController* continueWatchingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *continueWatching = [UIAlertAction actionWithTitle:@"Continue Watching" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
             [_mediaplayer play];
@@ -286,6 +306,7 @@ static NSString *const kText = @"kText";
         [continueWatchingAlert addAction:continueWatching];
         [continueWatchingAlert addAction:startWatching];
         [self presentViewController:continueWatchingAlert animated:YES completion:nil];
+        [_mediaplayer pause];
     }
     
     self.subsButton.enabled      = NO;
@@ -321,6 +342,8 @@ static NSString *const kText = @"kText";
                                                                  [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
                                                              }
                                                              [_mediaplayer stop];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"time"];
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
                                                              
@@ -332,103 +355,535 @@ static NSString *const kText = @"kText";
     
 }
 
-
-- (IBAction)menuButton:(id)sender
+#pragma mark - New Gesture recognizer implementation
+#pragma mark - UIActions
+- (void)playPausePressed
 {
-    if ([self isTopMenuOnScreen]) {
-        NSLog(@"Menu Out");
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    if (self.transportBar.scrubbing) {
+        [self selectButtonPressed];
+    } else {
+        [self playandPause:nil];
+    }
+}
+
+- (void)panGesture:(UIPanGestureRecognizer *)panGestureRecognizer
+{
+    switch (panGestureRecognizer.state) {
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+            return;
+        default:
+            break;
+    }
+    
+    VLCTransportBar *bar = self.transportBar;
+    
+    UIView *view = self.view;
+    CGPoint translation = [panGestureRecognizer translationInView:view];
+    
+    if (!bar.scrubbing) {
+        if (ABS(translation.x) > 150.0 && selectActivated) {
+            if (self.isSeekable) {
+                [self startScrubbing];
+                selectActivated=NO;
+            } else {
+                return;
+            }
+        } else if (translation.y > 200.0) {
+            panGestureRecognizer.enabled = NO;
+            panGestureRecognizer.enabled = YES;
+            [self showInfoVCIfNotScrubbing];
+            return;
+        } else {
+            return;
+        }
+    }
+    
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    
+    const CGFloat scaleFactor = 8.0;
+    CGFloat fractionInView = translation.x/CGRectGetWidth(view.bounds)/scaleFactor;
+    
+    CGFloat scrubbingFraction = MAX(0.0, MIN(bar.scrubbingFraction + fractionInView,1.0));
+    
+    
+    if (ABS(scrubbingFraction - bar.playbackFraction)<0.005) {
+        scrubbingFraction = bar.playbackFraction;
+    } else {
+        translation.x = 0.0;
+        [panGestureRecognizer setTranslation:translation inView:view];
+    }
+    
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         bar.scrubbingFraction = scrubbingFraction;
+                     }
+                     completion:nil];
+    [self updateTimeLabelsForScrubbingFraction:scrubbingFraction];
+}
+
+- (void)selectButtonPressed
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    VLCTransportBar *bar = self.transportBar;
+    if (bar.scrubbing) {
+        bar.playbackFraction = bar.scrubbingFraction;
+        [self stopScrubbing];
+        [_mediaplayer setPosition:bar.scrubbingFraction];
+    } else if(_mediaplayer.playing) {
+        [_mediaplayer pause];
+        selectActivated=YES;
+    }else if(!_mediaplayer.playing){
+        [self playandPause:nil];
+    }
+}
+- (void)menuButtonPressed:(UITapGestureRecognizer *)recognizer
+{
+    
+    VLCTransportBar *bar = self.transportBar;
+    if (bar.scrubbing) {
+        [UIView animateWithDuration:0.3 animations:^{
+            bar.scrubbingFraction = bar.playbackFraction;
+            [bar layoutIfNeeded];
+        }];
+        [self updateTimeLabelsForScrubbingFraction:bar.playbackFraction];
+        [self stopScrubbing];
+        [self hidePlaybackControlsIfNeededAfterDelay];
+    }else if([self isTopMenuOnScreen]){
         [self closeTopMenu];
-    }
-    else {
-        [self done:sender];
-    }
-}
-
-
-#pragma mark - Gesture Low level
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    //NSLog(@"touchesEnded: %@ - %@", touches, event);
-    
-    if (self.osdView.alpha == .0) {
-        _isPanning = YES;
-        
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-        [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-        [self showOSD];
-        [self showSwipeMessage];
-        
-        if (_didClickGesture) {
-            _didClickGesture = NO;
-        }
-    } else if (self.topTopMenuSpace.constant != .0) {
-        
-        if (!_didClickGesture && !_didPanGesture) {
-            _isPanning = NO;
-            [self hideOSD];
-        }
-        
-        if (_didPanGesture) {
-            _didPanGesture = NO;
-        }
-        
-        if (_didClickGesture) {
-            _didClickGesture = NO;
-        }
+    }else{
+        [self done:recognizer];
     }
 }
 
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (void)showInfoVCIfNotScrubbing
 {
-    //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
-    _isPanning = YES;
-}
-
-- (void)pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    //NSLog(@"pressesEnded: %@ - %@", presses, event);
-    
-    if ([presses count] == 0) {
+    if (self.transportBar.scrubbing) {
         return;
     }
     
-    UIPress *press = [presses anyObject];
-    
-    _didClickGesture = YES;
-    
-    // Click on everywhere
-    if (press.type == 4) {
-        if ([self isTopMenuOnScreen]) {
-            if (!self.audioButton.focused &&
-                !self.subsButton.focused &&
-                !self.subsDelayButton.focused) {
-                [self closeTopMenu];
-                NSLog(@"A Click anywhere");
-            }
-        }
-        else {
-            [self playandPause:nil];
-        }
-    }/*
-      // Touch Left
-      else if (press.type == 2) {
-      
-      }
-      // Touch Right
-      else if (press.type == 3) {
-      
-      }
-      // Touch Up
-      else if (press.type == 0) {
-      
-      }
-      // Touch Down
-      else if (press.type == 1) {
-      
-      }*/
-    
+    // prevent repeated presentation when users repeatedly and quickly press the arrow button
+    if ([self isTopMenuOnScreen]) {
+        return;
+    }
+    [self openTopMenu];
+    [self animatePlaybackControlsToVisibility:NO];
 }
+
+- (void)handleIRPressLeft
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    if (!self.isSeekable) {
+        return;
+    }
+    
+    BOOL paused = !_mediaplayer.isPlaying;
+    if (paused) {
+        [self jumpBackward];
+    } else
+    {
+        [self scanForwardPrevious];
+    }
+}
+
+- (void)handleIRPressRight
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    if (!self.isSeekable) {
+        return;
+    }
+    
+    BOOL paused = !_mediaplayer.isPlaying;
+    if (paused) {
+        [self jumpForward];
+    } else {
+        [self scanForwardNext];
+    }
+}
+
+- (void)handleSiriRemote:(VLCSiriRemoteGestureRecognizer *)recognizer
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    VLCTransportBarHint hint = self.transportBar.hint;
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+        case UIGestureRecognizerStateChanged:
+            if (recognizer.isLongPress) {
+                if (!self.isSeekable && recognizer.touchLocation == VLCSiriRemoteTouchLocationRight) {
+                    [self setScanState:VLCPlayerScanStateForward2];
+                    return;
+                }
+            } else {
+                switch (recognizer.touchLocation) {
+                    case VLCSiriRemoteTouchLocationLeft:
+                        hint = VLCTransportBarHintJumpBackward10;
+                        break;
+                    case VLCSiriRemoteTouchLocationRight:
+                        hint = VLCTransportBarHintJumpForward10;
+                        break;
+                    default:
+                        hint = VLCTransportBarHintNone;
+                        break;
+                }
+            }
+            break;
+        case UIGestureRecognizerStateEnded:
+            if (recognizer.isClick && !recognizer.isLongPress) {
+                [self handleSiriPressUpAtLocation:recognizer.touchLocation];
+            }
+            [self setScanState:VLCPlayerScanStateNone];
+            break;
+        case UIGestureRecognizerStateCancelled:
+            hint = VLCTransportBarHintNone;
+            [self setScanState:VLCPlayerScanStateNone];
+            break;
+        default:
+            break;
+    }
+    self.transportBar.hint = self.isSeekable ? hint : VLCPlayerScanStateNone;
+}
+
+- (void)handleSiriPressUpAtLocation:(VLCSiriRemoteTouchLocation)location
+{
+    switch (location) {
+        case VLCSiriRemoteTouchLocationLeft:
+            if (self.isSeekable) {
+                [self jumpBackward];
+            }
+            break;
+        case VLCSiriRemoteTouchLocationRight:
+            if (self.isSeekable) {
+                [self jumpForward];
+            }
+            break;
+        default:
+            [self selectButtonPressed];
+            break;
+    }
+}
+
+#pragma mark -
+static const NSInteger VLCJumpInterval = 10000; // 10 seconds
+- (void)jumpForward
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    if (_mediaplayer.isPlaying) {
+        [self jumpInterval:VLCJumpInterval];
+    } else {
+        [self scrubbingJumpInterval:VLCJumpInterval];
+    }
+}
+- (void)jumpBackward
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    if (_mediaplayer.isPlaying) {
+        [self jumpInterval:-VLCJumpInterval];
+    } else {
+        [self scrubbingJumpInterval:-VLCJumpInterval];
+    }
+}
+
+- (void)jumpInterval:(NSInteger)interval
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    NSInteger duration = _mediaplayer.media.length.intValue;
+    if (duration==0) {
+        return;
+    }
+    
+    CGFloat intervalFraction = ((CGFloat)interval)/((CGFloat)duration);
+    CGFloat currentFraction = _mediaplayer.position;
+    currentFraction += intervalFraction;
+    _mediaplayer.position = currentFraction;
+}
+
+- (void)scrubbingJumpInterval:(NSInteger)interval
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    NSInteger duration = _mediaplayer.media.length.intValue;
+    if (duration==0) {
+        return;
+    }
+    CGFloat intervalFraction = ((CGFloat)interval)/((CGFloat)duration);
+    VLCTransportBar *bar = self.transportBar;
+    bar.scrubbing = YES;
+    CGFloat currentFraction = bar.scrubbingFraction;
+    currentFraction += intervalFraction;
+    bar.scrubbingFraction = currentFraction;
+    [self updateTimeLabelsForScrubbingFraction:currentFraction];
+}
+
+- (void)scanForwardNext
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    VLCPlayerScanState nextState = self.scanState;
+    switch (self.scanState) {
+        case VLCPlayerScanStateNone:
+            nextState = VLCPlayerScanStateForward2;
+            break;
+        case VLCPlayerScanStateForward2:
+            nextState = VLCPlayerScanStateForward4;
+            break;
+        case VLCPlayerScanStateForward4:
+            return;
+        default:
+            return;
+    }
+    [self setScanState:nextState];
+}
+
+- (void)scanForwardPrevious
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    VLCPlayerScanState nextState = self.scanState;
+    switch (self.scanState) {
+        case VLCPlayerScanStateNone:
+            return;
+        case VLCPlayerScanStateForward2:
+            nextState = VLCPlayerScanStateNone;
+            break;
+        case VLCPlayerScanStateForward4:
+            nextState = VLCPlayerScanStateForward2;
+            break;
+        default:
+            return;
+    }
+    [self setScanState:nextState];
+}
+
+- (void)setScanState:(VLCPlayerScanState)scanState
+{
+    if (_scanState == scanState) {
+        return;
+    }
+    
+    NSAssert(self.isSeekable || scanState == VLCPlayerScanStateNone, @"Tried to seek while media not seekable.");
+    
+    if (_scanState == VLCPlayerScanStateNone) {
+        self.scanSavedPlaybackRate = @(_mediaplayer.rate);
+    }
+    _scanState = scanState;
+    float rate = 1.0;
+    VLCTransportBarHint hint = VLCTransportBarHintNone;
+    switch (scanState) {
+        case VLCPlayerScanStateForward2:
+            rate = 2.0;
+            hint = VLCTransportBarHintScanForward;
+            break;
+        case VLCPlayerScanStateForward4:
+            rate = 4.0;
+            hint = VLCTransportBarHintScanForward;
+            break;
+            
+        case VLCPlayerScanStateNone:
+        default:
+            rate = self.scanSavedPlaybackRate.floatValue ?: 1.0;
+            hint = VLCTransportBarHintNone;
+            self.scanSavedPlaybackRate = nil;
+            break;
+    }
+    
+    _mediaplayer.rate = rate;
+    [self.transportBar setHint:hint];
+}
+
+
+- (BOOL)isSeekable
+{
+    return _mediaplayer.isSeekable;
+}
+
+#pragma mark -
+
+- (void)updateTimeLabelsForScrubbingFraction:(CGFloat)scrubbingFraction
+{
+    VLCTransportBar *bar = self.transportBar;
+    // MAX 1, _ is ugly hack to prevent --:-- instead of 00:00
+    int scrubbingTimeInt = MAX(1,_mediaplayer.media.length.intValue*scrubbingFraction);
+    VLCTime *scrubbingTime = [VLCTime timeWithInt:scrubbingTimeInt];
+    bar.markerTimeLabel.text = [scrubbingTime stringValue];
+    VLCTime *remainingTime = [VLCTime timeWithInt:-(int)(_mediaplayer.media.length.intValue-scrubbingTime.intValue)];
+    bar.remainingTimeLabel.text = [remainingTime stringValue];
+}
+
+
+- (void)startScrubbing
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    self.transportBar.scrubbing = YES;
+    [self updateDimmingView];
+    if (_mediaplayer.isPlaying) {
+        [self playandPause:nil];
+    }
+}
+- (void)stopScrubbing
+{
+    self.transportBar.scrubbing = NO;
+    [self updateDimmingView];
+    [_mediaplayer play];
+}
+
+- (void)updateDimmingView
+{
+    BOOL shouldBeVisible = self.transportBar.scrubbing;
+    BOOL isVisible = self.dimmingView.alpha == 1.0;
+    if (shouldBeVisible != isVisible) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.dimmingView.alpha = shouldBeVisible ? 1.0 : 0.0;
+        }];
+    }
+}
+
+- (void)updateActivityIndicatorForState:(VLCMediaPlayerState)state {
+    UIActivityIndicatorView *indicator = self.indicatorView;
+    switch (state) {
+        case VLCMediaPlayerStateBuffering:
+            if (!indicator.isAnimating) {
+                self.indicatorView.alpha = 1.0;
+                [self.indicatorView startAnimating];
+            }
+            break;
+        default:
+            if (indicator.isAnimating) {
+                [self.indicatorView stopAnimating];
+                self.indicatorView.alpha = 0.0;
+            }
+            break;
+    }
+}
+
+
+#pragma mark - gesture recognizer delegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer.allowedPressTypes containsObject:@(UIPressTypeMenu)]) {
+        return self.transportBar.scrubbing;
+    }
+    return YES;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return [self.simultaneousGestureRecognizers containsObject:gestureRecognizer];
+}
+
+- (void)playbackPositionUpdated
+{
+    // FIXME: hard coded state since the state in mediaPlayer is incorrectly still buffering
+    [self updateActivityIndicatorForState:VLCMediaPlayerStatePlaying];
+    
+    if (self.osdView.alpha != 0.0) {
+        [self updateTransportBarPosition];
+    }
+}
+
+- (void)updateTransportBarPosition
+{
+    VLCMediaPlayer *mediaPlayer = _mediaplayer;
+    VLCTransportBar *transportBar = self.transportBar;
+    transportBar.remainingTimeLabel.text = [[mediaPlayer remainingTime] stringValue];
+    transportBar.markerTimeLabel.text = [[mediaPlayer time] stringValue];
+    transportBar.playbackFraction = mediaPlayer.position;
+}
+
+#pragma mark - PlaybackControls
+
+- (void)fireHidePlaybackControlsIfNotPlayingTimer:(NSTimer *)timer
+{
+    BOOL playing = [_mediaplayer isPlaying];
+    if (playing) {
+        [self animatePlaybackControlsToVisibility:NO];
+        
+    }
+}
+- (void)showPlaybackControlsIfNeededForUserInteraction
+{
+    if (self.osdView.alpha == 0.0) {
+        [self animatePlaybackControlsToVisibility:YES];
+        // We need an additional update here because in some cases (e.g. when the playback was
+        // paused or started buffering), the transport bar is only updated when it is visible
+        // and if the playback is interrupted, no updates of the transport bar are triggered.
+        [self updateTransportBarPosition];
+    }
+    [self hidePlaybackControlsIfNeededAfterDelay];
+}
+- (void)hidePlaybackControlsIfNeededAfterDelay
+{
+    self.hidePlaybackControlsViewAfterDeleayTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                                                     target:self
+                                                                                   selector:@selector(fireHidePlaybackControlsIfNotPlayingTimer:)
+                                                                                   userInfo:nil repeats:NO];
+}
+
+
+- (void)animatePlaybackControlsToVisibility:(BOOL)visible
+{
+    NSTimeInterval duration = visible ? 0.3 : 1.0;
+    
+    CGFloat alpha = visible ? 1.0 : 0.0;
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         self.osdView.alpha = alpha;
+                     }];
+}
+
+
+#pragma mark - Properties
+- (void)setHidePlaybackControlsViewAfterDeleayTimer:(NSTimer *)hidePlaybackControlsViewAfterDeleayTimer {
+    [_hidePlaybackControlsViewAfterDeleayTimer invalidate];
+    _hidePlaybackControlsViewAfterDeleayTimer = hidePlaybackControlsViewAfterDeleayTimer;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
+    [self playbackPositionUpdated];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Change focus
@@ -565,8 +1020,6 @@ static NSString *const kText = @"kText";
     
     self.topTopMenuSpace.constant = .0;
     
-    _panGestureRecognizer.enabled = NO;
-    
     _topMenuContainerView.hidden = NO;
     _topButton.hidden            = NO;
     
@@ -580,15 +1033,7 @@ static NSString *const kText = @"kText";
 
 - (void) closeTopMenu
 {
-    _finishAnalyzePan = NO;
-    _didPanGesture = NO;
-    _didClickGesture = NO;
-    _isPanning  = NO;
-    _panChangingTime = NO;
-    
     self.topTopMenuSpace.constant = -232.0;
-    
-    _panGestureRecognizer.enabled = YES;
     
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
@@ -607,21 +1052,6 @@ static NSString *const kText = @"kText";
     return (!_topMenuContainerView.hidden);
 }
 
-
-- (void) showMiddleButton
-{
-    //    self.middleButton.hidden = NO;
-    
-}
-
-
-- (void) hideMiddleButton
-{
-    //    self.middleButton.hidden = YES;
-    
-}
-
-
 #pragma mark - Actions
 
 - (IBAction)playandPause:(id)sender
@@ -629,197 +1059,13 @@ static NSString *const kText = @"kText";
     [self showOSD];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     
     if (_mediaplayer.isPlaying) {
         [_mediaplayer pause];
         return;
     }
-    
+    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     [_mediaplayer play];
-    
-}
-
-
-- (IBAction)panGesture:(id)sender
-{
-    
-    //    NSLog(@"panGesture");
-    
-    if (!_videoLoaded) return;
-    
-    UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-    
-    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        _panGestureDeltaPoint = CGPointZero;
-        _finishAnalyzePan = NO;
-        
-        if (self.osdView.alpha == 0) {
-            [self showOSD];
-            [self showSwipeMessage];
-        } else {
-            
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
-            
-            _isPanning = YES;
-            self.heightCurrentLineSpace.constant = 40.0;
-            [UIView animateWithDuration:0.3 animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        }
-    } else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-        CGPoint currentPoint = [panGestureRecognizer translationInView:self.view];
-        
-        if (!_finishAnalyzePan) {
-            CGFloat deltaX = fabs(currentPoint.x) - fabs(_lastPointPan.x);
-            CGFloat deltaY = _lastPointPan.y - currentPoint.y;
-            CGFloat yValue = (deltaY < .0) ? .0 : _panGestureDeltaPoint.y + deltaY;
-            
-            _panGestureDeltaPoint = CGPointMake(_panGestureDeltaPoint.x + fabs(deltaX), yValue);
-            
-            if (deltaY < -50.0) {
-                _panGestureRecognizer.cancelsTouchesInView = YES;
-                _finishAnalyzePan = YES;
-                [self openTopMenu];
-            } else if (deltaX > 100.0) {
-                if (![_mediaplayer isPlaying]) {
-                    [self showOSD];
-                    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
-                    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-                    
-                    _finishAnalyzePan = YES;
-                    [_mediaplayer pause];
-                    _panChangingTime = YES;
-                }
-            }
-        }
-        
-        if (_isPanning && _finishAnalyzePan) {
-            
-            _didPanGesture = YES;
-            _leftCurrentLineSpace.constant += ((currentPoint.x - _lastPointPan.x) * 0.15);
-            
-            if (_leftCurrentLineSpace.constant < 100.0) {
-                _leftCurrentLineSpace.constant = 100.0;
-            }
-            else if (_leftCurrentLineSpace.constant > self.lineBackView.frame.size.width+100) {
-                _leftCurrentLineSpace.constant = self.lineBackView.frame.size.width+100;
-            }
-            
-            [self.view layoutIfNeeded];
-            _lastPointPan = currentPoint;
-            
-            float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-            NSLog(@"%f - %f", position, self.overallProgressView.progress);
-            if (position >= self.overallProgressView.progress) {
-                NSLog(@"CANT LOAD PAST THE DOWNLOADED POINT");
-            } else {
-                NSLog(@"Safe to load");
-            }
-            
-            // Left label
-            {
-                int actualSeconds = (int) (([[_mediaplayer time]intValue] - [[_mediaplayer remainingTime]intValue]) * 0.001 * position);
-                div_t hours = div(actualSeconds,3600);
-                div_t minutes = div(hours.rem,60);
-                int seconds = minutes.rem;
-                
-                self.leftLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
-            }
-            
-            // Right Label
-            {
-                int remainingSeconds = (int) (([[_mediaplayer time]intValue] - [[_mediaplayer remainingTime]intValue]) * 0.001 * (1.0 - position));
-                div_t hours = div(remainingSeconds,3600);
-                div_t minutes = div(hours.rem,60);
-                int seconds = minutes.rem;
-                
-                self.rightLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
-            }
-        }
-    } else if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        _finishAnalyzePan = NO;
-        float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-        [_mediaplayer pause];
-        [_mediaplayer setPosition:position];
-        
-        self.indicatorView.hidden = NO;
-        
-        if (position == 1.0) {
-            [self done:panGestureRecognizer];
-        } else {
-            [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
-            [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-        }
-    }
-    
-    //    _isPanning = NO;
-    //    _panChangingTime = NO;
-    //    _panGestureRecognizer.cancelsTouchesInView = NO;
-    //
-    //    self.heightCurrentLineSpace.constant = 25.0;
-    //    [UIView animateWithDuration:0.3 animations:^{
-    //        [self.view layoutIfNeeded];
-    //    }];
-    //
-    //    _lastPointPan = CGPointZero;
-}
-
-
-- (IBAction)panGestureDelay:(id)sender
-{
-    //NSLog(@"panGestureDelay");
-    
-    if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateBegan) {
-        
-        _panGestureDeltaPoint = CGPointZero;
-        _finishAnalyzePan = NO;
-        
-        if (self.osdView.alpha == 0) {
-            [self showOSD];
-            [self showSwipeMessage];
-        }
-    } else if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateChanged) {
-        
-        CGPoint currentPoint = [_panGestureRecognizerDelay translationInView:self.view];
-        
-        if (!_finishAnalyzePan) {
-            CGFloat deltaX = fabs(currentPoint.x) - fabs(_lastPointPan.x);
-            CGFloat deltaY = _lastPointPan.y - currentPoint.y;
-            CGFloat yValue = (deltaY < .0) ? .0 : _panGestureDeltaPoint.y + deltaY;
-            
-            _panGestureDeltaPoint = CGPointMake(_panGestureDeltaPoint.x + fabs(deltaX), yValue);
-            
-            if (deltaY > 50.0) {
-                _panGestureRecognizer.cancelsTouchesInView = YES;
-                _finishAnalyzePan = YES;
-                [self setNeedsFocusUpdate];
-            } else if (deltaX > 100.0) {
-                _finishAnalyzePan = YES;
-            }
-        }
-        
-        
-        if (_finishAnalyzePan) {
-            _offsetFloat += ((currentPoint.x - _lastPointDelayPanX) * 0.005);
-            NSString *signStr = (_offsetFloat > 0) ? @"+" : @"";
-            NSString *delayValue = [NSString stringWithFormat:@"%@%4.2f", signStr, (roundf(_offsetFloat) * 5.0) / 10.0];
-            [self.subValueDelayButton setTitle:delayValue forState:UIControlStateNormal];
-        }
-        
-        _lastPointDelayPanX = currentPoint.x;
-    }
-    
-    _panGestureRecognizerDelay.cancelsTouchesInView = NO;
-    _lastPointPan = CGPointZero;
-}
-
-
-- (void) playDelay
-{
-    [_mediaplayer play];
-    self.indicatorView.hidden = YES;
     
 }
 
@@ -881,8 +1127,11 @@ static NSString *const kText = @"kText";
                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
             }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
+            
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
@@ -930,12 +1179,15 @@ static NSString *const kText = @"kText";
                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
             }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
             //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
             [self stopStreamingTorrent];
+            
             
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -975,6 +1227,7 @@ static NSString *const kText = @"kText";
             break;
         case VLCMediaPlayerStateBuffering:
             self.indicatorView.hidden = NO;
+            [self.indicatorView startAnimating];
             //NSLog(@"VLCMediaPlayerStateBuffering");
             break;
         case VLCMediaPlayerStateEnded:
@@ -986,6 +1239,8 @@ static NSString *const kText = @"kText";
             break;
         case VLCMediaPlayerStatePlaying:
             //NSLog(@"VLCMediaPlayerStatePlaying");
+            [self.indicatorView stopAnimating];
+            self.indicatorView.hidden=YES;
             break;
             // Error al abrir fichero con DRM
         case VLCMediaPlayerStatePaused:
@@ -1033,18 +1288,7 @@ static NSString *const kText = @"kText";
     
     self.indicatorView.hidden = YES;
     
-    if (!_panChangingTime) {
-        self.leftLabel.text   = [self currentTimeAsString];
-        self.rightLabel.text  = [self durationToEndAsString];
-        
-        CGFloat width = self.lineBackView.frame.size.width;
-        CGFloat ratio = [self currentTimeAsPercentage];
-        self.leftCurrentLineSpace.constant = 100.0 + (width * ratio);
-        
-        if (ratio >= 1.0) {
-            [self done:nil];
-        }
-    }
+    
     
 }
 
@@ -1097,7 +1341,6 @@ static NSString *const kText = @"kText";
 
 - (void) hideOSD
 {
-    _isPanning = NO;
     self.subtitlesBottomSpace.constant = 72.0;
     
     [self hideSwipeMessage];
@@ -1241,7 +1484,6 @@ static NSString *const kText = @"kText";
 
 - (void) newItemSelected:(id) cell
 {
-    [self performSelector:@selector(showMiddleButton) withObject:nil afterDelay:1.0];
     
     if ([cell isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
         SQTabMenuCollectionViewCell *tabCell = (SQTabMenuCollectionViewCell *) cell;
@@ -1401,7 +1643,7 @@ static NSString *const kText = @"kText";
 
 - (void) createAudioSubsDatasource
 {
-    NSString *path = [_mediaplayer.media.url.path stringByRemovingPercentEncoding];
+    NSString *path = [_filePath.relativePath stringByRemovingPercentEncoding];
     [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
         _subsTracks = [NSMutableArray array];
         [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];

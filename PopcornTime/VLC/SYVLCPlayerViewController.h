@@ -1,7 +1,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SQTabMenuCollectionViewCell.h"
-
+#import "VLCTransportBar.h"
+#import "VLCFrostedGlasView.h"
 @protocol SYVLCPlayerViewControllerDelegate <NSObject>
 
 - (void) setRatio:(float) ratio;
@@ -15,10 +16,10 @@
 @interface SYVLCPlayerViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, weak) IBOutlet UIView *osdView;
-@property (nonatomic, weak) IBOutlet UIProgressView *overallProgressView;
-@property (nonatomic, weak) IBOutlet UIView *lineBackView;
-@property (nonatomic, weak) IBOutlet UIView *currentLineView;
+@property (weak, nonatomic) IBOutlet VLCTransportBar *transportBar;
+@property (weak, nonatomic) IBOutlet VLCFrostedGlasView *osdView;
+@property (weak, nonatomic) IBOutlet UIView *dimmingView;
+
 @property (nonatomic, weak) IBOutlet UIView *topButtonContainerView;
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *swipeTopConstraint;

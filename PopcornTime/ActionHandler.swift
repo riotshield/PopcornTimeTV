@@ -134,37 +134,47 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
     
     static func showGenre(pieces: [String], genre: Bool = true) {
-        NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces.last!)!, sortBy: "download_count", orderBy: "desc") { movies, error in
-            
-            /**
-            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: text, sortBy: "download_count", orderBy: "desc") { movies, error in
-                if let movies = movies {
-                    let mapped: [String] = movies.map { movie in
-                        movie.lockUp
-                    }
-                        data = mapped.joinWithSeparator("\n")
-                        dispatch_semaphore_signal(semaphore)
-                    }
+        switch Genre().fetchType! {
+            // FIXME: Switch on type
+        case .Movies:
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces.last!)!, sortBy: "download_count", orderBy: "desc") { movies, error in
+                if error != nil {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    return
                 }
-            **/
- 
-            if error != nil {
-                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                return
+                if let _ = movies {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    let recipe = CatalogRecipe(title: pieces.last!, movies: movies)
+                    /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
+                    recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
+                    Kitchen.serve(recipe: recipe)
+                } else {
+                    // To Do: Go back to the movie overview instead of main home view
+                    Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                    let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+                    
+                    Kitchen.serve(recipe: recipe)
+                }
             }
-            
-            if let _ = movies {
-                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                let recipe = CatalogRecipe(title: pieces.last!, movies: movies)
-                /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
-                recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
-                Kitchen.serve(recipe: recipe)
-            } else {
-                // To Do: Go back to the movie overview instead of main home view
-                Kitchen.navigationController.popToRootViewControllerAnimated(false)
-                let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
-                
-                Kitchen.serve(recipe: recipe)
+        case .Shows:
+            NetworkManager.sharedManager().fetchShows([1], searchTerm: nil, genre: String(UTF8String: pieces.last!)!) { shows, error in
+                if error != nil {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    return
+                }
+                if let _ = shows {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    let recipe = CatalogRecipe(title: pieces.last!, shows: shows)
+                    /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
+                    recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
+                    Kitchen.serve(recipe: recipe)
+                } else {
+                    // To Do: Go back to the movie overview instead of main home view
+                    Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                    let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+
+                    Kitchen.serve(recipe: recipe)
+                }
             }
         }
         

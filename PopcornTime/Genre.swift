@@ -1,29 +1,67 @@
 //
-//  Popular.swift
+//  Genre.swift
 //  PopcornTime
 //
-//  Created by Joe Bloggs on 16/03/2016.
+//  Created by RefusedFlow on 24/07/2016.
 //  Copyright © 2016 PopcornTime. All rights reserved.
 //
 
 import TVMLKitchen
 import PopcornKit
 
-
 struct Genre: TabItem {
 
-    let title = "Genre"
-    var fetchType: FetchType! = .Movies
+    var title = "Genre"
+
+    var fetchType: FetchType! = .Movies {
+        didSet {
+            if let _ = self.fetchType {
+                switch self.fetchType! {
+                case .Movies: title = "Genre"
+                case .Shows: title = "Genre"
+
+                }
+            }
+        }
+    }
 
     func handler() {
+        switch self.fetchType! {
+        case .Movies:
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc") { movies, error in
+                if movies != nil {
+                    let recipe = GenreRecipe(fetchType: self.fetchType)
+                    print("CURRENT FETCHTYPE -> \(self.fetchType)")
+                    self.serveRecipe(recipe)
+                }
+            }
+        case .Shows:
+            let manager = NetworkManager.sharedManager()
+            manager.fetchShowPageNumbers { pageNumbers, error in
+                if let _ = pageNumbers {
+                    // this is temporary limit until solve pagination
+                    manager.fetchShows([1], sort: "trending") { shows, error in
+                        if shows != nil {
+                            let recipe = GenreRecipe(fetchType: self.fetchType)
+                            print("CURRENT FETCHTYPE -> \(self.fetchType)")
+                            self.serveRecipe(recipe)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    func serveRecipe(recipe: GenreRecipe) {
         let recipe = GenreRecipe.init(fetchType: fetchType)
         Kitchen.appController.evaluateInJavaScriptContext({jsContext in
             let highlightSection: @convention(block) (String, JSValue) -> () = {(text, callback) in
-                    recipe.highlightSection(text) { string in
-                        if callback.isObject {
-                            callback.callWithArguments([string])
-                        }
+                recipe.highlightSection(text) { string in
+                    if callback.isObject {
+                        callback.callWithArguments([string])
                     }
+                }
             }
 
             jsContext.setObject(unsafeBitCast(highlightSection, AnyObject.self), forKeyedSubscript: "highlightSection")
@@ -39,5 +77,5 @@ struct Genre: TabItem {
             }
 
             }, completion: nil)
-   }
+    }
 }

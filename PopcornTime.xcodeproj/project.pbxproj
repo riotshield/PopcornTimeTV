@@ -800,7 +800,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 00300bfeec376832434eb23fb0fa10bd66c1969b 272fad76b8959a14c34e1c9d2c8ef5ef2a73432345e70937602abcc742b60e51";
+			shellScript = "#\"${PODS_ROOT}/Fabric/run\" 00300bfeec376832434eb23fb0fa10bd66c1969b 272fad76b8959a14c34e1c9d2c8ef5ef2a73432345e70937602abcc742b60e51";
 		};
 		76F406D61D38045700A88E04 /* Upload dSYM to Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -814,7 +814,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "find ${BUILT_PRODUCTS_DIR} -name \"*.dSYM\" | xargs -I \\{\\} ${PODS_ROOT}/Fabric/upload-symbols -a 00300bfeec376832434eb23fb0fa10bd66c1969b -p tvos \\{\\}";
+			shellScript = "#find ${BUILT_PRODUCTS_DIR} -name \"*.dSYM\" | xargs -I \\{\\} ${PODS_ROOT}/Fabric/upload-symbols -a 00300bfeec376832434eb23fb0fa10bd66c1969b -p tvos \\{\\}";
 		};
 		85B764B0AA36833E1E9526FC /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

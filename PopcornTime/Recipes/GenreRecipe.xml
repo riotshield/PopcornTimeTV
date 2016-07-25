@@ -5,21 +5,16 @@
         }
     </style>
 </head>
-<catalogTemplate>
+<paradeTemplate>
     <background>
         <img src="http://i.cubeupload.com/DYdaxx.png"></img>
     </background>
-    <banner>
-        <title id="title"></title>
-    </banner>
     <list>
+        <header>
+            <title>Genres</title>
+        </header>
         <section>
-            <header>
-                <title>Genres</title>
-            </header>
-            
             {{LIST_ITEMS}}
-                
         </section>
     </list>
-</catalogTemplate>
+</paradeTemplate>

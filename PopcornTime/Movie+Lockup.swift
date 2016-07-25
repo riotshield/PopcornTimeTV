@@ -17,6 +17,11 @@ extension Movie {
         string += "</lockup>"
         return string
     }
+    
+    var lockUpGenre: String {
+        let string = "<img class=\"img\" src=\"\(mediumCoverImage)\" width=\"250\" height=\"375\" />"
+        return string
+    }
 
 }
 

@@ -77,6 +77,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "showActor": showCredits(pieces, isActor: true)
         case "showDirector": showCredits(pieces, isActor: false)
 
+        case "showGenre": showGenre(pieces, genre: true)
+
         default: break
         }
 
@@ -129,6 +131,43 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             }
         }
+    }
+    
+    static func showGenre(pieces: [String], genre: Bool = true) {
+        NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces.last!)!, sortBy: "download_count", orderBy: "desc") { movies, error in
+            
+            /**
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: text, sortBy: "download_count", orderBy: "desc") { movies, error in
+                if let movies = movies {
+                    let mapped: [String] = movies.map { movie in
+                        movie.lockUp
+                    }
+                        data = mapped.joinWithSeparator("\n")
+                        dispatch_semaphore_signal(semaphore)
+                    }
+                }
+            **/
+ 
+            if error != nil {
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                return
+            }
+            
+            if let _ = movies {
+                Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                let recipe = CatalogRecipe(title: pieces.last!, movies: movies)
+                /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
+                recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
+                Kitchen.serve(recipe: recipe)
+            } else {
+                // To Do: Go back to the movie overview instead of main home view
+                Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies/tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+                
+                Kitchen.serve(recipe: recipe)
+            }
+        }
+        
     }
 
     static func showCredits(pieces: [String], isActor: Bool = true) {

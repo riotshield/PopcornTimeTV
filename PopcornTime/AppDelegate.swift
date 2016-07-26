@@ -11,8 +11,6 @@ import TVMLKitchen
 import PopcornKit
 import Alamofire
 import GCDWebServer
-import Fabric
-import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

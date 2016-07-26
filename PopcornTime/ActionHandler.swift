@@ -166,7 +166,6 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func showGenre(pieces: [String], genre: Bool = true) {
         print(pieces)
         switch pieces.last! {
-            // FIXME: Switch on type
         case "movie":
             NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces[1])!, sortBy: "download_count", orderBy: "desc") { movies, error in
                 if error != nil {
@@ -194,7 +193,6 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     return
                 }
                 if let _ = shows {
-                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     let recipe = CatalogRecipe(title: pieces[1], shows: shows)
                     recipe.genre = pieces[1]
                     recipe.fetchType = .Shows

@@ -1,4 +1,5 @@
 var doc = makeDocument(`{{RECIPE}}`);
+var type = "{{TYPE}}";
 doc.addEventListener("select", load.bind(this));
 doc.addEventListener("play", play.bind(this));
 
@@ -37,4 +38,8 @@ var addEventListenersLockupElements = function(lockupElements) {
 var lockupElements = doc.getElementsByTagName("lockup");
 addEventListenersLockupElements(lockupElements)
 
-menuBarItemPresenter(doc);
+if (type === "catalog") {
+    defaultPresenter(doc);
+} else {
+    menuBarItemPresenter(doc);
+}

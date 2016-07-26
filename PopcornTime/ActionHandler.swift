@@ -136,7 +136,35 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         }
     }
 
+    static func serveCatalogRecipe(recipe: CatalogRecipe) {
+        print(recipe.xmlString)
+        Kitchen.appController.evaluateInJavaScriptContext({jsContext in
+            let highlightLockup: @convention(block) (Int, JSValue) -> () = {(nextPage, callback) in
+                recipe.highlightLockup(nextPage) { string in
+                    if callback.isObject {
+                        callback.callWithArguments([string])
+                    }
+                }
+            }
+
+            jsContext.setObject(unsafeBitCast(highlightLockup, AnyObject.self), forKeyedSubscript: "highlightLockup")
+
+            if let file = NSBundle.mainBundle().URLForResource("Pagination", withExtension: "js") {
+                do {
+                    var js = try String(contentsOfURL: file)
+                    js = js.stringByReplacingOccurrencesOfString("{{RECIPE}}", withString: recipe.xmlString)
+                    js = js.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "catalog")
+                    jsContext.evaluateScript(js)
+                } catch {
+                    print("Could not open Pagination.js")
+                }
+            }
+
+            }, completion: nil)
+    }
+
     static func showGenre(pieces: [String], genre: Bool = true) {
+        print(pieces)
         switch pieces.last! {
             // FIXME: Switch on type
         case "movie":
@@ -146,11 +174,11 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     return
                 }
                 if let _ = movies {
-                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     let recipe = CatalogRecipe(title: pieces[1], movies: movies)
-                    /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
-                    recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
-                    Kitchen.serve(recipe: recipe)
+                    recipe.minimumRating = 3
+                    recipe.sortBy = "seeds"
+                    recipe.genre = pieces[1]
+                    serveCatalogRecipe(recipe)
                 } else {
                     // To Do: Go back to the movie overview instead of main home view
                     Kitchen.navigationController.popToRootViewControllerAnimated(false)
@@ -168,9 +196,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                 if let _ = shows {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     let recipe = CatalogRecipe(title: pieces[1], shows: shows)
-                    /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
-                    recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
-                    Kitchen.serve(recipe: recipe)
+                    recipe.genre = pieces[1]
+                    recipe.fetchType = .Shows
+                    recipe.sortBy = "trending"
+                    serveCatalogRecipe(recipe)
                 } else {
                     // To Do: Go back to the movie overview instead of main home view
                     Kitchen.navigationController.popToRootViewControllerAnimated(false)

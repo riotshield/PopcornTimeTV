@@ -54,7 +54,6 @@ struct Genre: TabItem {
 
 
     func serveRecipe(recipe: GenreRecipe) {
-        let recipe = GenreRecipe.init(fetchType: fetchType)
         Kitchen.appController.evaluateInJavaScriptContext({jsContext in
             let highlightSection: @convention(block) (String, JSValue) -> () = {(text, callback) in
                 recipe.highlightSection(text) { string in

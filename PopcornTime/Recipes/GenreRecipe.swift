@@ -16,7 +16,7 @@ public struct GenreRecipe: RecipeType {
     var fetchType: FetchType! = .Movies
     let movieGenres = ["Action", "Adventure", "Animation", "Biography",
                        "Comedy", "Crime", "Documentary", "Drama", "Family",
-                       "Fantasy","Film-Noir", "History", "Horror", "Music",
+                       "Fantasy", "Film-Noir", "History", "Horror", "Music",
                        "Musical", "Mystery", "Romance", "Sport", "Thriller",
                        "War", "Western"]
     let tvGenres = [ "Action", "Adventure", "Animation", "Children", "Comedy",
@@ -40,7 +40,7 @@ public struct GenreRecipe: RecipeType {
         switch fetchType! {
         case .Movies:
             let mappedListItem: [String] = movieGenres.map {
-                let listItem = "<listItemLockup actionID=\"showGenre»\($0)\" sectionID=\"\($0)\"> \n" +
+                let listItem = "<listItemLockup actionID=\"showGenre»\($0)»movie\" sectionID=\"\($0)\"> \n" +
                              "<title>\($0)</title> \n" +
                              "<relatedContent> \n" +
                              "<imgDeck id=\"\($0)\"></imgDeck> \n" +
@@ -51,7 +51,7 @@ public struct GenreRecipe: RecipeType {
             return mappedListItem.joinWithSeparator("\n")
         case .Shows:
             let mappedListItem: [String] = tvGenres.map {
-                let listItem = "<listItemLockup actionID=\"showGenre»\($0)\" sectionID=\"\($0)\"> \n" +
+                let listItem = "<listItemLockup actionID=\"showGenre»\($0)»show\" sectionID=\"\($0)\"> \n" +
                     "<title>\($0)</title> \n" +
                     "<relatedContent> \n" +
                     "<imgDeck id=\"\($0)\"></imgDeck> \n" +

@@ -22,7 +22,10 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Genre(), Watchlist(), Search()]))
+        case "showMovies":
+            var genre = Genre()
+            genre.fetchType = .Movies
+            Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), genre, Watchlist(), Search()]))
         case "chooseKickassCategory":
             var buttons = [AlertButton]()
             buttons.append(AlertButton(title: "Movies", actionID: "showKickassSearch»movies"))
@@ -132,19 +135,19 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             }
         }
     }
-    
+
     static func showGenre(pieces: [String], genre: Bool = true) {
-        switch pieces.first! {
+        switch pieces.last! {
             // FIXME: Switch on type
-        case "showMovies":
-            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces.last!)!, sortBy: "download_count", orderBy: "desc") { movies, error in
+        case "movie":
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces[1])!, sortBy: "download_count", orderBy: "desc") { movies, error in
                 if error != nil {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     return
                 }
                 if let _ = movies {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                    let recipe = CatalogRecipe(title: pieces.last!, movies: movies)
+                    let recipe = CatalogRecipe(title: pieces[1], movies: movies)
                     /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
                     recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
                     Kitchen.serve(recipe: recipe)
@@ -152,19 +155,19 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     // To Do: Go back to the movie overview instead of main home view
                     Kitchen.navigationController.popToRootViewControllerAnimated(false)
                     let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
-                    
+
                     Kitchen.serve(recipe: recipe)
                 }
             }
-        case "showTVShows":
-            NetworkManager.sharedManager().fetchShows([1], searchTerm: nil, genre: String(UTF8String: pieces.last!)!) { shows, error in
+        case "show":
+            NetworkManager.sharedManager().fetchShows([1], searchTerm: nil, genre: String(UTF8String: pieces[1])!) { shows, error in
                 if error != nil {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     return
                 }
                 if let _ = shows {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                    let recipe = CatalogRecipe(title: pieces.last!, shows: shows)
+                    let recipe = CatalogRecipe(title: pieces[1], shows: shows)
                     /* Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Broken one "Displays Genre on Load" */
                     recipe.presentationType = .DefaultWithLoadingIndicator // Works but displays "loading..."
                     Kitchen.serve(recipe: recipe)
@@ -179,7 +182,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         default:
             print("Didn't catch it, it was actually: \(pieces)")
         }
-        
+
     }
 
     static func showCredits(pieces: [String], isActor: Bool = true) {

@@ -134,9 +134,9 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     }
     
     static func showGenre(pieces: [String], genre: Bool = true) {
-        switch Genre().fetchType! {
+        switch pieces.first! {
             // FIXME: Switch on type
-        case .Movies:
+        case "showMovies":
             NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces.last!)!, sortBy: "download_count", orderBy: "desc") { movies, error in
                 if error != nil {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
@@ -156,7 +156,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     Kitchen.serve(recipe: recipe)
                 }
             }
-        case .Shows:
+        case "showTVShows":
             NetworkManager.sharedManager().fetchShows([1], searchTerm: nil, genre: String(UTF8String: pieces.last!)!) { shows, error in
                 if error != nil {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
@@ -176,6 +176,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     Kitchen.serve(recipe: recipe)
                 }
             }
+        default:
+            print("Didn't catch it, it was actually: \(pieces)")
         }
         
     }

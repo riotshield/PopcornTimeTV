@@ -31,7 +31,6 @@ struct Genre: TabItem {
             NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc") { movies, error in
                 if movies != nil {
                     let recipe = GenreRecipe(fetchType: self.fetchType)
-                    print("CURRENT FETCHTYPE -> \(self.fetchType)")
                     self.serveRecipe(recipe)
                 }
             }
@@ -43,7 +42,6 @@ struct Genre: TabItem {
                     manager.fetchShows([1], sort: "trending") { shows, error in
                         if shows != nil {
                             let recipe = GenreRecipe(fetchType: self.fetchType)
-                            print("CURRENT FETCHTYPE -> \(self.fetchType)")
                             self.serveRecipe(recipe)
                         }
                     }

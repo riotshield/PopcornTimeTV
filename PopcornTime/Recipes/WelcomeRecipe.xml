@@ -26,18 +26,10 @@
         <img src="http://i.cubeupload.com/DYdaxx.png"></img>
     </background>
     <collectionList>
-        
-        <!-- Disabled until Trakt implemention with better banner images :)
-         <carousel>
-            <section>
-                {{CAROUSEL}}
-            </section>
-        </carousel>-->
-        
         <shelf>
             <section>
                 <lockup actionID="showMovies">
-                    <img class="round" src="{{MOVIES_BACKGROUND}}" width="548" height="250"></img>
+                    <img class="round" src="http://moviefail.com/wp-content/uploads/2014/04/divergent1.jpg" width="548" height="250"></img>
                     <overlay>
                         <title>Movies</title>
                     </overlay>

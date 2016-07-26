@@ -18,4 +18,9 @@ extension Show {
         return string
     }
 
+    var lockUpGenre: String {
+        let string = "<img class=\"img\" src=\"\(posterImage)\" width=\"250\" height=\"375\" />"
+        return string
+    }
+
 }

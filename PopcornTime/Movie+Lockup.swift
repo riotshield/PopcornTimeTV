@@ -18,6 +18,11 @@ extension Movie {
         return string
     }
 
+    var lockUpGenre: String {
+        let string = "<img class=\"img\" src=\"\(mediumCoverImage)\" width=\"250\" height=\"375\" />"
+        return string
+    }
+
 }
 
 extension KATResult {

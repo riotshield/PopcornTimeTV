@@ -294,13 +294,12 @@ static NSString *const kText = @"kText";
     NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
     if([streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]){
         [_mediaplayer pause];
-        [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
         UIAlertController* continueWatchingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         UIAlertAction *continueWatching = [UIAlertAction actionWithTitle:@"Continue Watching" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
             [_mediaplayer play];
         }];
         UIAlertAction *startWatching = [UIAlertAction actionWithTitle:@"Start from beginning" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
-            [_mediaplayer setTime:[VLCTime timeWithInt:0]];
             [_mediaplayer play];
         }];
         [continueWatchingAlert addAction:continueWatching];

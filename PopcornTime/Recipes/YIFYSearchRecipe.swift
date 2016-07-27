@@ -1,10 +1,4 @@
-//
-//  SearchRecipe.swift
-//  PopcornTime
-//
-//  Created by Yogi Bear on 3/19/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit
@@ -40,6 +34,42 @@ class YIFYSearchRecipe: SearchRecipe {
     }
 
 }
+
+class KATSearchRecipe: SearchRecipe {
+    private var currentSearchText=""
+    private var category = "movies"
+
+    init(type: PresentationType = .Search, category: String) {
+        super.init(type: type)
+        self.category = category
+    }
+
+    override func filterSearchText(text: String, callback: (String -> Void)) {
+        currentSearchText=text
+        NetworkManager.sharedManager().fetchKATResults(page: 1, queryTerm: text, genre: nil, category: self.category, sortBy: "seeders", orderBy: "desc") { movies, error in
+            if let movies = movies {
+                let mapped: [String] = movies.map { movie in
+                    return movie.lockUp
+                }
+
+                if let file = NSBundle.mainBundle().URLForResource("KATSearchRecipe", withExtension: "xml") {
+                    do {
+                        var xml = try String(contentsOfURL: file)
+
+                        xml = xml.stringByReplacingOccurrencesOfString("{{TITLE}}", withString: "Found \(movies.count) \(movies.count == 1 ? "movie" : "movies") for \"\(text.cleaned)\"")
+                        xml = xml.stringByReplacingOccurrencesOfString("{{RESULTS}}", withString: mapped.joinWithSeparator("\n"))
+                        callback(xml)
+                    } catch {
+                        print("Could not open Catalog template")
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
 
 class EZTVSearchRecipe: SearchRecipe {
 

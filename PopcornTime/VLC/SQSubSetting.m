@@ -1,10 +1,4 @@
-//
-//  SQSubSetting.m
-//  Squire
-//
-//  Created by Fernando Torcelly Garcia on 17/2/16.
-//  Copyright © 2016 Fernando Torcelly. All rights reserved.
-//
+
 
 #import "SQSubSetting.h"
 
@@ -24,10 +18,10 @@
     NSData *codedData = [[NSUserDefaults standardUserDefaults]objectForKey:@"subtitleSettings"];
     
     if (!codedData) {
-        subSetting.sizeFloat = 48.0;
+        subSetting.sizeFloat = 56.0;
         subSetting.textColor = [UIColor whiteColor];
         subSetting.fontName = @"system";
-        subSetting.backgroundType = SQSubSettingBackgroundBlack;
+        subSetting.backgroundType = SQSubSettingBackgroundNone;
         return subSetting;
     }
     

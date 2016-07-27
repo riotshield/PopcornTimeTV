@@ -1,7 +1,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SQTabMenuCollectionViewCell.h"
-
+#import "VLCTransportBar.h"
+#import "VLCFrostedGlasView.h"
 @protocol SYVLCPlayerViewControllerDelegate <NSObject>
 
 - (void) setRatio:(float) ratio;
@@ -15,9 +16,10 @@
 @interface SYVLCPlayerViewController : UIViewController
 
 @property (nonatomic, weak) IBOutlet UIView *containerView;
-@property (nonatomic, weak) IBOutlet UIView *osdView;
-@property (nonatomic, weak) IBOutlet UIView *lineBackView;
-@property (nonatomic, weak) IBOutlet UIView *currentLineView;
+@property (weak, nonatomic) IBOutlet VLCTransportBar *transportBar;
+@property (weak, nonatomic) IBOutlet VLCFrostedGlasView *osdView;
+@property (weak, nonatomic) IBOutlet UIView *dimmingView;
+
 @property (nonatomic, weak) IBOutlet UIView *topButtonContainerView;
 
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint *swipeTopConstraint;
@@ -28,7 +30,7 @@
 
 // Focus
 @property (nonatomic, weak) IBOutlet UIView *topMenuContainerView;
-@property (nonatomic, weak) IBOutlet UIButton *middleButton;
+//@property (nonatomic, weak) IBOutlet UIButton *middleButton;
 @property (nonatomic, weak) IBOutlet UIButton *topButton;
 @property (nonatomic, weak) IBOutlet UIButton *subValueDelayButton;
 
@@ -69,6 +71,16 @@
 @property (nonatomic, weak)   UIViewController <SYVLCPlayerViewControllerDelegate> *rootViewController;
 @property (nonatomic, weak) id <SQTabMenuCollectionViewCellDelegate> delegate;
 
+@property (nonatomic, weak) IBOutlet UIView *loadingView;
+@property (nonatomic, weak) IBOutlet UIImageView *backgroundImageView;
+@property (nonatomic, weak) IBOutlet UIImageView *imageView;
+@property (nonatomic, weak) IBOutlet UILabel *nameLabel;
+@property (nonatomic, weak) IBOutlet UIProgressView *progressView;
+@property (nonatomic, weak) IBOutlet UILabel *percentLabel;
+@property (nonatomic, weak) IBOutlet UILabel *statsLabel;
+
+
+- (id)initWithVideoInfo:(NSDictionary *)videoInfo;
 - (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles;
 
 @end

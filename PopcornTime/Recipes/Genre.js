@@ -6,10 +6,8 @@ var highlightSectionEvent = function(event) {
     sectionID = ele.getAttribute("sectionID");
     if (sectionID) {
         var container = doc.getElementById(sectionID);
-        var titleTag = doc.getElementById('title');
         highlightSection(sectionID, function(data) {
             container.innerHTML = data;
-            titleTag.innerHTML = sectionID;
         });
         return;
     }

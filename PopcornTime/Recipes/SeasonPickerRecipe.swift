@@ -1,9 +1,4 @@
-//
-//  SeasonsRecipe.swift
-//  PopcornTime
-//
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit

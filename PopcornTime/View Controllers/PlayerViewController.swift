@@ -1,10 +1,4 @@
-//
-//  PlayerViewController.swift
-//  PopcornTime
-//
-//  Created by Yogi Bear on 3/18/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import UIKit
 import AVKit

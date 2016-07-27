@@ -1,10 +1,4 @@
-//
-//  SQSubSetting.h
-//  Squire
-//
-//  Created by Fernando Torcelly Garcia on 17/2/16.
-//  Copyright © 2016 Fernando Torcelly. All rights reserved.
-//
+
 
 #import <UIKit/UIKit.h>
 

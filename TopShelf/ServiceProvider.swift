@@ -1,10 +1,4 @@
-//
-//  ServiceProvider.swift
-//  TopShelf
-//
-//  Created by Tengis Batsaikhan on 27/04/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import Foundation
 import TVServices
@@ -34,8 +28,10 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
         
         manager.fetchServers { servers, error in
             if let servers = servers {
-                if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
-                    self.manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
+                if let yts = servers["yts"] as? [String],
+                   let eztv = servers["eztv"] as? [String],
+                   let kat = servers["kat"] as? [String] {
+                    self.manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!, kat: kat.first!)
                     self.manager.fetchShowsForPage(1) { shows, error in
                         if let shows = shows {
                             self.manager.fetchMovies(limit: 10, page: 1, quality: "1080p", minimumRating: 3, queryTerm: nil, genre: nil, sortBy: "seeds", orderBy: "desc", withImages: true) { movies, error in
@@ -53,7 +49,7 @@ class ServiceProvider: NSObject, TVTopShelfProvider {
                                         )
                                     }
                                     
-                                    let latestMoviesSectionTitle = "Latest Movies"
+                                    let latestMoviesSectionTitle = "Top Movies"
                                     let latestMovieSectionItem = TVContentItem(contentIdentifier: TVContentIdentifier(identifier: latestMoviesSectionTitle, container: nil)!)
                                     latestMovieSectionItem!.title = latestMoviesSectionTitle
                                     latestMovieSectionItem!.topShelfItems = movieItems

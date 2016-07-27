@@ -1,14 +1,10 @@
-//
-//  AppDelegate.swift
-//  PopcornTime
-//
-//  Created by Joe Bloggs on 15/03/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import UIKit
 import TVMLKitchen
 import PopcornKit
+import Alamofire
+import GCDWebServer
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,12 +16,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         cookbook.actionIDHandler = ActionHandler.primary
         cookbook.playActionIDHandler = ActionHandler.play
         Kitchen.prepare(cookbook)
+        /*
+        Alamofire.request(.GET, "https://api.ipify.org/?format=json").responseJSON { response in
+            print(response.result.value)
+        }
+         */
+        if let webServer = NSUserDefaults.standardUserDefaults().objectForKey("StartWebServer") as? Bool {
+            if webServer {
+                WebServerManager.sharedManager().startServer(8181)
+            }
+        }
 
         let manager = NetworkManager.sharedManager()
         manager.fetchServers { servers, error in
             if let servers = servers {
-                if let yts = servers["yts"] as? [String], let eztv = servers["eztv"] as? [String] {
-                    manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!)
+                if let yts = servers["yts"] as? [String],
+                   let eztv = servers["eztv"] as? [String],
+                   let kat = servers["kat"] as? [String] {
+                    manager.setServerEndpoints(yts: yts.first!, eztv: eztv.first!, kat: kat.first!)
 
                     // Save the amount of TV Show pages
                     manager.fetchShowPageNumbers({ (pageNumbers, error) in
@@ -42,6 +50,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                     watchlist.fetchWatchListItems(forType: .Movie) { watchListMovies in
                                         watchlist.fetchWatchListItems(forType: .Show) { watchListShows in
                                             Kitchen.serve(recipe: WelcomeRecipe(title: "PopcornTime", movies: movies, shows: shows, watchListMovies: watchListMovies, watchListShows: watchListShows))
+
+                                            if let url = launchOptions?[UIApplicationLaunchOptionsURLKey] as? NSURL {
+                                                self.handleURL(url)
+                                            }
                                         }
                                     }
                                 }
@@ -63,14 +75,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
 
+
+
+        return true
+    }
+
+    func handleURL(url: NSURL) {
         let urlString = url.absoluteString
         let queryArray = urlString.componentsSeparatedByString("/")
 
         let action = queryArray[2..<queryArray.endIndex].joinWithSeparator("»")
 
         ActionHandler.primary(action)
-
-        return true
     }
 
     func checkForUpdates() {

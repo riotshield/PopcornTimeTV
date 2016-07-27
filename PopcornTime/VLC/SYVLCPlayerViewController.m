@@ -1,4 +1,3 @@
-
 #import "SYVLCPlayerViewController.h"
 //#import "SYAppDelegate.h"
 //#import "SQMovieViewController.h"
@@ -11,9 +10,19 @@
 #import "SQTabMenuCollectionViewCell.h"
 #import <TVVLCKit/TVVLCKit.h>
 #import "SQSubSetting.h"
+#import "PopcornTime-Swift.h"
 #import <PopcornTorrent/PopcornTorrent.h>
-//#import "PopcornTime-Swift.h"
 #import "SRTParser.h"
+#import "UIImageView+Network.h"
+#import "VLCIRTVTapGestureRecognizer.h"
+#import "VLCSiriRemoteGestureRecognizer.h"
+
+typedef NS_ENUM(NSInteger, VLCPlayerScanState)
+{
+    VLCPlayerScanStateNone,
+    VLCPlayerScanStateForward2,
+    VLCPlayerScanStateForward4,
+};
 
 static NSString *const kIndex = @"kIndex";
 static NSString *const kStart = @"kStart";
@@ -41,25 +50,24 @@ static NSString *const kText = @"kText";
     float _sizeFloat;
     float _offsetFloat;
     
-    BOOL _canPanning;
-    CGPoint _lastPointPan;
-    CGFloat _lastPointDelayPanX;
     NSIndexPath *_lastIndexPathSubtitle;
     NSIndexPath *_lastIndexPathAudio;
     
-    UIPanGestureRecognizer *_panGestureRecognizer;
-    UIPanGestureRecognizer *_panGestureRecognizerDelay;
-    
-    CGPoint _panGestureDeltaPoint; // Calcula la cantidad de variacion que ha habido en ambas coordenadas (diferencia de signo en cada detección)
-    BOOL _finishAnalyzePan;
-    BOOL _didPanGesture;
-    BOOL _didClickGesture;
-    BOOL _panChangingTime;
     NSUInteger _lastButtonSelectedTag;
-
+    BOOL selectActivated;
+    
     SQSubSetting *subSetting;
+    
+    NSDictionary *_videoInfo;
+    NSString *_magnet;
+    NSURL* _filePath;
+    
+    BOOL _videoLoaded;
 }
-
+@property (nonatomic) NSTimer *hidePlaybackControlsViewAfterDeleayTimer;
+@property (nonatomic) VLCPlayerScanState scanState;
+@property (nonatomic) NSNumber *scanSavedPlaybackRate;
+@property (nonatomic) NSSet<UIGestureRecognizer *> *simultaneousGestureRecognizers;
 @end
 
 
@@ -70,24 +78,44 @@ static NSString *const kText = @"kText";
 #define kAlphaFocusedBackground 0.5
 #define kAlphaNotFocusedBackground 0.15
 
+- (id)initWithVideoInfo:(NSDictionary *)videoInfo {
+    self = [super init];
+    
+    if (self) {
+        _lastButtonSelectedTag = 1;
+        _videoDidOpened = NO;
+        self.currentSubTitleDelay = .0;
+        _tryAccount = 0;
+        _sizeFloat = 68.0;
+        
+        // Settings object
+        subSetting = [SQSubSetting loadFromDisk];
+        
+        _videoInfo = videoInfo;
+        _magnet = _videoInfo[@"magnet"];
+        _videoLoaded = NO;
+        _filePath=[[NSURL alloc]initWithString:@""];
+        
+        [self beginStreamingTorrent];
+    }
+    
+    return self;
+}
+
 - (id) initWithURL:(NSURL *) url imdbID:(NSString *) hash subtitles:(NSArray *)cahcedSubtitles
 {
     self = [super init];
     
     if (self) {
         _lastButtonSelectedTag = 1;
-        _finishAnalyzePan = NO;
-        _didPanGesture = NO;
-        _didClickGesture = NO;
         _url = url;
         _videoDidOpened = NO;
         _hash = hash;
         _cahcedSubtitles = cahcedSubtitles;
         self.currentSubTitleDelay = .0;
         _tryAccount = 0;
-        _canPanning  = NO;
         _sizeFloat = 68.0;
-        _panChangingTime = NO;
+        _filePath=[[NSURL alloc]initWithString:@""];
         
         // Settings object
         subSetting = [SQSubSetting loadFromDisk];
@@ -98,9 +126,48 @@ static NSString *const kText = @"kText";
 }// initWithURL:
 
 
+- (void)beginStreamingTorrent {
+    // lets not get a retain cycle going
+    __weak __typeof__(self) weakSelf = self;
+    selectActivated=NO;
+    [[PTTorrentStreamer sharedStreamer] startStreamingFromFileOrMagnetLink:_magnet progress:^(PTTorrentStatus status) {
+        
+        // Percentage
+        _percentLabel.text = [NSString stringWithFormat:@"%.0f%%", status.bufferingProgress * 100];
+        
+        // Status
+        NSString *speedString = [NSByteCountFormatter stringFromByteCount:status.downloadSpeed countStyle:NSByteCountFormatterCountStyleBinary];
+        _statsLabel.text = [NSString stringWithFormat:@"Overall Progress: %.0f%%  Speed: %@/s  Seeds: %d  Peers: %d", status.totalProgreess * 100, speedString, status.seeds, status.peers];
+        //        NSLog(@"%.0f%%, %.0f%%, %@/s, %d,- %d", status.bufferingProgress*100, status.totalProgreess*100, speedString, status.seeds, status.peers);
+        
+        // State
+        self.transportBar.bufferEndFraction=status.totalProgreess;
+        _progressView.progress = status.bufferingProgress;
+        if (_progressView.progress > 0.0) {
+            _nameLabel.text=[_nameLabel.text stringByReplacingOccurrencesOfString:@"Processing" withString:@"Buffering"];
+        }
+    } readyToPlay:^(NSURL *videoFileURL,NSURL* videoFilePath) {
+        _url = videoFileURL;
+        _videoLoaded = YES;
+        _filePath=videoFilePath;
+        [weakSelf createAudioSubsDatasource];
+        [weakSelf updateLoadingRatio];
+        [weakSelf loadPlayer];
+    } failure:^(NSError *error) {
+        // Throw up an error and dismiss the view
+        [weakSelf showAlertLoadingView];
+    }];
+}
+
+- (void)stopStreamingTorrent {
+    [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.view canBecomeFocused];
     
     // Sub back
     if (subSetting.backgroundType == SQSubSettingBackgroundBlack) {
@@ -142,43 +209,77 @@ static NSString *const kText = @"kText";
         self.audioTabBarCollectionView.remembersLastFocusedIndexPath = YES;
     }
     
-    // Media player
-    _mediaplayer          = [[VLCMediaPlayer alloc] init];
-    _mediaplayer.drawable = self.containerView;
-    _mediaplayer.media    = [VLCMedia mediaWithURL:_url];
-    _mediaplayer.delegate = self;
+    _mediaplayer              = [[VLCMediaPlayer alloc] init];
+    _mediaplayer.drawable     = self.containerView;
+    _mediaplayer.delegate     = self;
     _mediaplayer.audio.volume = 200;
-    [_mediaplayer play];
     
-    self.lineBackView.layer.cornerRadius  = 6.0;
-    self.lineBackView.layer.masksToBounds = YES;
+    self.transportBar.bufferStartFraction = 0.0;
+    self.transportBar.bufferEndFraction = 1.0;
+    self.transportBar.playbackFraction = 0.0;
+    self.transportBar.scrubbingFraction = 0.0;
     
     self.backSubtitleView.layer.cornerRadius  = 10.0;
     self.backSubtitleView.layer.masksToBounds = YES;
+    self.dimmingView.alpha = 0.0;
+    self.osdView.alpha = 0.0;
     
-    // Exit filters
-    UITapGestureRecognizer *menuButtonResetFiltersSearch = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(menuButton:)];
-    menuButtonResetFiltersSearch.allowedPressTypes = @[[NSNumber numberWithInteger:UIPressTypeMenu]];
-    [self.view addGestureRecognizer:menuButtonResetFiltersSearch];
+    NSMutableSet<UIGestureRecognizer *> *simultaneousGestureRecognizers = [NSMutableSet set];
     
-    // Play/Pause
-    UITapGestureRecognizer *playPauseTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playandPause:)];
-    playPauseTapGesture.allowedPressTypes = @[@(UIPressTypePlayPause)];
-    [self.view addGestureRecognizer:playPauseTapGesture];
+    // Panning and Swiping
+    UIPanGestureRecognizer* panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
+    panGestureRecognizer.delegate = self;
+    [self.view addGestureRecognizer:panGestureRecognizer];
+    [simultaneousGestureRecognizers addObject:panGestureRecognizer];
     
-    // Pan
-    _panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
-    _panGestureRecognizer.delegate = self;
-    [self.view addGestureRecognizer:_panGestureRecognizer];
+    // Button presses
+    UITapGestureRecognizer *playpauseGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPausePressed)];
+    playpauseGesture.allowedPressTypes = @[@(UIPressTypePlayPause)];
+    [self.view addGestureRecognizer:playpauseGesture];
     
-    // Pan Delay
-    _panGestureRecognizerDelay = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDelay:)];
-    _panGestureRecognizerDelay.delegate = self;
-    [self.subValueDelayButton addGestureRecognizer:_panGestureRecognizerDelay];
+    UITapGestureRecognizer *menuTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(menuButtonPressed:)];
+    menuTapGestureRecognizer.allowedPressTypes = @[@(UIPressTypeMenu)];
+    [self.view addGestureRecognizer:menuTapGestureRecognizer];
+    
+    // IR only recognizer
+    UITapGestureRecognizer *downArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(showInfoVCIfNotScrubbing)];
+    downArrowRecognizer.allowedPressTypes = @[@(UIPressTypeDownArrow)];
+    [self.view addGestureRecognizer:downArrowRecognizer];
+    
+    UITapGestureRecognizer *leftArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(handleIRPressLeft)];
+    leftArrowRecognizer.allowedPressTypes = @[@(UIPressTypeLeftArrow)];
+    [self.view addGestureRecognizer:leftArrowRecognizer];
+    
+    UITapGestureRecognizer *rightArrowRecognizer = [[VLCIRTVTapGestureRecognizer alloc] initWithTarget:self action:@selector(handleIRPressRight)];
+    rightArrowRecognizer.allowedPressTypes = @[@(UIPressTypeRightArrow)];
+    [self.view addGestureRecognizer:rightArrowRecognizer];
+    
+    // Siri remote arrow presses
+    VLCSiriRemoteGestureRecognizer *siriArrowRecognizer = [[VLCSiriRemoteGestureRecognizer alloc] initWithTarget:self action:@selector(handleSiriRemote:)];
+    siriArrowRecognizer.delegate = self;
+    [self.view addGestureRecognizer:siriArrowRecognizer];
+    [simultaneousGestureRecognizers addObject:siriArrowRecognizer];
+    
+    self.simultaneousGestureRecognizers = simultaneousGestureRecognizers;
+    [_mediaplayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    [_mediaplayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
+    
+    if (_videoInfo) {
+        _statsLabel.text = @"";
+        _percentLabel.text = @"0%";
+        _nameLabel.text = [NSString stringWithFormat:@"Processing %@...", _videoInfo[@"movieName"]];
+        
+        [_imageView loadImageFromURL:[NSURL URLWithString:_videoInfo[@"imageAddress"]] placeholderImage:nil];
+        [_backgroundImageView loadImageFromURL:[NSURL URLWithString:_videoInfo[@"backgroundImageAddress"]] placeholderImage:nil];
+    }
+    
+    if (_url) {
+        [self loadPlayer];
+    }
+}
 
-    self.subsButton.enabled      = NO;
-    self.subsDelayButton.enabled = NO;
-    self.audioButton.enabled     = NO;
+- (void)loadPlayer {
+    [_loadingView setHidden:YES];
     
     [self showOSD];
     [self hideDelayButton];
@@ -186,10 +287,30 @@ static NSString *const kText = @"kText";
     self.heightCurrentLineSpace.constant = 25.0;
     [self.view layoutIfNeeded];
     
-    [self updateLoadingRatio];
+    // Media player
+    _mediaplayer.media = [VLCMedia mediaWithURL:_url];
+    [_mediaplayer play];
     
-    [self createAudioSubsDatasource];
-
+    NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+    if([streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]){
+        [_mediaplayer pause];
+        UIAlertController* continueWatchingAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *continueWatching = [UIAlertAction actionWithTitle:@"Continue Watching" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [_mediaplayer setTime:[VLCTime timeWithNumber:[streamContinuanceDefaults objectForKey:_videoInfo[@"movieName"]]]];
+            [_mediaplayer play];
+        }];
+        UIAlertAction *startWatching = [UIAlertAction actionWithTitle:@"Start from beginning" style:UIAlertActionStyleDefault handler:^(UIAlertAction* action){
+            [_mediaplayer play];
+        }];
+        [continueWatchingAlert addAction:continueWatching];
+        [continueWatchingAlert addAction:startWatching];
+        [self presentViewController:continueWatchingAlert animated:YES completion:nil];
+        [_mediaplayer pause];
+    }
+    
+    self.subsButton.enabled      = NO;
+    self.subsDelayButton.enabled = NO;
+    self.audioButton.enabled     = NO;
 }
 
 
@@ -202,53 +323,6 @@ static NSString *const kText = @"kText";
 
 - (void) updateLoadingRatio
 {
-    /*
-    if (self.isFile) {
-        self.progressView.alpha = .0;
-        return;
-    }
-    
-    if (self.progressView.ratio == 1.0) {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.loadingLogo.alpha = .0;
-            self.progressView.alpha = .0;
-        }];
-        return;
-    }
-    
-    [[SQClientController shareClient]loadingRatioForHash:_hash withBlock:^(NSData *data, NSError *error) {
-        SBJsonParser *parser = [[SBJsonParser alloc]init];
-        id object = [parser objectWithData:data];
-        
-        if (![object isKindOfClass:[NSDictionary class]]) {
-            [self showAlertLoadingView];
-            return;
-        }
-        
-        NSDictionary *responseDict = (NSDictionary *) object;
-        if ([[responseDict allKeys]containsObject:@"error"]) {
-            [self showAlertLoadingView];
-            return;
-        }
-        
-        float ratio = [responseDict[@"ratio"]floatValue];NSLog(@"%f", ratio);
-        if (ratio > 1.0) {
-            ratio = 1.0;
-        }
-        
-        if (self.progressView.ratio >= ratio) {
-            if (self.progressView.ratio < 0.4) {
-                ratio = self.progressView.ratio + 0.025;
-            }
-            else {
-                ratio = 0.4;
-            }
-        }
-        
-        [self.progressView setRatio:ratio animated:YES];
-        [self performSelector:@selector(updateLoadingRatio) withObject:nil afterDelay:1.0];
-    }];
-     */
     
 }
 
@@ -262,157 +336,563 @@ static NSString *const kText = @"kText";
     UIAlertAction* acceptAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Accept", @"Accept")
                                                            style:UIAlertActionStyleDefault
                                                          handler:^(UIAlertAction * action) {
+                                                             if(_mediaplayer.position<1.0){
+                                                                 NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                                                                 [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+                                                             }
                                                              [_mediaplayer stop];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+                                                             [_mediaplayer removeObserver:self forKeyPath:@"time"];
                                                              _mediaplayer.delegate = nil;
                                                              _mediaplayer = nil;
                                                              
-//                                                             [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
-                                                             
-                                                             [self dismissViewControllerAnimated:YES completion:^{
-                                                                 [[self.rootViewController navigationController]popToViewController:self.rootViewController animated:YES];
-                                                             }];
+                                                             [self stopStreamingTorrent];
+                                                             [self.navigationController popViewControllerAnimated:YES];
                                                          }];
     [alert addAction:acceptAction];
     [self presentViewController:alert animated:YES completion:nil];
     
 }
 
-
-- (IBAction)menuButton:(id)sender
+#pragma mark - New Gesture recognizer implementation
+#pragma mark - UIActions
+- (void)playPausePressed
 {
-    if ([self isTopMenuOnScreen]) {
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    if (self.transportBar.scrubbing) {
+        [self selectButtonPressed];
+    } else {
+        [self playandPause:nil];
+    }
+}
+
+- (void)panGesture:(UIPanGestureRecognizer *)panGestureRecognizer
+{
+    switch (panGestureRecognizer.state) {
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+            return;
+        default:
+            break;
+    }
+    
+    VLCTransportBar *bar = self.transportBar;
+    
+    UIView *view = self.view;
+    CGPoint translation = [panGestureRecognizer translationInView:view];
+    
+    if (!bar.scrubbing) {
+        if (ABS(translation.x) > 150.0 && selectActivated) {
+            if (self.isSeekable) {
+                [self startScrubbing];
+                selectActivated=NO;
+            } else {
+                return;
+            }
+        } else if (translation.y > 200.0) {
+            panGestureRecognizer.enabled = NO;
+            panGestureRecognizer.enabled = YES;
+            [self showInfoVCIfNotScrubbing];
+            return;
+        } else {
+            return;
+        }
+    }
+    
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    
+    const CGFloat scaleFactor = 8.0;
+    CGFloat fractionInView = translation.x/CGRectGetWidth(view.bounds)/scaleFactor;
+    
+    CGFloat scrubbingFraction = MAX(0.0, MIN(bar.scrubbingFraction + fractionInView,1.0));
+    
+    
+    if (ABS(scrubbingFraction - bar.playbackFraction)<0.005) {
+        scrubbingFraction = bar.playbackFraction;
+    } else {
+        translation.x = 0.0;
+        [panGestureRecognizer setTranslation:translation inView:view];
+    }
+    
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         bar.scrubbingFraction = scrubbingFraction;
+                     }
+                     completion:nil];
+    [self updateTimeLabelsForScrubbingFraction:scrubbingFraction];
+}
+
+- (void)selectButtonPressed
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    [self setScanState:VLCPlayerScanStateNone];
+    
+    VLCTransportBar *bar = self.transportBar;
+    if (bar.scrubbing) {
+        bar.playbackFraction = bar.scrubbingFraction;
+        [self stopScrubbing];
+        [_mediaplayer setPosition:bar.scrubbingFraction];
+    } else if(_mediaplayer.playing) {
+        [_mediaplayer pause];
+        selectActivated=YES;
+    }else if(!_mediaplayer.playing){
+        [self playandPause:nil];
+    }
+}
+- (void)menuButtonPressed:(UITapGestureRecognizer *)recognizer
+{
+    
+    VLCTransportBar *bar = self.transportBar;
+    if (bar.scrubbing) {
+        [UIView animateWithDuration:0.3 animations:^{
+            bar.scrubbingFraction = bar.playbackFraction;
+            [bar layoutIfNeeded];
+        }];
+        [self updateTimeLabelsForScrubbingFraction:bar.playbackFraction];
+        [self stopScrubbing];
+        [self hidePlaybackControlsIfNeededAfterDelay];
+    }else if([self isTopMenuOnScreen]){
         [self closeTopMenu];
-    }
-    else {
-        [self done:sender];
-    }
-}
-
-
-#pragma mark - Gesture Low level
-/*
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
-{
-    NSLog(@"touchesBegan");
-    
-}
-
-
-- (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    NSLog(@"touchesCancelled");
-}
-*/
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
-{
-    //NSLog(@"touchesEnded: %@ - %@", touches, event);
-    
-    if (self.osdView.alpha == .0) {
-        _canPanning = YES;
-        
-        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-        [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-        [self showOSD];
-        [self showSwipeMessage];
-        
-        if (_didClickGesture) {
-            _didClickGesture = NO;
-        }
-    }
-    else if (self.topTopMenuSpace.constant != .0) {
-        
-        if (!_didClickGesture && !_didPanGesture) {
-            _canPanning = NO;
-            [self hideOSD];
-        }
-        
-        if (_didPanGesture) {
-            _didPanGesture = NO;
-        }
-        
-        if (_didClickGesture) {
-            _didClickGesture = NO;
-        }
+    }else{
+        [self done:recognizer];
     }
 }
 
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+- (void)showInfoVCIfNotScrubbing
 {
-    //NSLog(@"touchesMoved : %i", [self isOSDOnScreen]);
-    _canPanning = YES;
-}
-/*
-- (void)touchesEstimatedPropertiesUpdated:(NSSet *)touches
-{
-    NSLog(@"touchesEstimatedPropertiesUpdated");
-}
-
-
-- (void) pressesBegan:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesBegan");
-}
-
-- (void) pressesChanged:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesChanged");
-}
-
-- (void) pressesCancelled:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    NSLog(@"pressesCancelled");
-}
-*/
-- (void) pressesEnded:(NSSet<UIPress *> *)presses withEvent:(UIPressesEvent *)event
-{
-    //NSLog(@"pressesEnded: %@ - %@", presses, event);
-    
-    if ([presses count] == 0) {
+    if (self.transportBar.scrubbing) {
         return;
     }
     
-    UIPress *press = [presses anyObject];
-    
-    _didClickGesture = YES;
-    
-    // Click on everywhere
-    if (press.type == 4) {
-        if ([self isTopMenuOnScreen]) {
-            if (!self.audioButton.focused &&
-                !self.subsButton.focused &&
-                !self.subsDelayButton.focused) {
-                [self closeTopMenu];
-            }
-        }
-        else {
-            [self playandPause:nil];
-        }
-    }/*
-    // Touch Left
-    else if (press.type == 2) {
-        
+    // prevent repeated presentation when users repeatedly and quickly press the arrow button
+    if ([self isTopMenuOnScreen]) {
+        return;
     }
-    // Touch Right
-    else if (press.type == 3) {
-        
-    }
-    // Touch Up
-    else if (press.type == 0) {
-        
-    }
-    // Touch Down
-    else if (press.type == 1) {
-        
-    }*/
-
+    [self openTopMenu];
+    [self animatePlaybackControlsToVisibility:NO];
 }
+
+- (void)handleIRPressLeft
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    if (!self.isSeekable) {
+        return;
+    }
+    
+    BOOL paused = !_mediaplayer.isPlaying;
+    if (paused) {
+        [self jumpBackward];
+    } else
+    {
+        [self scanForwardPrevious];
+    }
+}
+
+- (void)handleIRPressRight
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    if (!self.isSeekable) {
+        return;
+    }
+    
+    BOOL paused = !_mediaplayer.isPlaying;
+    if (paused) {
+        [self jumpForward];
+    } else {
+        [self scanForwardNext];
+    }
+}
+
+- (void)handleSiriRemote:(VLCSiriRemoteGestureRecognizer *)recognizer
+{
+    [self showPlaybackControlsIfNeededForUserInteraction];
+    
+    VLCTransportBarHint hint = self.transportBar.hint;
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+        case UIGestureRecognizerStateChanged:
+            if (recognizer.isLongPress) {
+                if (!self.isSeekable && recognizer.touchLocation == VLCSiriRemoteTouchLocationRight) {
+                    [self setScanState:VLCPlayerScanStateForward2];
+                    return;
+                }
+            } else {
+                switch (recognizer.touchLocation) {
+                    case VLCSiriRemoteTouchLocationLeft:
+                        hint = VLCTransportBarHintJumpBackward10;
+                        break;
+                    case VLCSiriRemoteTouchLocationRight:
+                        hint = VLCTransportBarHintJumpForward10;
+                        break;
+                    default:
+                        hint = VLCTransportBarHintNone;
+                        break;
+                }
+            }
+            break;
+        case UIGestureRecognizerStateEnded:
+            if (recognizer.isClick && !recognizer.isLongPress) {
+                [self handleSiriPressUpAtLocation:recognizer.touchLocation];
+            }
+            [self setScanState:VLCPlayerScanStateNone];
+            break;
+        case UIGestureRecognizerStateCancelled:
+            hint = VLCTransportBarHintNone;
+            [self setScanState:VLCPlayerScanStateNone];
+            break;
+        default:
+            break;
+    }
+    self.transportBar.hint = self.isSeekable ? hint : VLCPlayerScanStateNone;
+}
+
+- (void)handleSiriPressUpAtLocation:(VLCSiriRemoteTouchLocation)location
+{
+    switch (location) {
+        case VLCSiriRemoteTouchLocationLeft:
+            if (self.isSeekable) {
+                [self jumpBackward];
+            }
+            break;
+        case VLCSiriRemoteTouchLocationRight:
+            if (self.isSeekable) {
+                [self jumpForward];
+            }
+            break;
+        default:
+            [self selectButtonPressed];
+            break;
+    }
+}
+
+#pragma mark -
+static const NSInteger VLCJumpInterval = 10000; // 10 seconds
+- (void)jumpForward
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    if (_mediaplayer.isPlaying) {
+        [self jumpInterval:VLCJumpInterval];
+    } else {
+        [self scrubbingJumpInterval:VLCJumpInterval];
+    }
+}
+- (void)jumpBackward
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    if (_mediaplayer.isPlaying) {
+        [self jumpInterval:-VLCJumpInterval];
+    } else {
+        [self scrubbingJumpInterval:-VLCJumpInterval];
+    }
+}
+
+- (void)jumpInterval:(NSInteger)interval
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    NSInteger duration = _mediaplayer.media.length.intValue;
+    if (duration==0) {
+        return;
+    }
+    
+    CGFloat intervalFraction = ((CGFloat)interval)/((CGFloat)duration);
+    CGFloat currentFraction = _mediaplayer.position;
+    currentFraction += intervalFraction;
+    _mediaplayer.position = currentFraction;
+}
+
+- (void)scrubbingJumpInterval:(NSInteger)interval
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    NSInteger duration = _mediaplayer.media.length.intValue;
+    if (duration==0) {
+        return;
+    }
+    CGFloat intervalFraction = ((CGFloat)interval)/((CGFloat)duration);
+    VLCTransportBar *bar = self.transportBar;
+    bar.scrubbing = YES;
+    CGFloat currentFraction = bar.scrubbingFraction;
+    currentFraction += intervalFraction;
+    bar.scrubbingFraction = currentFraction;
+    [self updateTimeLabelsForScrubbingFraction:currentFraction];
+}
+
+- (void)scanForwardNext
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    VLCPlayerScanState nextState = self.scanState;
+    switch (self.scanState) {
+        case VLCPlayerScanStateNone:
+            nextState = VLCPlayerScanStateForward2;
+            break;
+        case VLCPlayerScanStateForward2:
+            nextState = VLCPlayerScanStateForward4;
+            break;
+        case VLCPlayerScanStateForward4:
+            return;
+        default:
+            return;
+    }
+    [self setScanState:nextState];
+}
+
+- (void)scanForwardPrevious
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    VLCPlayerScanState nextState = self.scanState;
+    switch (self.scanState) {
+        case VLCPlayerScanStateNone:
+            return;
+        case VLCPlayerScanStateForward2:
+            nextState = VLCPlayerScanStateNone;
+            break;
+        case VLCPlayerScanStateForward4:
+            nextState = VLCPlayerScanStateForward2;
+            break;
+        default:
+            return;
+    }
+    [self setScanState:nextState];
+}
+
+- (void)setScanState:(VLCPlayerScanState)scanState
+{
+    if (_scanState == scanState) {
+        return;
+    }
+    
+    NSAssert(self.isSeekable || scanState == VLCPlayerScanStateNone, @"Tried to seek while media not seekable.");
+    
+    if (_scanState == VLCPlayerScanStateNone) {
+        self.scanSavedPlaybackRate = @(_mediaplayer.rate);
+    }
+    _scanState = scanState;
+    float rate = 1.0;
+    VLCTransportBarHint hint = VLCTransportBarHintNone;
+    switch (scanState) {
+        case VLCPlayerScanStateForward2:
+            rate = 2.0;
+            hint = VLCTransportBarHintScanForward;
+            break;
+        case VLCPlayerScanStateForward4:
+            rate = 4.0;
+            hint = VLCTransportBarHintScanForward;
+            break;
+            
+        case VLCPlayerScanStateNone:
+        default:
+            rate = self.scanSavedPlaybackRate.floatValue ?: 1.0;
+            hint = VLCTransportBarHintNone;
+            self.scanSavedPlaybackRate = nil;
+            break;
+    }
+    
+    _mediaplayer.rate = rate;
+    [self.transportBar setHint:hint];
+}
+
+
+- (BOOL)isSeekable
+{
+    return _mediaplayer.isSeekable;
+}
+
+#pragma mark -
+
+- (void)updateTimeLabelsForScrubbingFraction:(CGFloat)scrubbingFraction
+{
+    VLCTransportBar *bar = self.transportBar;
+    // MAX 1, _ is ugly hack to prevent --:-- instead of 00:00
+    int scrubbingTimeInt = MAX(1,_mediaplayer.media.length.intValue*scrubbingFraction);
+    VLCTime *scrubbingTime = [VLCTime timeWithInt:scrubbingTimeInt];
+    bar.markerTimeLabel.text = [scrubbingTime stringValue];
+    VLCTime *remainingTime = [VLCTime timeWithInt:-(int)(_mediaplayer.media.length.intValue-scrubbingTime.intValue)];
+    bar.remainingTimeLabel.text = [remainingTime stringValue];
+}
+
+
+- (void)startScrubbing
+{
+    NSAssert(self.isSeekable, @"Tried to seek while not media is not seekable.");
+    
+    self.transportBar.scrubbing = YES;
+    [self updateDimmingView];
+    if (_mediaplayer.isPlaying) {
+        [self playandPause:nil];
+    }
+}
+- (void)stopScrubbing
+{
+    self.transportBar.scrubbing = NO;
+    [self updateDimmingView];
+    [_mediaplayer play];
+}
+
+- (void)updateDimmingView
+{
+    BOOL shouldBeVisible = self.transportBar.scrubbing;
+    BOOL isVisible = self.dimmingView.alpha == 1.0;
+    if (shouldBeVisible != isVisible) {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.dimmingView.alpha = shouldBeVisible ? 1.0 : 0.0;
+        }];
+    }
+}
+
+- (void)updateActivityIndicatorForState:(VLCMediaPlayerState)state {
+    UIActivityIndicatorView *indicator = self.indicatorView;
+    switch (state) {
+        case VLCMediaPlayerStateBuffering:
+            if (!indicator.isAnimating) {
+                self.indicatorView.alpha = 1.0;
+                [self.indicatorView startAnimating];
+            }
+            break;
+        default:
+            if (indicator.isAnimating) {
+                [self.indicatorView stopAnimating];
+                self.indicatorView.alpha = 0.0;
+            }
+            break;
+    }
+}
+
+
+#pragma mark - gesture recognizer delegate
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    if ([gestureRecognizer.allowedPressTypes containsObject:@(UIPressTypeMenu)]) {
+        return self.transportBar.scrubbing;
+    }
+    return YES;
+}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return [self.simultaneousGestureRecognizers containsObject:gestureRecognizer];
+}
+
+- (void)playbackPositionUpdated
+{
+    // FIXME: hard coded state since the state in mediaPlayer is incorrectly still buffering
+    [self updateActivityIndicatorForState:VLCMediaPlayerStatePlaying];
+    
+    if (self.osdView.alpha != 0.0) {
+        [self updateTransportBarPosition];
+    }
+}
+
+- (void)updateTransportBarPosition
+{
+    VLCMediaPlayer *mediaPlayer = _mediaplayer;
+    VLCTransportBar *transportBar = self.transportBar;
+    transportBar.remainingTimeLabel.text = [[mediaPlayer remainingTime] stringValue];
+    transportBar.markerTimeLabel.text = [[mediaPlayer time] stringValue];
+    transportBar.playbackFraction = mediaPlayer.position;
+}
+
+#pragma mark - PlaybackControls
+
+- (void)fireHidePlaybackControlsIfNotPlayingTimer:(NSTimer *)timer
+{
+    BOOL playing = [_mediaplayer isPlaying];
+    if (playing) {
+        [self animatePlaybackControlsToVisibility:NO];
+        
+    }
+}
+- (void)showPlaybackControlsIfNeededForUserInteraction
+{
+    if (self.osdView.alpha == 0.0) {
+        [self animatePlaybackControlsToVisibility:YES];
+        // We need an additional update here because in some cases (e.g. when the playback was
+        // paused or started buffering), the transport bar is only updated when it is visible
+        // and if the playback is interrupted, no updates of the transport bar are triggered.
+        [self updateTransportBarPosition];
+    }
+    [self hidePlaybackControlsIfNeededAfterDelay];
+}
+- (void)hidePlaybackControlsIfNeededAfterDelay
+{
+    self.hidePlaybackControlsViewAfterDeleayTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                                                     target:self
+                                                                                   selector:@selector(fireHidePlaybackControlsIfNotPlayingTimer:)
+                                                                                   userInfo:nil repeats:NO];
+}
+
+
+- (void)animatePlaybackControlsToVisibility:(BOOL)visible
+{
+    NSTimeInterval duration = visible ? 0.3 : 1.0;
+    
+    CGFloat alpha = visible ? 1.0 : 0.0;
+    [UIView animateWithDuration:duration
+                     animations:^{
+                         self.osdView.alpha = alpha;
+                     }];
+}
+
+
+#pragma mark - Properties
+- (void)setHidePlaybackControlsViewAfterDeleayTimer:(NSTimer *)hidePlaybackControlsViewAfterDeleayTimer {
+    [_hidePlaybackControlsViewAfterDeleayTimer invalidate];
+    _hidePlaybackControlsViewAfterDeleayTimer = hidePlaybackControlsViewAfterDeleayTimer;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context{
+    
+    [self playbackPositionUpdated];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark - Change focus
 
 - (UIView *) preferredFocusedView
 {
+    if (![self isTopMenuOnScreen]) {
+        return self.view;
+    }
+    
     if ([self.subValueDelayButton isFocused]) {
         
         self.subsButton.enabled      = YES;
@@ -498,28 +978,26 @@ static NSString *const kText = @"kText";
         else {
             [self deactiveHeaderButtons];
         }
-    }
-    else if (context.nextFocusedView.tag == 1001) {
+    } else if (context.nextFocusedView.tag == 1001) {
         if ([context.previouslyFocusedView isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
             [self deactiveCollectionViews];
-            self.middleButton.hidden = YES;
+            //            self.middleButton.hidden = YES;
             [self setNeedsFocusUpdate];
-        }
-        else {
+        } else {
             [self closeTopMenu];
+            //            NSLog(@"Update Focus");
         }
     }
     
     if (context.nextFocusedView.tag == 4) {
         [self deactiveHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocused] forState:UIControlStateFocused];
-    }
-    else if (context.previouslyFocusedView.tag == 4) {
-        self.middleButton.hidden = YES;
+    } else if (context.previouslyFocusedView.tag == 4) {
+        //        self.middleButton.hidden = YES;
         [self activeHeaderButtons];
         [self.subValueDelayButton setTitleColor:[UIColor colorWithWhite:1.0 alpha:kAlphaFocusedBackground] forState:UIControlStateFocused];
     }
-
+    
 }
 
 
@@ -541,15 +1019,12 @@ static NSString *const kText = @"kText";
     
     self.topTopMenuSpace.constant = .0;
     
-    _panGestureRecognizer.enabled = NO;
-    
     _topMenuContainerView.hidden = NO;
     _topButton.hidden            = NO;
     
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        _middleButton.hidden = NO;
         [self setNeedsFocusUpdate];
     }];
 }
@@ -559,13 +1034,10 @@ static NSString *const kText = @"kText";
 {
     self.topTopMenuSpace.constant = -232.0;
     
-    _panGestureRecognizer.enabled = YES;
-    
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _topMenuContainerView.hidden = YES;
-        _middleButton.hidden         = YES;
         _topButton.hidden            = YES;
         [self setNeedsFocusUpdate];
         [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
@@ -579,21 +1051,6 @@ static NSString *const kText = @"kText";
     return (!_topMenuContainerView.hidden);
 }
 
-
-- (void) showMiddleButton
-{
-    self.middleButton.hidden = NO;
-    
-}
-
-
-- (void) hideMiddleButton
-{
-    self.middleButton.hidden = YES;
-    
-}
-
-
 #pragma mark - Actions
 
 - (IBAction)playandPause:(id)sender
@@ -601,194 +1058,13 @@ static NSString *const kText = @"kText";
     [self showOSD];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     
     if (_mediaplayer.isPlaying) {
         [_mediaplayer pause];
         return;
     }
-    
+    [self performSelector:@selector(hideOSD) withObject:nil afterDelay:4.0];
     [_mediaplayer play];
-    
-}
-
-
-- (IBAction)panGesture:(id)sender
-{
-    //NSLog(@"panGesture");
-    UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *) sender;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideOSD) object:nil];
-    
-    if (panGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
-        _panGestureDeltaPoint = CGPointZero;
-        _finishAnalyzePan = NO;
-        
-        if (self.osdView.alpha == 0) {
-            [self showOSD];
-            [self showSwipeMessage];
-        }
-        else {
-            
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(playDelay) object:nil];
-            
-            _canPanning = YES;
-            self.heightCurrentLineSpace.constant = 40.0;
-            [UIView animateWithDuration:0.3 animations:^{
-                [self.view layoutIfNeeded];
-            }];
-        }
-    }
-    else if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-
-        CGPoint currentPoint = [panGestureRecognizer translationInView:self.view];
-        
-        if (!_finishAnalyzePan) {
-            CGFloat deltaX = fabs(currentPoint.x) - fabs(_lastPointPan.x);
-            CGFloat deltaY = _lastPointPan.y - currentPoint.y;
-            CGFloat yValue = (deltaY < .0) ? .0 : _panGestureDeltaPoint.y + deltaY;
-            
-            _panGestureDeltaPoint = CGPointMake(_panGestureDeltaPoint.x + fabs(deltaX), yValue);
-            if (deltaY < -50.0) {
-                _panGestureRecognizer.cancelsTouchesInView = YES;
-                _finishAnalyzePan = YES;
-                [self openTopMenu];
-            }
-            else if (deltaX > 100.0) {
-                _finishAnalyzePan = YES;
-                [_mediaplayer pause];
-                _panChangingTime = YES;
-            }
-        }
-        
-        
-        if (_canPanning && _finishAnalyzePan) {
-            
-            _didPanGesture = YES;
-            _leftCurrentLineSpace.constant += ((currentPoint.x - _lastPointPan.x) * 0.15);
-            
-            if (_leftCurrentLineSpace.constant < 100.0) {
-                _leftCurrentLineSpace.constant = 100.0;
-            }
-            else if (_leftCurrentLineSpace.constant > self.lineBackView.frame.size.width+100) {
-                _leftCurrentLineSpace.constant = self.lineBackView.frame.size.width+100;
-            }
-            
-            [self.view layoutIfNeeded];
-            _lastPointPan = currentPoint;
-            
-            float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-
-            // Left label
-            {
-                int actualSeconds = (int) (([[_mediaplayer time]intValue] - [[_mediaplayer remainingTime]intValue]) * 0.001 * position);
-                div_t hours = div(actualSeconds,3600);
-                div_t minutes = div(hours.rem,60);
-                int seconds = minutes.rem;
-                
-                self.leftLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
-            }
-            
-            // Right Label
-            {
-                int remainingSeconds = (int) (([[_mediaplayer time]intValue] - [[_mediaplayer remainingTime]intValue]) * 0.001 * (1.0 - position));
-                div_t hours = div(remainingSeconds,3600);
-                div_t minutes = div(hours.rem,60);
-                int seconds = minutes.rem;
-                
-                self.rightLabel.text = [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
-            }
-        }
-    }
-    else {
-        _canPanning = NO;
-        _panChangingTime = NO;
-        _panGestureRecognizer.cancelsTouchesInView = NO;
-        
-        self.heightCurrentLineSpace.constant = 25.0;
-        [UIView animateWithDuration:0.3 animations:^{
-            [self.view layoutIfNeeded];
-        }];
-        
-        _lastPointPan = CGPointZero;
-        
-        if (panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-            float position = (_leftCurrentLineSpace.constant - 100.0) / self.lineBackView.frame.size.width;
-            [_mediaplayer pause];
-            [_mediaplayer setPosition:position];
-
-            self.indicatorView.hidden = NO;
-            
-            if (position == 1.0) {
-                [self done:panGestureRecognizer];
-            }
-            else {
-                [self performSelector:@selector(playDelay) withObject:nil afterDelay:2.0];
-                [self performSelector:@selector(hideOSD) withObject:nil afterDelay:5.0];
-            }
-        }
-    }
-    
-}
-
-
-- (IBAction)panGestureDelay:(id)sender
-{
-    //NSLog(@"panGestureDelay");
-    
-    if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateBegan) {
-        
-        _panGestureDeltaPoint = CGPointZero;
-        _finishAnalyzePan = NO;
-        
-        if (self.osdView.alpha == 0) {
-            [self showOSD];
-            [self showSwipeMessage];
-        }
-    }
-    else if (_panGestureRecognizerDelay.state == UIGestureRecognizerStateChanged) {
-        
-        CGPoint currentPoint = [_panGestureRecognizerDelay translationInView:self.view];
-        
-        if (!_finishAnalyzePan) {
-            CGFloat deltaX = fabs(currentPoint.x) - fabs(_lastPointPan.x);
-            CGFloat deltaY = _lastPointPan.y - currentPoint.y;
-            CGFloat yValue = (deltaY < .0) ? .0 : _panGestureDeltaPoint.y + deltaY;
-            
-            _panGestureDeltaPoint = CGPointMake(_panGestureDeltaPoint.x + fabs(deltaX), yValue);
-            
-            if (deltaY > 50.0) {
-                _panGestureRecognizer.cancelsTouchesInView = YES;
-                _finishAnalyzePan = YES;
-                [self setNeedsFocusUpdate];
-            }
-            else if (deltaX > 100.0) {
-                _finishAnalyzePan = YES;
-            }
-        }
-        
-        
-        if (_finishAnalyzePan) {
-            _offsetFloat += ((currentPoint.x - _lastPointDelayPanX) * 0.005);
-            NSString *signStr = (_offsetFloat > 0) ? @"+" : @"";
-            NSString *delayValue = [NSString stringWithFormat:@"%@%4.2f", signStr, (roundf(_offsetFloat) * 5.0) / 10.0];
-            [self.subValueDelayButton setTitle:delayValue forState:UIControlStateNormal];
-        }
-        
-        _lastPointDelayPanX = currentPoint.x;
-    }
-    else {
-        _panGestureRecognizerDelay.cancelsTouchesInView = NO;
-        _lastPointPan = CGPointZero;
-    }
-    
-}
-
-
-- (void) playDelay
-{
-    [_mediaplayer play];
-    self.indicatorView.hidden = YES;
     
 }
 
@@ -808,34 +1084,34 @@ static NSString *const kText = @"kText";
             // Si hay entrado realmente en el video
             // guarda el ratio
             if (_videoDidOpened) {
-//            if (_videoDidOpened && _hash.length > 0) {
+                //            if (_videoDidOpened && _hash.length > 0) {
                 
-//                float ratio = [self currentTimeAsPercentage];
-//                if (ratio > 0.95) {
-//                    ratio = 1.0;
-//                }
+                //                float ratio = [self currentTimeAsPercentage];
+                //                if (ratio > 0.95) {
+                //                    ratio = 1.0;
+                //                }
                 
                 NSArray *viewControllers = [self.navigationController viewControllers];
                 
                 for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
                     
-//                    id object = viewControllers[i];
+                    //                    id object = viewControllers[i];
                     
                     /*
-                    if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
-                        SQMovieDetailViewController *detailViewController = (SQMovieDetailViewController *) object;
-                        [[SYContentController shareController]setRatio:ratio toMovie:detailViewController.imdb];
-                        break;
-                    }
-                    else if ([object isKindOfClass:[SQShowDetailViewController class]]) {
-                        SQShowDetailViewController *detailViewController = (SQShowDetailViewController *) object;
-                        [[SYContentController shareController]setRatio:ratio
-                                                             toEpisode:detailViewController.episodeSelected
-                                                             withBlock:^(NSData *data, NSError *error) {
-                                                                 [detailViewController setRatio:ratio];
-                                                             }];
-                        break;
-                    }
+                     if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
+                     SQMovieDetailViewController *detailViewController = (SQMovieDetailViewController *) object;
+                     [[SYContentController shareController]setRatio:ratio toMovie:detailViewController.imdb];
+                     break;
+                     }
+                     else if ([object isKindOfClass:[SQShowDetailViewController class]]) {
+                     SQShowDetailViewController *detailViewController = (SQShowDetailViewController *) object;
+                     [[SYContentController shareController]setRatio:ratio
+                     toEpisode:detailViewController.episodeSelected
+                     withBlock:^(NSData *data, NSError *error) {
+                     [detailViewController setRatio:ratio];
+                     }];
+                     break;
+                     }
                      */
                 }
                 
@@ -845,13 +1121,20 @@ static NSString *const kText = @"kText";
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLoadingRatio) object:nil];
             
+            if(_mediaplayer.position<1.0){
+                NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+            }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
-//            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+            //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
+            
+            [self stopStreamingTorrent];
             
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -861,43 +1144,49 @@ static NSString *const kText = @"kText";
         
         if (!sender || panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
             /*
-            if (_hash.length > 0) {
-                float ratio = 1.0;
-                
-                NSArray *viewControllers = [[self.rootViewController navigationController]viewControllers];
-                
-                for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
-                    
-                    id object = viewControllers[i];
-                    
-                    if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
-                        SQMovieDetailViewController *detailViewController = (SQMovieDetailViewController *) object;
-                        [[SYContentController shareController]setRatio:ratio toMovie:detailViewController.imdb];
-                        break;
-                    }
-                    else if ([object isKindOfClass:[SQShowDetailViewController class]]) {
-                        SQShowDetailViewController *detailViewController = (SQShowDetailViewController *) object;
-                        [[SYContentController shareController]setRatio:ratio toEpisode:detailViewController.episodeSelected withBlock:^(NSData *data, NSError *error) {
-                            [self.rootViewController setRatio:ratio];
-                        }];
-                        
-                        break;
-                    }
-                }
-                
-                [self rememberAudioSub];
-            }
+             if (_hash.length > 0) {
+             float ratio = 1.0;
+             
+             NSArray *viewControllers = [[self.rootViewController navigationController]viewControllers];
+             
+             for (NSInteger i = [viewControllers count]-1 ; i >= 0 ; i--) {
+             
+             id object = viewControllers[i];
+             
+             if ([object isKindOfClass:[SQMovieDetailViewController class]]) {
+             SQMovieDetailViewController *detailViewController = (SQMovieDetailViewController *) object;
+             [[SYContentController shareController]setRatio:ratio toMovie:detailViewController.imdb];
+             break;
+             }
+             else if ([object isKindOfClass:[SQShowDetailViewController class]]) {
+             SQShowDetailViewController *detailViewController = (SQShowDetailViewController *) object;
+             [[SYContentController shareController]setRatio:ratio toEpisode:detailViewController.episodeSelected withBlock:^(NSData *data, NSError *error) {
+             [self.rootViewController setRatio:ratio];
+             }];
+             
+             break;
+             }
+             }
+             
+             [self rememberAudioSub];
+             }
              */
             
             [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateLoadingRatio) object:nil];
-            
+            if(_mediaplayer.position<1.0){
+                NSUserDefaults *streamContinuanceDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.popcorntime.PopcornTime.StreamContinuance"];
+                [streamContinuanceDefaults setObject:_mediaplayer.time.value forKey:_videoInfo[@"movieName"]];
+            }
             [_mediaplayer stop];
+            [_mediaplayer removeObserver:self forKeyPath:@"remainingTime"];
+            [_mediaplayer removeObserver:self forKeyPath:@"time"];
             _mediaplayer.delegate = nil;
             _mediaplayer = nil;
             
-//            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
+            //            [[SQClientController shareClient]stopStreamingWithHash:_hash withBlock:nil];
             
-            [[PTTorrentStreamer sharedStreamer] cancelStreaming];
+            [self stopStreamingTorrent];
+            
             
             [self.navigationController popViewControllerAnimated:YES];
         }
@@ -908,14 +1197,14 @@ static NSString *const kText = @"kText";
 
 - (void) rememberAudioSub
 {
-    NSDictionary *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *subSelected = _subsTracks[_lastIndexPathSubtitle.row];
     //NSDictionary *audioSelected = _audioTracks[_lastIndexPathAudio.row];
     //NSLog(@"audio : %@", audioSelected);
     
-    NSString *currentSubs = [subSelected[@"name"]lowercaseString];
+    NSString *currentSubs = [[subSelected language] lowercaseString];
     if (currentSubs) {
-        [[NSUserDefaults standardUserDefaults]setValue:currentSubs forKey:@"currentSubs"];
-        [[NSUserDefaults standardUserDefaults]synchronize];
+        [[NSUserDefaults standardUserDefaults] setValue:currentSubs forKey:@"currentSubs"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }
 
@@ -937,6 +1226,7 @@ static NSString *const kText = @"kText";
             break;
         case VLCMediaPlayerStateBuffering:
             self.indicatorView.hidden = NO;
+            [self.indicatorView startAnimating];
             //NSLog(@"VLCMediaPlayerStateBuffering");
             break;
         case VLCMediaPlayerStateEnded:
@@ -948,6 +1238,8 @@ static NSString *const kText = @"kText";
             break;
         case VLCMediaPlayerStatePlaying:
             //NSLog(@"VLCMediaPlayerStatePlaying");
+            [self.indicatorView stopAnimating];
+            self.indicatorView.hidden=YES;
             break;
             // Error al abrir fichero con DRM
         case VLCMediaPlayerStatePaused:
@@ -986,27 +1278,16 @@ static NSString *const kText = @"kText";
         
         [UIView animateWithDuration:0.3 animations:^{
             self.loadingLogo.alpha = .0;
-//            self.progressView.alpha = .0;
+            //            self.progressView.alpha = .0;
             self.indicatorView.alpha = 1.0;
         }];
         
         _videoDidOpened = YES;
     }
- 
+    
     self.indicatorView.hidden = YES;
-
-    if (!_panChangingTime) {
-        self.leftLabel.text   = [self currentTimeAsString];
-        self.rightLabel.text  = [self durationToEndAsString];
-        
-        CGFloat width = self.lineBackView.frame.size.width;
-        CGFloat ratio = [self currentTimeAsPercentage];
-        self.leftCurrentLineSpace.constant = 100.0 + (width * ratio);
-        
-        if (ratio >= 1.0) {
-            [self done:nil];
-        }
-    }
+    
+    
     
 }
 
@@ -1015,10 +1296,6 @@ static NSString *const kText = @"kText";
 
 - (void) showSwipeMessage
 {
-    // It's trailer
-    if (_hash.length == 0) {
-        return;
-    }
     
     if (self.swipeTopConstraint.constant == 26) {
         return;
@@ -1063,7 +1340,6 @@ static NSString *const kText = @"kText";
 
 - (void) hideOSD
 {
-    _canPanning = NO;
     self.subtitlesBottomSpace.constant = 72.0;
     
     [self hideSwipeMessage];
@@ -1165,18 +1441,21 @@ static NSString *const kText = @"kText";
 {
     static NSString *identifier = @"TabMenuCollectionViewCell";
     
-    NSDictionary *item = ([collectionView isEqual:self.subTabBarCollectionView]) ? [_subsTracks objectAtIndex:indexPath.row] : [_audioTracks objectAtIndex:indexPath.row];
-    
     SQTabMenuCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     cell.delegate = self;
-    cell.nameLabel.text = item[@"name"];
+    if ([collectionView isEqual:self.subTabBarCollectionView]) {
+        Subtitle *item = [_subsTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item.language;
+    } else {
+        NSDictionary *item = [_audioTracks objectAtIndex:indexPath.row];
+        cell.nameLabel.text = item[@"name"];
+    }
     
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         cell.collectionViewType = SQTabMenuCollectionViewTypeSubtitle;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
-    }
-    else {
+    } else {
         cell.collectionViewType = SQTabMenuCollectionViewTypeAudio;
         float alpha = (indexPath.row == _lastIndexPathSubtitle.row) ? kAlphaFocusedBackground : kAlphaNotFocusedBackground;
         cell.nameLabel.textColor = [UIColor colorWithWhite:1.0 alpha:alpha];
@@ -1192,8 +1471,7 @@ static NSString *const kText = @"kText";
     if ([collectionView isEqual:self.subTabBarCollectionView]) {
         [self newSubSelected];
         [self closeTopMenu];
-    }
-    else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
+    } else if ([collectionView isEqual:self.audioTabBarCollectionView]) {
         [self newAudioSelected];
         [self closeTopMenu];
     }
@@ -1205,7 +1483,6 @@ static NSString *const kText = @"kText";
 
 - (void) newItemSelected:(id) cell
 {
-    [self performSelector:@selector(showMiddleButton) withObject:nil afterDelay:1.0];
     
     if ([cell isKindOfClass:[SQTabMenuCollectionViewCell class]]) {
         SQTabMenuCollectionViewCell *tabCell = (SQTabMenuCollectionViewCell *) cell;
@@ -1252,14 +1529,14 @@ static NSString *const kText = @"kText";
 
 - (void) restoreSub
 {
-    NSString *currentSubs = [[NSUserDefaults standardUserDefaults]valueForKey:@"currentSubs"];
+    NSString *currentSubs = [[NSUserDefaults standardUserDefaults] valueForKey:@"currentSubs"];
     if (!currentSubs || [currentSubs isEqual:@"off"]) {
         return;
     }
     
-    for (NSDictionary *sub in _subsTracks) {
+    for (Subtitle *sub in _subsTracks) {
         
-        NSString *name = [sub[@"name"]lowercaseString];
+        NSString *name = [[sub language] lowercaseString];
         
         if ([name isEqual:currentSubs]) {
             NSUInteger row = [_subsTracks indexOfObject:sub];
@@ -1274,93 +1551,59 @@ static NSString *const kText = @"kText";
 
 - (void) newSubSelected
 {
-    NSDictionary *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
+    Subtitle *lastSelected = _subsTracks[_lastIndexPathSubtitle.row];
     
-    if ([[lastSelected allKeys]containsObject:@"index"]) {
-        [_mediaplayer setCurrentVideoSubTitleIndex:[lastSelected[@"index"]intValue]];
+    if (lastSelected.index) {
+        [_mediaplayer setCurrentVideoSubTitleIndex:lastSelected.index.intValue];
         self.subtitleTextView.hidden = YES;
         [self stopSubtitleParseTimer];
-    }
-    else {
+    } else {
         [_mediaplayer setCurrentVideoSubTitleIndex:-1];
         
-        NSString *file = lastSelected[@"path"];
-        
-        NSString *string = [self readSubtitleAtPath:file];
-        NSError *error;
-        SRTParser *parser = [[SRTParser alloc] init];
-        _currentSelectedSub = [parser parseString:string error:&error];
-
-        
-//        _currentSubParsed = [self parseSubtitle:file];
-        
-        
-        /*
-        [[SQClientController shareClient]subtitleLanguage:lastSelected[@"name"]
-                                                  forHash:_hash
-                                                withBlock:^(NSData *data, NSError *error) {
-                                                    if (data) {
-                                                        _currentSubParsed = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-                                                    }
-                                                    else {
-                                                        _currentSubParsed = @{};
-                                                    }
-                                                }];
-        */
+        NSString *file = lastSelected.filePath;
+        if (file) {
+            NSString *string = [self readSubtitleAtPath:file withEncoding:lastSelected.encoding];
+            NSError *error;
+            SRTParser *parser = [[SRTParser alloc] init];
+            _currentSelectedSub = [parser parseString:string error:&error];
+        } else {
+            if (lastSelected.fileAddress) {
+                [lastSelected downloadSubtitle:^(NSString * _Nullable filePath) {
+                    NSString *string = [self readSubtitleAtPath:filePath withEncoding:lastSelected.encoding];
+                    NSError *error;
+                    lastSelected.filePath = filePath;
+                    SRTParser *parser = [[SRTParser alloc] init];
+                    _currentSelectedSub = [parser parseString:string error:&error];
+                }];
+            }
+        }
     }
     
 }
 
-- (NSString *)readSubtitleAtPath:(NSString *)path
+- (NSString *)readSubtitleAtPath:(NSString *)path withEncoding:(NSString *)encoding
 {
-    NSError *error = nil;
-    NSString *string = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
-    // If UTF-8 Encoding fails, try ISO Latin1 & 2
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin1StringEncoding error:&error];
+    
+    NSString *string = nil;
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    CFStringEncoding encodingType = CFStringConvertIANACharSetNameToEncoding((__bridge CFStringRef)encoding);
+    if (encodingType != kCFStringEncodingInvalidId) {
+        CFStringRef cfstring = CFStringCreateWithBytes(kCFAllocatorDefault, data.bytes, data.length, encodingType, YES);
+        string = (__bridge NSString *)cfstring;
+        CFRelease(cfstring);
+        return string;
     }
     
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:NSISOLatin2StringEncoding error:&error];
+    // Sometimes the encoding is unknown (i.e. Catalan) so we have to fallback on some sort of other check
+    [NSString stringEncodingForData:data encodingOptions:nil convertedString:&string usedLossyConversion:nil];
+    if (string) {
+        return string;
     }
     
-    if (!string) {
-        NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacCentralEurRoman);
-        string = [NSString stringWithContentsOfFile:path encoding:encoding error:&error];
-    }
-    
-    // If that fails try one other format, GBK_95
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingGBK_95 error:&error];
-    }
-    
-    // Give Big5 a try
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-    }
-    
-    // Hong Kong varient
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_HKSCS_1999 error:&error];
-    }
-    
-    // Taiwan varient
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5_E error:&error];
-    }
-    
-    if (!string) {
-        string = [NSString stringWithContentsOfFile:path encoding:kCFStringEncodingBig5 error:&error];
-    }
-    
-    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
-    
+    // Just as a last resort failsafe, open in UTF-8. Encoding will probably be broken but it will open.
+    string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     return string;
+    
 }
 
 - (void) newAudioSelected
@@ -1399,89 +1642,94 @@ static NSString *const kText = @"kText";
 
 - (void) createAudioSubsDatasource
 {
-    
-    _subsTracks = [NSMutableArray array];
-    [_subsTracks addObject:@{@"name" : @"Off", @"path" : @""}];
-    [_subsTracks addObjectsFromArray:_cahcedSubtitles];
-    
-    // Subtitles Internal
-    _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
-    NSArray *subsTrackNames = nil;
-    @try {
-        subsTrackNames = [_mediaplayer videoSubTitlesNames];
-    }
-    
-    @catch (NSException *exception) {
-        NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
-        for (id item in _subsTrackIndexes) {
-            NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
-            [subsTrackNamesMut addObject:subsName];
+    NSString *path = [_filePath.relativePath stringByRemovingPercentEncoding];
+    [[SubtitleManager sharedManager] searchWithFile:path completion:^(NSArray<Subtitle *> * _Nullable subtitles) {
+        _subsTracks = [NSMutableArray array];
+        [_subsTracks addObject:[[Subtitle alloc] initWithLanguage:@"Off" fileAddress:nil fileName:nil encoding:nil]];
+        [_subsTracks addObjectsFromArray:subtitles];
+        
+        // Subtitles Internal
+        _subsTrackIndexes = [_mediaplayer videoSubTitlesIndexes];
+        NSArray *subsTrackNames = nil;
+        @try {
+            subsTrackNames = [_mediaplayer videoSubTitlesNames];
         }
-        subsTrackNames = [subsTrackNamesMut copy];
-    }
-    
-    if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
-        for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++)
-            [_subsTracks addObject:@{@"index": [_subsTrackIndexes objectAtIndex:i], @"name": [subsTrackNames objectAtIndex:i]}];
-    }
-    
-    // Audio
-    _audioTracks = [NSMutableArray array];
-    NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
-    NSArray *audioTrackNames = nil;
-    @try {
-        audioTrackNames = [_mediaplayer audioTrackNames];
-    }
-    
-    @catch (NSException *exception) {
-        NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
-        for (id item in audioTrackIndexes) {
-            NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
-            [audioTrackNamesMut addObject:audioName];
+        
+        @catch (NSException *exception) {
+            NSMutableArray *subsTrackNamesMut = [NSMutableArray array];
+            for (id item in _subsTrackIndexes) {
+                NSString *subsName = [NSString stringWithFormat:@"Subtitle %lu", [_subsTrackIndexes indexOfObject:item]];
+                [subsTrackNamesMut addObject:subsName];
+            }
+            subsTrackNames = [subsTrackNamesMut copy];
         }
-        audioTrackNames = [audioTrackNamesMut copy];
-    }
-    
-    if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
-        for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
-            [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
-    }
-    else {
-        [_audioTracks addObject:@{@"name" : @"Disabled"}];
-    }
-    
-    _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
-    _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
-    
-    self.subTabBarCollectionView.dataSource = self;
-    self.subTabBarCollectionView.delegate   = self;
-    [self.subTabBarCollectionView reloadData];
-    
-    self.audioTabBarCollectionView.dataSource = self;
-    self.audioTabBarCollectionView.delegate   = self;
-    [self.audioTabBarCollectionView reloadData];
-    
-    [self restoreSub];
+        
+        if ([_subsTrackIndexes count] == [subsTrackNames count] && [_subsTrackIndexes count] > 1) {
+            for (NSUInteger i = 1; i < [_subsTrackIndexes count]; i++) {
+                Subtitle *item = [[Subtitle alloc] initWithLanguage:[subsTrackNames objectAtIndex:i] fileAddress:nil fileName:nil encoding:nil];
+                item.index = [NSNumber numberWithUnsignedInteger:i];
+                [_subsTracks addObject:item];
+            }
+        }
+        
+        // Audio
+        _audioTracks = [NSMutableArray array];
+        NSArray *audioTrackIndexes = [_mediaplayer audioTrackIndexes];
+        NSArray *audioTrackNames = nil;
+        @try {
+            audioTrackNames = [_mediaplayer audioTrackNames];
+        }
+        
+        @catch (NSException *exception) {
+            NSMutableArray *audioTrackNamesMut = [NSMutableArray array];
+            for (id item in audioTrackIndexes) {
+                NSString *audioName = [NSString stringWithFormat:@"Audio %lu", [audioTrackIndexes indexOfObject:item]];
+                [audioTrackNamesMut addObject:audioName];
+            }
+            audioTrackNames = [audioTrackNamesMut copy];
+        }
+        
+        if ([audioTrackIndexes count] == [audioTrackNames count] && [audioTrackIndexes count] > 1) {
+            for (NSUInteger i = 1; i < [audioTrackIndexes count]; i++)
+                [_audioTracks addObject:@{@"index": [audioTrackIndexes objectAtIndex:i], @"name": [audioTrackNames objectAtIndex:i]}];
+        }
+        else {
+            [_audioTracks addObject:@{@"name" : @"Disabled"}];
+        }
+        
+        _lastIndexPathSubtitle = [NSIndexPath indexPathForRow:0 inSection:0];
+        _lastIndexPathAudio    = [NSIndexPath indexPathForRow:0 inSection:0];
+        
+        self.subTabBarCollectionView.dataSource = self;
+        self.subTabBarCollectionView.delegate   = self;
+        [self.subTabBarCollectionView reloadData];
+        
+        self.audioTabBarCollectionView.dataSource = self;
+        self.audioTabBarCollectionView.delegate   = self;
+        [self.audioTabBarCollectionView reloadData];
+        
+        [self restoreSub];
+    }];
     
     /*
-    [[SQClientController shareClient]subtitlesListForHash:_hash
-                                                withBlock:^(NSData *data, NSError *error) {
+     [[SQClientController shareClient]subtitlesListForHash:_hash
+     withBlock:^(NSData *data, NSError *error) {
      
-                                                    SBJsonParser *parser = [[SBJsonParser alloc]init];
-                                                    id object = [parser objectWithData:data];
+     SBJsonParser *parser = [[SBJsonParser alloc]init];
+     id object = [parser objectWithData:data];
      
-                                                    if (!error && [object isKindOfClass:[NSArray class]]) {
+     if (!error && [object isKindOfClass:[NSArray class]]) {
      
      
-                                                    }
-                                                    else {
-                                                        _tryAccount++;
-                                                        if (_tryAccount < 10) {
-                                                            [self performSelector:@selector(createAudioSubsDatasource)
-                                                                       withObject:nil afterDelay:5.0];
-                                                        }
-                                                    }
-                                                }];
+     }
+     else {
+     _tryAccount++;
+     if (_tryAccount < 10) {
+     [self performSelector:@selector(createAudioSubsDatasource)
+     withObject:nil afterDelay:5.0];
+     }
+     }
+     }];
      */
     
 }// createOptionsRoll
@@ -1524,14 +1772,17 @@ static NSString *const kText = @"kText";
     SRTSubtitle *lastFounded = (SRTSubtitle *)[objectsFound lastObject];
     
     if (lastFounded) {
+        if ([lastFounded.content.lowercaseString containsString:@"opensubtitles"]) {
+            return;
+        }
         [self updateSubtitle:lastFounded.content];
         
         CGRect rectBack = [lastFounded.content boundingRectWithSize:CGSizeMake(1920, 1080)
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                            attributes:[subSetting attributes]
-                                               context:nil];
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:[subSetting attributes]
+                                                            context:nil];
         
-
+        
         if (subSetting.backgroundType == SQSubSettingBackgroundBlur) {
             self.widthSubtitleConstraint.constant  = rectBack.size.width + 140;
             self.heightSubtitleConstraint.constant = rectBack.size.height + 34;
@@ -1546,7 +1797,7 @@ static NSString *const kText = @"kText";
             self.heightSubtitleViewConstraint.constant = rectBack.size.height + 34;
             self.backSubtitleView.hidden = NO;
         }
-       
+        
         self.heightSubtitleTextConstraint.constant = rectBack.size.height + 34;
         [self.view layoutIfNeeded];
         
@@ -1571,32 +1822,22 @@ static NSString *const kText = @"kText";
 - (void) updateSubtitle:(NSString *) string
 {
     /*
-    NSShadow *shadow = [[NSShadow alloc]init];
-    shadow.shadowOffset = CGSizeMake(.0, 1.0);
-    shadow.shadowBlurRadius = 5.0;
-    shadow.shadowColor = [UIColor blackColor];
+     NSShadow *shadow = [[NSShadow alloc]init];
+     shadow.shadowOffset = CGSizeMake(.0, 1.0);
+     shadow.shadowBlurRadius = 5.0;
+     shadow.shadowColor = [UIColor blackColor];
+     
+     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
+     paragraphStyle.alignment = NSTextAlignmentCenter;
+     paragraphStyle.lineSpacing = 1.6;
+     
+     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc]initWithString:string];
+     [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:_sizeFloat weight:UIFontWeightMedium] range:NSMakeRange(0, string.length)];
+     [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, string.length)];
+     [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
+     [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
+     */
     
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-    paragraphStyle.alignment = NSTextAlignmentCenter;
-    paragraphStyle.lineSpacing = 1.6;
-    
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc]initWithString:string];
-    [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:_sizeFloat weight:UIFontWeightMedium] range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSForegroundColorAttributeName value:[UIColor whiteColor] range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSShadowAttributeName value:shadow range:NSMakeRange(0, string.length)];
-    [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, string.length)];
-    */
-    
-    // <b></b>
-    // <i></i>
-    // <u></u>
-    string = [string stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
-    string = [string stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
-
     self.subtitleTextView.attributedText = [[NSAttributedString alloc]initWithString:string attributes:[subSetting attributes]];
 }
 
@@ -1609,7 +1850,7 @@ static NSString *const kText = @"kText";
     div_t hours = div(totalDurationInSeconds,3600);
     div_t minutes = div(hours.rem,60);
     int seconds = minutes.rem;
-
+    
     return [NSString stringWithFormat:@"%02d:%02d:%02d", hours.quot, minutes.quot, seconds];
     
 }// durationAsString

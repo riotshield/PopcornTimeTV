@@ -6,11 +6,20 @@
     .hover {
         tv-text-highlight-style: marquee-and-show-on-highlight;
     }
+    .img {
+    tv-placeholder:movie;
+    }
 </style>
 </head>
 <productTemplate>
     <banner>
         <infoList>
+            <info>
+                <header>
+                    <title>Genre</title>
+                </header>
+                {{GENRES}}
+            </info>
             <info>
                 <header>
                     <title>Directors</title>
@@ -19,7 +28,7 @@
             </info>
             <info>
                 <header>
-                    <title>Actors</title>
+                    <title>Staring</title>
                 </header>
                 {{ACTORS}}
             </info>
@@ -28,19 +37,21 @@
         <stack>
             <title>{{TITLE}}</title>
             <row>
-                <text><badge src="resource://tomato-{{TOMATO_CRITIC_RATING}}"/> {{TOMATO_CRITIC_SCORE}}%</text>
                 <text>{{RUNTIME}}</text>
-                <text>{{GENRES}}</text>
-                <text>{{YEAR}}</text>
+                <text>{{YEAR}}</text> 
                 <badge src="resource://mpaa-{{RATING}}" class="badge" />
+                <badge src="resource://hd" class="badge" />
                 <badge src="resource://cc" class="badge" />
+                <ratingBadge value="0.{{STAR_RATING}}">
+                </ratingBadge>
+
                 {{AIR_DATE_TIME}}
             </row>
             <description allowsZooming="true" moreLabel="more" actionID="showDescription»{{TITLE}}»{{DESCRIPTION}}">{{DESCRIPTION}}</description>
             <row>
                 <buttonLockup actionID="playPreview»{{YOUTUBE_PREVIEW_URL}}">
                     <badge src="resource://button-preview" />
-                    <title>Trailer</title>
+                    <title>Preview</title>
                 </buttonLockup>
                 
                 <buttonLockup actionID="playMovie»{{IMAGE}}»{{BACKGROUND_IMAGE}}»{{TITLE}}»{{SHORT_DESCRIPTION}}»{{TORRENTS}}»{{IMDBID}}">

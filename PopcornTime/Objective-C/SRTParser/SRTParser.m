@@ -1,10 +1,4 @@
-//
-//  SRTParser.m
-//  PopcornTime
-//
-//  Created by Yogi Bear on 5/13/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 #import "SRTParser.h"
 
@@ -14,6 +8,14 @@
     NSString *newString = [string stringByReplacingOccurrencesOfString:@"\n\r\n" withString:@"\n\n"];
     newString = [newString stringByReplacingOccurrencesOfString:@"\n\n\n" withString:@"\n\n"];
     NSArray *textBlocks = [newString componentsSeparatedByString:@"\n\n"];
+    //if you are going to do it at least do it properly!!!
+    newString = [newString stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+    newString = [newString stringByReplacingOccurrencesOfString:@"{y:i}" withString:@""];
     
     NSMutableArray *subtitles = [[NSMutableArray alloc] init];
     
@@ -58,10 +60,26 @@
         
         NSString *content = [text stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         
+        content = [self stringByStrippingHTML:content];
+        content = [content stringByReplacingOccurrencesOfString:@"<b>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</b>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"<i>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</i>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"<u>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"</u>" withString:@""];
+        content = [content stringByReplacingOccurrencesOfString:@"{y:i}" withString:@""];
+        
         return [[SRTSubtitle alloc] initWithIndex:index startTime:startTime endTime:endTime content:content];
     } else {
         return nil;
     }
+}
+
+- (NSString *)stringByStrippingHTML:(NSString *)string {
+    NSRange r;
+    while ((r = [string rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        string = [string stringByReplacingCharactersInRange:r withString:@""];
+    return string;
 }
 
 - (NSTimeInterval)timeIntervalFromSubRipTimeString:(NSString *)text {

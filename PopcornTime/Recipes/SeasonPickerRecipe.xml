@@ -6,6 +6,9 @@
         .white-color{
         color: rgb(255,255,255);
         }
+        .img {
+        tv-placeholder:movie;
+        }
     </style>
 </head>
 <descriptiveAlertTemplate>

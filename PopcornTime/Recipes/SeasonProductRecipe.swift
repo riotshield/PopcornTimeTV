@@ -1,10 +1,4 @@
-//
-//  ShowProductRecipe.swift
-//  PopcornTime
-//
-//  Created by Joe Bloggs on 13/03/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit
@@ -51,12 +45,10 @@ public struct ShowInfo {
         self.contentRating = seriesInfo["ContentRating"].element!.text!
 
         self.cast = seriesInfo["Actors"].element!.text!.componentsSeparatedByString("|")
-        self.cast.removeAtIndex(self.cast.count - 1)
-        self.cast.removeAtIndex(0)
+        self.cast = self.cast.filter { $0 != "" }
 
         self.genres = seriesInfo["Genre"].element!.text!.componentsSeparatedByString("|")
-        self.genres.removeAtIndex(self.genres.count - 1)
-        self.genres.removeAtIndex(0)
+        self.genres = self.genres.filter { $0 != "" }
 
         self.network = seriesInfo["Network"].element!.text!
 
@@ -173,7 +165,7 @@ public struct SeasonProductRecipe: RecipeType {
 
     func magnetForEpisode(episode: Episode) -> String {
         let filteredTorrents = episode.torrents.filter {
-            $0.quality == "480p"
+            $0.quality == "720p"
         }
 
         if let first = filteredTorrents.first {
@@ -186,8 +178,12 @@ public struct SeasonProductRecipe: RecipeType {
 
     var episodesString: String {
         let mapped: [String] = detailedEpisodes.map {
-            var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)\">" + "\n"
-            string += "<img src=\"\($0.mediumScreenshot)\" width=\"380\" height=\"230\" />" + "\n"
+            var overview = ""
+            if let synopsis = $0.episode.overview {
+                overview = synopsis.cleaned
+            }
+            var string = "<lockup actionID=\"playMovie»\($0.fullScreenshot)»\(show.fanartImage)»\($0.episodeTitle.cleaned)»\(overview)»\(torrents($0.episode).cleaned)»\($0.episode.tvdbId)»\(show.title.cleaned)»\($0.episode.episode)»\($0.episode.season)\">" + "\n"
+            string += "<img src=\"\($0.mediumScreenshot)\" width=\"310\" height=\"175\" />" + "\n"
             string += "<title>\($0.episode.episode). \($0.episodeTitle.cleaned)</title>" + "\n"
             string += "<overlay class=\"overlayPosition\">" + "\n"
             string += "<badge src=\"resource://button-play\" class=\"whiteButton overlayPosition\"/>" + "\n"
@@ -202,7 +198,7 @@ public struct SeasonProductRecipe: RecipeType {
             string +=       "<header>" + "\n"
             string +=           "<title>Description</title>" + "\n"
             string +=       "</header>" + "\n"
-            string +=       "<description allowsZooming=\"true\" moreLabel=\"more\" actionID=\"showDescription»\($0.episodeTitle.cleaned)»\($0.episode.overview.cleaned)\">\($0.episode.overview.cleaned)</description>" + "\n"
+            string +=       "<description allowsZooming=\"true\" moreLabel=\"more\" actionID=\"showDescription»\($0.episodeTitle.cleaned)»\(overview)\">\(overview)</description>" + "\n"
             string +=   "</info>" + "\n"
             string += "</infoTable>" + "\n"
             string += "</relatedContent>" + "\n"

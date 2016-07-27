@@ -1,3 +1,11 @@
+<head>
+    <style>
+        .img {
+        tv-placeholder:movie;
+        }
+    </style>
+</head>
+
 <grid>
     <header>
         <title>{{TITLE}}</title>

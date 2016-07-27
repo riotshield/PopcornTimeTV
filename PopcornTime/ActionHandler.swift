@@ -1,10 +1,4 @@
-//
-//  ActionHandler.swift
-//  PopcornTime
-//
-//  Created by Joe Bloggs on 15/03/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit
@@ -22,7 +16,18 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
     static func primary(id: String) {
         let pieces = id.componentsSeparatedByString("»")
         switch pieces.first! { // swiftlint:disable:this force_cast
-        case "showMovies": Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), Genre(), Watchlist(), Search()]))
+        case "showMovies":
+            var genre = Genre()
+            genre.fetchType = .Movies
+            Kitchen.serve(recipe: KitchenTabBar(items: [Popular(), Latest(), genre, Watchlist(), Search()]))
+        case "chooseKickassCategory":
+            var buttons = [AlertButton]()
+            buttons.append(AlertButton(title: "Movies", actionID: "showKickassSearch»movies"))
+            buttons.append(AlertButton(title: "Shows", actionID: "showKickassSearch»shows"))
+            Kitchen.serve(recipe: AlertRecipe(title: "Category", description: "", buttons: buttons, presentationType: .Modal))
+        case "showKickassSearch":
+             let kickassSearchRecipe = KATSearchRecipe(type: .Search, category: pieces[1])
+             Kitchen.serve(recipe: kickassSearchRecipe)
         case "showTVShows":
             var latest = Latest()
             latest.fetchType = .Shows
@@ -69,6 +74,8 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         case "showActor": showCredits(pieces, isActor: true)
         case "showDirector": showCredits(pieces, isActor: false)
 
+        case "showGenre": showGenre(pieces, genre: true)
+
         default: break
         }
 
@@ -80,7 +87,17 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
      - parameter id: The actionID of the element pressed
      */
     static func play(id: String) {
+        let pieces = id.componentsSeparatedByString("»")
+        switch pieces.first! { // swiftlint:disable:this force_cast
 
+        case "playMovieById":
+            playMovieById(pieces)
+
+        case "showShow":
+            showShow(pieces)
+
+        default: break
+        }
     }
 
     // MARK: Actions
@@ -113,6 +130,82 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         }
     }
 
+    static func serveCatalogRecipe(recipe: CatalogRecipe) {
+        print(recipe.xmlString)
+        Kitchen.appController.evaluateInJavaScriptContext({jsContext in
+            let highlightLockup: @convention(block) (Int, JSValue) -> () = {(nextPage, callback) in
+                recipe.highlightLockup(nextPage) { string in
+                    if callback.isObject {
+                        callback.callWithArguments([string])
+                    }
+                }
+            }
+
+            jsContext.setObject(unsafeBitCast(highlightLockup, AnyObject.self), forKeyedSubscript: "highlightLockup")
+
+            if let file = NSBundle.mainBundle().URLForResource("Pagination", withExtension: "js") {
+                do {
+                    var js = try String(contentsOfURL: file)
+                    js = js.stringByReplacingOccurrencesOfString("{{RECIPE}}", withString: recipe.xmlString)
+                    js = js.stringByReplacingOccurrencesOfString("{{TYPE}}", withString: "catalog")
+                    jsContext.evaluateScript(js)
+                } catch {
+                    print("Could not open Pagination.js")
+                }
+            }
+
+            }, completion: nil)
+    }
+
+    static func showGenre(pieces: [String], genre: Bool = true) {
+        print(pieces)
+        switch pieces.last! {
+        case "movie":
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces[1])!, sortBy: "download_count", orderBy: "desc") { movies, error in
+                if error != nil {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    return
+                }
+                if let _ = movies {
+                    let recipe = CatalogRecipe(title: pieces[1], movies: movies)
+                    recipe.minimumRating = 3
+                    recipe.sortBy = "seeds"
+                    recipe.genre = pieces[1]
+                    serveCatalogRecipe(recipe)
+                } else {
+                    // To Do: Go back to the movie overview instead of main home view
+                    Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                    let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no movies", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+
+                    Kitchen.serve(recipe: recipe)
+                }
+            }
+        case "show":
+            NetworkManager.sharedManager().fetchShows([1], searchTerm: nil, genre: String(UTF8String: pieces[1])!) { shows, error in
+                if error != nil {
+                    Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
+                    return
+                }
+                if let _ = shows {
+                    let recipe = CatalogRecipe(title: pieces[1], shows: shows)
+                    recipe.genre = pieces[1]
+                    recipe.fetchType = .Shows
+                    recipe.sortBy = "trending"
+                    serveCatalogRecipe(recipe)
+                } else {
+                    // To Do: Go back to the movie overview instead of main home view
+                    Kitchen.navigationController.popToRootViewControllerAnimated(false)
+                    let recipe = AlertRecipe(title: "Sorry, " + String(UTF8String: pieces.last!)! + " has no tv shows", description: "This can happen because we are not using the same data sources for movies, tv shows and actors", buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal)
+
+                    Kitchen.serve(recipe: recipe)
+                }
+            }
+        default:
+            print("Didn't catch it, it was actually: \(pieces)")
+        }
+
+    }
+
     static func showCredits(pieces: [String], isActor: Bool = true) {
         Kitchen.serve(recipe: LoadingRecipe(message: pieces.last!)) // Show LoadingView
 
@@ -125,7 +218,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
             if let _ = movies, let _ = shows {
                 Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
-                var recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
+                let recipe = CatalogRecipe(title: pieces.last!, movies: movies, shows: shows)
                 recipe.presentationType = .DefaultWithLoadingIndicator
                 Kitchen.serve(recipe: recipe)
             } else {
@@ -171,7 +264,15 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
                     if let xml = response {
                         let seriesInfo = xml["Data"]["Series"]
 
-                        let slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        var slug = seriesInfo["SeriesName"].element!.text!.slugged
+                        if slug.rangeOfString(".") != nil {
+                            let characterAfterDot = slug.componentsSeparatedByString(".")[1].characters.first
+                            if String(characterAfterDot).rangeOfString("-") != nil {
+                              slug = slug.removeSpecialCharacters()
+                            } else {
+                              slug = slug.stringByReplacingOccurrencesOfString(".", withString: "-")
+                            }
+                        }
 
                         manager.fetchTraktSeasonEpisodesInfoForIMDB(slug, season: seasonInfo.current) { response, error in
                             if let response = response {
@@ -284,12 +385,28 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
     }
 
-    static func playMovie(pieces: [String]) {
-        print(pieces.count)
-        print(pieces)
-        ["playMovie", "http://62.210.81.37/assets/images/movies/deadpool_2016/large-cover.jpg", "http://62.210.81.37/assets/images/movies/deadpool_2016/background.jpg", "Deadpool", "A former Special Forces operative turned mercenary is subjected to a rogue experiment that leaves him with accelerated healing powers, adopting the alter ego Deadpool.", "tt1431045", "quality=720p&hash=A1D0C3B0FD52A29D2487027E6B50F27EAF4912C5•quality=1080p&hash=6268ABCCB049444BEE76813177AA46643A7ADA88"]
+    static func playMovieById(pieces: [String]) {
+        NetworkManager.sharedManager().showDetailsForMovie(movieId: Int(pieces.last!)!, withImages: false, withCast: true) { movie, error in
+            if let movie = movie {
+                playMovie(["playMovie", movie.largeCoverImage,
+                           movie.backgroundImage, movie.title.cleaned,
+                           movie.summary.cleaned, movie.torrentsText, movie.imdbId])
+            }
+        }
+    }
 
+    static func playMovie(pieces: [String]) {
         let torrentsString = pieces[5]
+
+        // Only used for TV Shows
+        var episodeTitle: String!
+        var episodeNumber: String!
+        var episodeSeason: String!
+        if pieces.indices.count > 7 {
+            episodeTitle = pieces[7]
+            episodeNumber = pieces[8]
+            episodeSeason = pieces[9]
+        }
         if torrentsString == "" || torrentsString == "{{TORRENTS}}" {
             // NO torrents found
             Kitchen.serve(recipe: AlertRecipe(title: "No torrents found", description: "A torrent could not be found for \(pieces[3]).".cleaned, buttons: [AlertButton(title: "Okay", actionID: "closeAlert")], presentationType: .Modal))
@@ -309,11 +426,11 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
             torrents.append(torrentDict)
         }
 
-        torrents.sortInPlace({ $0["quality"] > $1["quality"] })
+        torrents.sortInPlace({ $0["quality"] < $1["quality"] })
 
         var buttons = [AlertButton]()
         for torrent in torrents {
-            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3].cleaned)»\(pieces[4].cleaned)»\(pieces[6])"))
+            buttons.append(AlertButton(title: torrent["quality"]!, actionID: "streamTorrent»\(torrent["hash"]!)»\(pieces[1])»\(pieces[2])»\(pieces[3].cleaned)»\(pieces[4].cleaned)»\(pieces[6])»\(episodeTitle)»\(episodeNumber)»\(episodeSeason)"))
         }
 
         Kitchen.serve(recipe: AlertRecipe(title: "Choose Quality", description: "Choose a quality to stream \(pieces[3])".cleaned, buttons: buttons, presentationType: .Modal))
@@ -324,19 +441,27 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         Kitchen.dismissModal()
         let magnet = "magnet:?xt=urn:btih:\(pieces[1])&tr=" + Trackers.map { $0 }.joinWithSeparator("&tr=")
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let viewController = storyboard.instantiateViewControllerWithIdentifier("ProgressViewController") as? ProgressViewController {
-            viewController.magnet = magnet
-            viewController.imdbId = pieces[6]
-            viewController.imageAddress = pieces[2]
-            viewController.backgroundImageAddress = pieces[3]
-            viewController.movieName = pieces[4]
-            viewController.shortDescription = pieces[5]
 
-            NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-                Kitchen.appController.navigationController.pushViewController(viewController, animated: true)
-            })
-        }
+        let info: [String : AnyObject] = [
+            "magnet" : magnet,
+            "imdbId" : pieces[6],
+            "imageAddress" : pieces[2],
+            "backgroundImageAddress" : pieces[3],
+            "movieName" : pieces[4],
+            "shortDescription" : pieces[5]
+        ]
+
+//        if pieces.indices.count > 7 {
+//            info["episodeName"] = pieces[7]
+//            info["episodeNumber"] = Int(pieces[8])!
+//            info["episodeSeason"] = Int(pieces[9])!
+//        }
+
+        let player = SYVLCPlayerViewController(videoInfo: info)
+//        Kitchen.appController.navigationController.pushViewController(player, animated: true)
+        NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+            Kitchen.appController.navigationController.pushViewController(player, animated: true)
+        })
 
     }
 
@@ -396,5 +521,11 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
 
         })
     }
+}
 
+extension String {
+    func removeSpecialCharacters() -> String {
+      let okayChars: Set<Character> = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890-".characters)
+      return String(self.characters.filter {okayChars.contains($0) })
+  }
 }

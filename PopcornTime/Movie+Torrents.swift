@@ -1,10 +1,4 @@
-//
-//  Movie+Torrents.swift
-//  PopcornTime
-//
-//  Created by Tengis Batsaikhan on 25/06/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import PopcornKit
 

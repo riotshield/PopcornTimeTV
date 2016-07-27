@@ -1,10 +1,3 @@
-//
-//  UIImageView+Network.m
-//  PopcornTime
-//
-//  Created by Yogi Bear on 5/31/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
 
 #import "UIImageView+Network.h"
 #import <objc/runtime.h>

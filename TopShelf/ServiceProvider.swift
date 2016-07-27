@@ -1,10 +1,4 @@
-//
-//  ServiceProvider.swift
-//  TopShelf
-//
-//  Created by Tengis Batsaikhan on 27/04/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import Foundation
 import TVServices

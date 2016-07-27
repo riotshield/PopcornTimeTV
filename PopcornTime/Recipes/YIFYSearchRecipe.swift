@@ -1,10 +1,4 @@
-//
-//  SearchRecipe.swift
-//  PopcornTime
-//
-//  Created by Yogi Bear on 3/19/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit

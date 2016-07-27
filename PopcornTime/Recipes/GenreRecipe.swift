@@ -1,10 +1,4 @@
-//
-//  GenreRecipe.swift
-//  PopcornTime
-//
-//  Created by Tengis Batsaikhan on 6/05/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit

@@ -1,10 +1,4 @@
-//
-//  Welcome+Carousel.swift
-//  PopcornTime
-//
-//  Created by RefusedFlow on 7/03/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import PopcornKit
 

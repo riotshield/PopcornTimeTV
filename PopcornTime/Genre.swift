@@ -1,10 +1,4 @@
-//
-//  Genre.swift
-//  PopcornTime
-//
-//  Created by RefusedFlow on 24/07/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit

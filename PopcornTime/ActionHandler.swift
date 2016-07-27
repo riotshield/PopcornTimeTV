@@ -1,10 +1,4 @@
-//
-//  ActionHandler.swift
-//  PopcornTime
-//
-//  Created by Joe Bloggs on 15/03/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import TVMLKitchen
 import PopcornKit

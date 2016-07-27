@@ -1,10 +1,4 @@
-//
-//  Movie+Parallax.swift
-//  PopcornTime
-//
-//  Created by Joe Bloggs on 26/03/2016.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import PopcornKit
 

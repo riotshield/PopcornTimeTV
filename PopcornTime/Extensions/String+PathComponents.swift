@@ -1,10 +1,4 @@
-//
-//  String+PathComponents.swift
-//  PopcornTime
-//
-//  Created by Yogi Bear on 5/13/16.
-//  Copyright © 2016 PopcornTime. All rights reserved.
-//
+
 
 import Foundation
 

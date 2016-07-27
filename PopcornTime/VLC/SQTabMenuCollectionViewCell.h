@@ -1,10 +1,4 @@
-//
-//  SQTabMenuCollectionViewCell.h
-//  Squire
-//
-//  Created by Fernando Torcelly on 27/9/15.
-//  Copyright © 2015 Fernando Torcelly. All rights reserved.
-//
+
 
 #import <UIKit/UIKit.h>
 

@@ -10,13 +10,12 @@ public struct GenreRecipe: RecipeType {
     var fetchType: FetchType! = .Movies
     let movieGenres = ["Action", "Adventure", "Animation", "Biography",
                        "Comedy", "Crime", "Documentary", "Drama", "Family",
-                       "Fantasy", "Film-Noir", "History", "Horror", "Music",
+                       "Fantasy", "History", "Horror", "Music",
                        "Musical", "Mystery", "Romance", "Sport", "Thriller",
                        "War", "Western"]
     let tvGenres = [ "Action", "Adventure", "Animation", "Children", "Comedy",
                      "Crime", "Documentary", "Drama", "Family", "Fantasy",
-                     "History", "Horror", "Mystery", "Musical", "Mystery",
-                     "News", "Reality", "Romance"]
+                     "History", "Horror", "Mystery", "News", "Reality", "Romance"]
 
     init(fetchType: FetchType = .Movies) {
         self.fetchType = fetchType

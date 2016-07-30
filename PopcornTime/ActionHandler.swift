@@ -161,7 +161,7 @@ struct ActionHandler { // swiftlint:disable:this type_body_length
         print(pieces)
         switch pieces.last! {
         case "movie":
-            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces[1])!, sortBy: "download_count", orderBy: "desc") { movies, error in
+            NetworkManager.sharedManager().fetchMovies(limit: 50, page: 1, quality: "720p", minimumRating: 0, queryTerm: nil, genre: String(UTF8String: pieces[1])!, sortBy: "seeds", orderBy: "desc") { movies, error in
                 if error != nil {
                     Kitchen.navigationController.popViewControllerAnimated(false) // Dismiss LoadingView
                     return

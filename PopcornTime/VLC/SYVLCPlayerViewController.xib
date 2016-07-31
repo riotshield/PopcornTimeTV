@@ -161,7 +161,7 @@
                         <constraint firstAttribute="height" constant="170" id="FaH-3z-XaS"/>
                     </constraints>
                 </imageView>
-                <activityIndicatorView hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="CmR-ro-YLC">
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="CmR-ro-YLC">
                     <rect key="frame" x="944" y="524" width="32" height="32"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="3UG-F8-gHn"/>

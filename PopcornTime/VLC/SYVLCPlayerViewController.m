@@ -218,6 +218,7 @@ static NSString *const kText = @"kText";
     self.transportBar.bufferEndFraction = 1.0;
     self.transportBar.playbackFraction = 0.0;
     self.transportBar.scrubbingFraction = 0.0;
+    self.indicatorView.hidden=YES;
     
     self.backSubtitleView.layer.cornerRadius  = 10.0;
     self.backSubtitleView.layer.masksToBounds = YES;
@@ -758,14 +759,14 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
     switch (state) {
         case VLCMediaPlayerStateBuffering:
             if (!indicator.isAnimating) {
-                self.indicatorView.alpha = 1.0;
-                [self.indicatorView startAnimating];
+                indicator.hidden = NO;
+                [indicator startAnimating];
             }
             break;
         default:
             if (indicator.isAnimating) {
-                [self.indicatorView stopAnimating];
-                self.indicatorView.alpha = 0.0;
+                [indicator stopAnimating];
+                indicator.hidden = YES;
             }
             break;
     }
@@ -1215,45 +1216,22 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
 {
     VLCMediaPlayer *player = [aNotification object];
     //NSLog(@"mediaPlayerStateChanged");
-    switch(player.state) {
-        case VLCMediaPlayerStateStopped: {
-            //NSLog(@"VLCMediaPlayerStateStopped");
-            [self done:nil];
-            break;
-        }
-        case VLCMediaPlayerStateOpening:
-            //NSLog(@"VLCMediaPlayerStateOpening");
-            break;
-        case VLCMediaPlayerStateBuffering:
-            self.indicatorView.hidden = NO;
-            [self.indicatorView startAnimating];
-            //NSLog(@"VLCMediaPlayerStateBuffering");
-            break;
-        case VLCMediaPlayerStateEnded:
-            //NSLog(@"VLCMediaPlayerStateEnded");
-            break;
-        case VLCMediaPlayerStateError:
-            //NSLog(@"VLCMediaPlayerStateError");
-            [self done:nil];
-            break;
-        case VLCMediaPlayerStatePlaying:
-            //NSLog(@"VLCMediaPlayerStatePlaying");
-            [self.indicatorView stopAnimating];
-            self.indicatorView.hidden=YES;
-            break;
-            // Error al abrir fichero con DRM
-        case VLCMediaPlayerStatePaused:
-            //NSLog(@"VLCMediaPlayerStatePaused");
-            break;
+
+    if(player.state== VLCMediaPlayerStateStopped) {
+        //NSLog(@"VLCMediaPlayerStateStopped");
+        [self done:nil];
+        return;
     }
+    [self updateActivityIndicatorForState:player.state];
     
+            
 }// mediaPlayerStateChanged:
 
 
 - (void)mediaPlayerTimeChanged:(NSNotification *)aNotification
 {
     self.indicatorView.hidden = YES;
-    
+    if(!self.indicatorView.isAnimating)[self.indicatorView startAnimating];
     [self resumeSubtitleParseTimerIfNeeded];
     
     if (!_videoDidOpened) {
@@ -1279,7 +1257,8 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
         [UIView animateWithDuration:0.3 animations:^{
             self.loadingLogo.alpha = .0;
             //            self.progressView.alpha = .0;
-            self.indicatorView.alpha = 1.0;
+            if(self.indicatorView.isAnimating)[self.indicatorView stopAnimating];
+            self.indicatorView.hidden = NO;
         }];
         
         _videoDidOpened = YES;

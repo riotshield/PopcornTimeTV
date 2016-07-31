@@ -118,7 +118,7 @@ public struct WelcomeRecipe: RecipeType {
             }
         }
 
-        return "http://i.cubeupload.com/dgwEXZ.png"
+        return "https://github.com/PopcornTimeTV/PopcornTimeTV/blob/master/Assets/Watchlist.lsr?raw=true"
 
     }
 

@@ -48,7 +48,7 @@
                 </lockup>
                 {{KAT_SEARCH}}
                 <lockup actionID="showSettings">
-                    <img class="round" src="http://i.cubeupload.com/ZaJQcD.png" width="548" height="250"></img>
+                    <img class="round" src="https://github.com/PopcornTimeTV/PopcornTimeTV/blob/master/Assets/settings.lsr?raw=true" width="548" height="250"></img>
                     <overlay>
                         <title>Settings</title>
                     </overlay>

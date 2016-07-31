@@ -1216,7 +1216,9 @@ static const NSInteger VLCJumpInterval = 10000; // 10 seconds
 {
     VLCMediaPlayer *player = [aNotification object];
     //NSLog(@"mediaPlayerStateChanged");
-
+    
+    if(player.state==VLCMediaPlayerStatePlaying && self.presentedViewController!=nil)[player pause];
+    
     if(player.state== VLCMediaPlayerStateStopped) {
         //NSLog(@"VLCMediaPlayerStateStopped");
         [self done:nil];
